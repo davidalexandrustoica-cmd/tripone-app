@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripOne — Plan your perfect trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;
+  --bg2:#111114;
+  --bg3:#18181c;
+  --card:#1c1c21;
+  --card2:#222228;
+  --border:#2a2a32;
+  --border2:#333340;
+  --ink:#f4f3f0;
+  --ink2:#9998a8;
+  --ink3:#5a5a6e;
+  --cyan:#00e5ff;
+  --cyan2:#00b8d4;
+  --violet:#7c3aed;
+  --violet2:#a78bfa;
+  --amber:#f59e0b;
+  --coral:#ff6b6b;
+  --green:#10b981;
+  --r:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+
+/* NOISE TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* GLOW ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(0,229,255,.08),transparent 70%);top:-100px;right:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(124,58,237,.07),transparent 70%);bottom:10%;left:-100px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(9,9,11,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--ink)}
+.logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:var(--ink)}
+.nav-btn{background:linear-gradient(135deg,var(--cyan2),var(--violet));color:#fff;border:none;padding:9px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.nav-btn:hover{opacity:.88}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:100px 32px 80px;text-align:center;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--cyan);font-size:12px;font-weight:500;padding:6px 16px;border-radius:100px;margin-bottom:32px;letter-spacing:.5px}
+.hero-badge i{font-size:14px}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,7vw,72px);line-height:1.02;letter-spacing:-2px;color:var(--ink);margin-bottom:24px}
+h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--ink2);line-height:1.7;max-width:580px;margin:0 auto 48px;font-weight:300}
+
+/* SEARCH BOX */
+.search-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:8px 8px 8px 24px;display:flex;align-items:center;gap:12px;max-width:640px;margin:0 auto 20px;transition:border-color .3s;box-shadow:0 0 0 0 rgba(0,229,255,0)}
+.search-box:focus-within{border-color:var(--cyan2);box-shadow:0 0 0 3px rgba(0,229,255,.08)}
+.search-box i{color:var(--ink3);font-size:20px;flex-shrink:0}
+.search-box input{flex:1;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--ink);outline:none;padding:10px 0}
+.search-box input::placeholder{color:var(--ink3)}
+.search-go{background:linear-gradient(135deg,var(--cyan2),var(--violet));color:#fff;border:none;padding:13px 26px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.search-go:hover{opacity:.88}
+
+/* QUICK CHIPS */
+.quick-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:56px}
+.qchip{background:var(--card);border:1px solid var(--border);color:var(--ink2);padding:7px 16px;border-radius:100px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.qchip:hover{border-color:var(--cyan2);color:var(--cyan);background:rgba(0,229,255,.05)}
+
+/* AI RECOMMEND SECTION */
+.ai-section{position:relative;z-index:1;max-width:700px;margin:0 auto 80px;padding:0 32px}
+.ai-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:28px;position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,.06),rgba(0,229,255,.04));pointer-events:none}
+.ai-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.ai-card-title i{color:var(--violet2)}
+.ai-card-sub{font-size:13px;color:var(--ink2);margin-bottom:20px}
+.ai-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.ai-input-wrap{display:flex;flex-direction:column;gap:5px}
+.ai-input-wrap label{font-size:11px;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase}
+.ai-input-wrap select,.ai-input-wrap input{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s;width:100%}
+.ai-input-wrap select:focus,.ai-input-wrap input:focus{border-color:var(--violet)}
+.ai-input-wrap select option{background:var(--bg3)}
+.ai-btn{width:100%;background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
+.ai-btn:hover{opacity:.88}
+.ai-btn i{font-size:17px}
+
+/* CATEGORIES */
+.categories{position:relative;z-index:1;padding:0 32px 80px;max-width:1100px;margin:0 auto}
+.section-hd{display:flex;align-items:baseline;gap:12px;margin-bottom:28px}
+.section-hd h2{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--ink)}
+.section-hd span{font-size:13px;color:var(--ink3)}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.cat-card::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.cat-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.cat-card:hover::after{opacity:1}
+.cat-card.beach::after{background:linear-gradient(135deg,rgba(0,229,255,.06),transparent)}
+.cat-card.adventure::after{background:linear-gradient(135deg,rgba(16,185,129,.06),transparent)}
+.cat-card.city::after{background:linear-gradient(135deg,rgba(245,158,11,.06),transparent)}
+.cat-card.party::after{background:linear-gradient(135deg,rgba(124,58,237,.06),transparent)}
+.cat-card.family::after{background:linear-gradient(135deg,rgba(255,107,107,.06),transparent)}
+.cat-card.budget::after{background:linear-gradient(135deg,rgba(16,185,129,.06),transparent)}
+.cat-card.luxury::after{background:linear-gradient(135deg,rgba(245,158,11,.08),transparent)}
+.cat-card.all::after{background:linear-gradient(135deg,rgba(0,229,255,.05),rgba(124,58,237,.05))}
+.cat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:22px;position:relative;z-index:1}
+.cat-icon.c1{background:rgba(0,229,255,.1);color:var(--cyan)}
+.cat-icon.c2{background:rgba(16,185,129,.1);color:var(--green)}
+.cat-icon.c3{background:rgba(245,158,11,.1);color:var(--amber)}
+.cat-icon.c4{background:rgba(124,58,237,.1);color:var(--violet2)}
+.cat-icon.c5{background:rgba(255,107,107,.1);color:var(--coral)}
+.cat-icon.c6{background:rgba(16,185,129,.1);color:var(--green)}
+.cat-icon.c7{background:rgba(245,158,11,.12);color:var(--amber)}
+.cat-icon.c8{background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(124,58,237,.1));color:var(--violet2)}
+.cat-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px;position:relative;z-index:1}
+.cat-desc{font-size:12px;color:var(--ink3);line-height:1.5;position:relative;z-index:1}
+
+/* TOP DESTINATIONS */
+.top-dests{position:relative;z-index:1;padding:0 32px 80px;max-width:1100px;margin:0 auto}
+.dest-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.dest-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center}
+.dest-card:hover{border-color:var(--border2);transform:translateY(-2px);background:var(--card2)}
+.dest-flag{font-size:30px;margin-bottom:10px;display:block}
+.dest-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:2px}
+.dest-country{font-size:11px;color:var(--ink3);margin-bottom:10px}
+.dest-price{display:inline-block;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.15);color:var(--cyan);font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px}
+
+/* WHAT YOU GET */
+.features{position:relative;z-index:1;padding:0 32px 100px;max-width:1100px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:border-color .2s}
+.feat:hover{border-color:var(--border2)}
+.feat-icon{font-size:22px;margin-bottom:12px}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px}
+.feat-desc{font-size:12px;color:var(--ink3);line-height:1.5}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28px 32px;display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--ink)}
+.footer-logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-note{font-size:12px;color:var(--ink3)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero-badge{animation:fadeUp .6s ease both}
+h1{animation:fadeUp .6s .1s ease both}
+.hero-sub{animation:fadeUp .6s .2s ease both}
+.search-box{animation:fadeUp .6s .3s ease both}
+.quick-chips{animation:fadeUp .6s .4s ease both}
+
+@media(max-width:900px){
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .dest-grid{grid-template-columns:repeat(3,1fr)}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .ai-inputs{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  nav{padding:14px 16px}
+  .nav-links{display:none}
+  .hero{padding:60px 16px 48px}
+  .categories,.top-dests,.features,.ai-section{padding-left:16px;padding-right:16px}
+  .dest-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <div class="logo">Trip<em>One</em></div>
+  <div class="nav-links">
+    <a>Destinations</a>
+    <a>Categories</a>
+    <a>How it works</a>
+  </div>
+  <button class="nav-btn">Get Started</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge"><i class="ti ti-sparkles"></i> Everything you need. One search.</div>
+  <h1>Plan your trip<br>without the <span class="grad">tab chaos</span></h1>
+  <p class="hero-sub">Weather, flights, hotels, activities, nightlife, food, budget — all in one place. Stop switching between 10 tabs.</p>
+
+  <div class="search-box">
+    <i class="ti ti-map-pin"></i>
+    <input type="text" id="main-search" placeholder="Where do you want to go? (e.g. Santorini, Bali, Tokyo...)" autofocus>
+    <button class="search-go" onclick="goSearch()">Search <i class="ti ti-arrow-right"></i></button>
+  </div>
+
+  <div class="quick-chips">
+    <button class="qchip" onclick="setDest('Santorini')">🇬🇷 Santorini</button>
+    <button class="qchip" onclick="setDest('Bali')">🇮🇩 Bali</button>
+    <button class="qchip" onclick="setDest('Barcelona')">🇪🇸 Barcelona</button>
+    <button class="qchip" onclick="setDest('Tokyo')">🇯🇵 Tokyo</button>
+    <button class="qchip" onclick="setDest('Dubai')">🇦🇪 Dubai</button>
+    <button class="qchip" onclick="setDest('Maldives')">🇲🇻 Maldives</button>
+    <button class="qchip" onclick="setDest('New York')">🇺🇸 New York</button>
+    <button class="qchip" onclick="setDest('Lisbon')">🇵🇹 Lisbon</button>
+  </div>
+</div>
+
+<!-- AI RECOMMENDATION -->
+<div class="ai-section">
+  <div class="ai-card">
+    <div class="ai-card-title"><i class="ti ti-sparkles"></i> Not sure where to go? Let AI decide.</div>
+    <div class="ai-card-sub">Tell us your preferences and we'll find the perfect destination for you.</div>
+    <div class="ai-inputs">
+      <div class="ai-input-wrap">
+        <label>Budget per person</label>
+        <select id="ai-budget">
+          <option>Under €500</option>
+          <option>€500 – €1,000</option>
+          <option selected>€1,000 – €2,000</option>
+          <option>€2,000 – €5,000</option>
+          <option>No limit (luxury)</option>
+        </select>
+      </div>
+      <div class="ai-input-wrap">
+        <label>Trip duration</label>
+        <select id="ai-duration">
+          <option>Weekend (2–3 days)</option>
+          <option selected>1 week</option>
+          <option>2 weeks</option>
+          <option>1 month+</option>
+        </select>
+      </div>
+      <div class="ai-input-wrap">
+        <label>Vibe</label>
+        <select id="ai-vibe">
+          <option>Beach & Relax</option>
+          <option>Adventure & Nature</option>
+          <option>City & Culture</option>
+          <option>Party & Nightlife</option>
+          <option>Family Friendly</option>
+          <option>Luxury & Romance</option>
+        </select>
+      </div>
+      <div class="ai-input-wrap">
+        <label>Departure city</label>
+        <input type="text" id="ai-from" placeholder="e.g. Bucharest" value="Bucharest">
+      </div>
+    </div>
+    <button class="ai-btn" onclick="goAI()"><i class="ti ti-wand"></i> Find my perfect destination</button>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="section-hd">
+    <h2>Browse by category</h2>
+    <span>Find your vibe</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card beach" onclick="setDest('Maldives');goSearch()">
+      <div class="cat-icon c1"><i class="ti ti-beach"></i></div>
+      <div class="cat-name">Beach & Sun</div>
+      <div class="cat-desc">Crystal waters, white sand, pure relaxation</div>
+    </div>
+    <div class="cat-card adventure" onclick="setDest('Patagonia');goSearch()">
+      <div class="cat-icon c2"><i class="ti ti-mountain"></i></div>
+      <div class="cat-name">Adventure & Nature</div>
+      <div class="cat-desc">Hikes, wildlife, raw landscapes</div>
+    </div>
+    <div class="cat-card city" onclick="setDest('Tokyo');goSearch()">
+      <div class="cat-icon c3"><i class="ti ti-building-skyscraper"></i></div>
+      <div class="cat-name">City & Culture</div>
+      <div class="cat-desc">Museums, food scenes, architecture</div>
+    </div>
+    <div class="cat-card party" onclick="setDest('Ibiza');goSearch()">
+      <div class="cat-icon c4"><i class="ti ti-music"></i></div>
+      <div class="cat-name">Party & Nightlife</div>
+      <div class="cat-desc">Clubs, bars, festivals, energy</div>
+    </div>
+    <div class="cat-card family" onclick="setDest('Orlando');goSearch()">
+      <div class="cat-icon c5"><i class="ti ti-users"></i></div>
+      <div class="cat-name">Family Friendly</div>
+      <div class="cat-desc">Safe, fun for all ages, activities for kids</div>
+    </div>
+    <div class="cat-card budget" onclick="setDest('Lisbon');goSearch()">
+      <div class="cat-icon c6"><i class="ti ti-coin"></i></div>
+      <div class="cat-name">Budget Travel</div>
+      <div class="cat-desc">Amazing experiences, minimal spend</div>
+    </div>
+    <div class="cat-card luxury" onclick="setDest('Maldives');goSearch()">
+      <div class="cat-icon c7"><i class="ti ti-diamond"></i></div>
+      <div class="cat-name">Luxury</div>
+      <div class="cat-desc">5-star hotels, private villas, fine dining</div>
+    </div>
+    <div class="cat-card all" onclick="document.getElementById('main-search').focus()">
+      <div class="cat-icon c8"><i class="ti ti-world"></i></div>
+      <div class="cat-name">Explore All</div>
+      <div class="cat-desc">Search any destination on the planet</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP DESTINATIONS -->
+<div class="top-dests">
+  <div class="section-hd">
+    <h2>Top destinations</h2>
+    <span>Most searched this month</span>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card" onclick="setDest('Santorini');goSearch()"><span class="dest-flag">🇬🇷</span><div class="dest-name">Santorini</div><div class="dest-country">Greece</div><div class="dest-price">from €89</div></div>
+    <div class="dest-card" onclick="setDest('Bali');goSearch()"><span class="dest-flag">🇮🇩</span><div class="dest-name">Bali</div><div class="dest-country">Indonesia</div><div class="dest-price">from €420</div></div>
+    <div class="dest-card" onclick="setDest('Barcelona');goSearch()"><span class="dest-flag">🇪🇸</span><div class="dest-name">Barcelona</div><div class="dest-country">Spain</div><div class="dest-price">from €65</div></div>
+    <div class="dest-card" onclick="setDest('Lisbon');goSearch()"><span class="dest-flag">🇵🇹</span><div class="dest-name">Lisbon</div><div class="dest-country">Portugal</div><div class="dest-price">from €59</div></div>
+    <div class="dest-card" onclick="setDest('Dubai');goSearch()"><span class="dest-flag">🇦🇪</span><div class="dest-name">Dubai</div><div class="dest-country">UAE</div><div class="dest-price">from €180</div></div>
+    <div class="dest-card" onclick="setDest('Tokyo');goSearch()"><span class="dest-flag">🇯🇵</span><div class="dest-name">Tokyo</div><div class="dest-country">Japan</div><div class="dest-price">from €520</div></div>
+    <div class="dest-card" onclick="setDest('New York');goSearch()"><span class="dest-flag">🇺🇸</span><div class="dest-name">New York</div><div class="dest-country">USA</div><div class="dest-price">from €350</div></div>
+    <div class="dest-card" onclick="setDest('Maldives');goSearch()"><span class="dest-flag">🇲🇻</span><div class="dest-name">Maldives</div><div class="dest-country">Maldives</div><div class="dest-price">from €800</div></div>
+    <div class="dest-card" onclick="setDest('Rome');goSearch()"><span class="dest-flag">🇮🇹</span><div class="dest-name">Rome</div><div class="dest-country">Italy</div><div class="dest-price">from €55</div></div>
+    <div class="dest-card" onclick="setDest('Amsterdam');goSearch()"><span class="dest-flag">🇳🇱</span><div class="dest-name">Amsterdam</div><div class="dest-country">Netherlands</div><div class="dest-price">from €79</div></div>
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<div class="features">
+  <div class="section-hd">
+    <h2>Everything in one search</h2>
+    <span>No more tab switching</span>
+  </div>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-icon">🌤️</div><div class="feat-title">Live Weather</div><div class="feat-desc">Real-time forecast + best season to visit</div></div>
+    <div class="feat"><div class="feat-icon">✈️</div><div class="feat-title">Flights</div><div class="feat-desc">Cheapest flights from your city</div></div>
+    <div class="feat"><div class="feat-icon">🏨</div><div class="feat-title">Hotels & Stays</div><div class="feat-desc">Hotels, villas, Airbnb filtered by budget</div></div>
+    <div class="feat"><div class="feat-icon">💰</div><div class="feat-title">Budget Breakdown</div><div class="feat-desc">Minimum & ideal budget per person</div></div>
+    <div class="feat"><div class="feat-icon">🎯</div><div class="feat-title">Top Activities</div><div class="feat-desc">Must-do experiences with prices</div></div>
+    <div class="feat"><div class="feat-icon">🍽️</div><div class="feat-title">Food & Restaurants</div><div class="feat-desc">Local food scene from street to fine dining</div></div>
+    <div class="feat"><div class="feat-icon">🎵</div><div class="feat-title">Nightlife</div><div class="feat-desc">Clubs, bars and the local scene</div></div>
+    <div class="feat"><div class="feat-icon">⚠️</div><div class="feat-title">Safety & Warnings</div><div class="feat-desc">Scams to avoid, safety tips, local alerts</div></div>
+    <div class="feat"><div class="feat-icon">🏷️</div><div class="feat-title">Discounts & Deals</div><div class="feat-desc">Tourist cards, free days, current offers</div></div>
+    <div class="feat"><div class="feat-icon">🚌</div><div class="feat-title">Local Transport</div><div class="feat-desc">How to get around once you're there</div></div>
+    <div class="feat"><div class="feat-icon">📖</div><div class="feat-title">Destination Guide</div><div class="feat-desc">Area overview, culture, what to know</div></div>
+    <div class="feat"><div class="feat-icon">🗺️</div><div class="feat-title">AI Itinerary</div><div class="feat-desc">Day-by-day plan generated just for you</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Trip<em>One</em></div>
+  <div class="footer-note">v0.2 — built step by step</div>
+</footer>
+
+<script>
+function setDest(d){ document.getElementById('main-search').value = d; }
+function goSearch(){
+  const v = document.getElementById('main-search').value.trim();
+  if(v) window.location.href = 'results.html?dest=' + encodeURIComponent(v);
+}
+function goAI(){
+  const budget = document.getElementById('ai-budget').value;
+  const duration = document.getElementById('ai-duration').value;
+  const vibe = document.getElementById('ai-vibe').value;
+  const from = document.getElementById('ai-from').value;
+  window.location.href = `results.html?ai=1&budget=${encodeURIComponent(budget)}&duration=${encodeURIComponent(duration)}&vibe=${encodeURIComponent(vibe)}&from=${encodeURIComponent(from)}`;
+}
+document.getElementById('main-search').addEventListener('keydown', e => {
+  if(e.key === 'Enter') goSearch();
+});
+</script>
+</body>
+</html>
