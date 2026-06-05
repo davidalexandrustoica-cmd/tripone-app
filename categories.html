@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripOne — Browse Destinations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--card:#1c1c21;--card2:#222228;
+  --border:#2a2a32;--border2:#333340;--ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
+  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
+  --amber:#f59e0b;--coral:#ff6b6b;--green:#10b981;--r:12px;
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
+.logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;cursor:pointer;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.nav-search-wrap{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:6px 14px;max-width:260px;flex:1}
+.nav-search-wrap i{color:var(--ink3);font-size:14px}
+.nav-search-wrap input{border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--ink);outline:none;width:100%}
+.nav-search-wrap input::placeholder{color:var(--ink3)}
+
+.page-hero{position:relative;z-index:1;padding:52px 32px 40px;text-align:center;max-width:700px;margin:0 auto}
+.page-hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,48px);letter-spacing:-1px;margin-bottom:14px}
+.page-hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hero p{font-size:15px;color:var(--ink2);line-height:1.7}
+
+.filters-wrap{position:relative;z-index:1;padding:0 28px 32px;max-width:1200px;margin:0 auto}
+.filters-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.filters-label{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+.sort-wrap{display:flex;align-items:center;gap:8px}
+.sort-wrap label{font-size:12px;color:var(--ink3)}
+.sort-select{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--ink);outline:none;cursor:pointer}
+.sort-select option{background:var(--bg3)}
+
+.cat-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cat-btn{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .2s;font-family:"DM Sans",sans-serif}
+.cat-btn:hover{border-color:var(--border2);color:var(--ink)}
+.cat-btn.active{background:rgba(0,229,255,.08);border-color:var(--cyan2);color:var(--cyan)}
+.cat-btn .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.budget-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.bud-btn{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--ink3);cursor:pointer;transition:all .2s;font-family:"DM Sans",sans-serif}
+.bud-btn:hover{color:var(--ink2)}
+.bud-btn.active{background:rgba(124,58,237,.08);border-color:var(--violet2);color:var(--violet2)}
+
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.results-count{font-size:13px;color:var(--ink3)}
+.results-count span{color:var(--cyan);font-weight:500}
+.clear-btn{font-size:12px;color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:"DM Sans",sans-serif}
+.clear-btn:hover{color:var(--ink2)}
+
+.dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.dest-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.dest-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.dest-card.hidden{display:none}
+.dc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.dc-flag{font-size:28px;line-height:1}
+.dc-badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:60%}
+.dc-badge{font-size:10px;border-radius:100px;padding:2px 8px;font-weight:500;white-space:nowrap}
+.dc-badge.beach{background:rgba(0,229,255,.1);color:var(--cyan)}
+.dc-badge.party{background:rgba(124,58,237,.1);color:var(--violet2)}
+.dc-badge.luxury{background:rgba(245,158,11,.1);color:var(--amber)}
+.dc-badge.budget{background:rgba(16,185,129,.1);color:var(--green)}
+.dc-badge.city{background:rgba(245,158,11,.1);color:var(--amber)}
+.dc-badge.nature{background:rgba(16,185,129,.1);color:var(--green)}
+.dc-badge.family{background:rgba(255,107,107,.1);color:var(--coral)}
+.dc-badge.food{background:rgba(245,158,11,.1);color:var(--amber)}
+.dc-badge.history{background:rgba(124,58,237,.1);color:var(--violet2)}
+.dc-badge.winter{background:rgba(0,229,255,.08);color:var(--cyan2)}
+.dc-name{font-family:"Syne",sans-serif;font-weight:700;font-size:18px;color:var(--ink);margin-bottom:2px}
+.dc-country{font-size:12px;color:var(--ink3);margin-bottom:12px}
+.dc-desc{font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dc-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.dc-meta-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--ink3)}
+.dc-meta-item i{font-size:13px;color:var(--ink3)}
+.dc-footer{display:flex;align-items:center;justify-content:space-between}
+.dc-price{font-family:"Syne",sans-serif;font-size:14px;font-weight:700;color:var(--ink)}
+.dc-price span{font-size:10px;color:var(--ink3);font-weight:400;font-family:"DM Sans",sans-serif}
+.dc-btn{font-size:12px;background:var(--cyan2);color:#000;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500;transition:opacity .2s}
+.dc-btn:hover{opacity:.85}
+
+.no-results{text-align:center;padding:60px 20px;color:var(--ink2);display:none}
+.no-results h3{font-family:"Syne",sans-serif;font-size:18px;color:var(--ink);margin-bottom:8px}
+
+.compare-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border2);padding:14px 28px;display:flex;align-items:center;gap:16px;z-index:200;transform:translateY(100%);transition:transform .3s}
+.compare-bar.visible{transform:translateY(0)}
+.compare-items{display:flex;gap:10px;flex:1;flex-wrap:wrap}
+.compare-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;display:flex;align-items:center;gap:8px}
+.compare-item button{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:16px;line-height:1;padding:0}
+.compare-item button:hover{color:var(--coral)}
+.compare-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;border-radius:10px;padding:10px 20px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
+.compare-label{font-size:13px;color:var(--ink2);white-space:nowrap}
+.add-compare{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);cursor:pointer;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;transition:all .2s;font-family:"DM Sans",sans-serif;margin-top:4px}
+.add-compare:hover{border-color:var(--violet2);color:var(--violet2)}
+.add-compare.added{background:rgba(124,58,237,.1);border-color:var(--violet2);color:var(--violet2)}
+
+@media(max-width:640px){
+  nav{padding:12px 16px;flex-wrap:wrap}
+  .nav-links{display:none}
+  .page-hero{padding:36px 16px 28px}
+  .filters-wrap{padding:0 16px 24px}
+  .dest-grid{grid-template-columns:1fr}
+  .compare-bar{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Trip<em>One</em></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="categories.html" class="active">Destinations</a>
+    <a href="index.html#finder">Destination Finder</a>
+  </div>
+  <div class="nav-search-wrap">
+    <i class="ti ti-search"></i>
+    <input type="text" id="search-input" placeholder="Search destinations..." oninput="filterDestinations()">
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>Find your <em>perfect</em> destination</h1>
+  <p>Browse and filter all destinations by vibe, budget, and travel style. Compare up to 3 destinations side by side.</p>
+</div>
+
+<div class="filters-wrap">
+  <div class="filters-top">
+    <div class="filters-label">Filter by vibe</div>
+    <div class="sort-wrap">
+      <label>Sort by:</label>
+      <select class="sort-select" id="sort-select" onchange="filterDestinations()">
+        <option value="name">Name A–Z</option>
+        <option value="budget-asc">Budget: Low to High</option>
+        <option value="budget-desc">Budget: High to Low</option>
+        <option value="flight">Flight time</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="cat-filters" id="cat-filters">
+    <button class="cat-btn active" data-cat="all" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--ink3)"></span> All destinations
+    </button>
+    <button class="cat-btn" data-cat="beach" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--cyan)"></span> 🏖️ Beach & Sun
+    </button>
+    <button class="cat-btn" data-cat="party" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--violet2)"></span> 🎵 Party & Nightlife
+    </button>
+    <button class="cat-btn" data-cat="city" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--amber)"></span> 🏙️ City & Culture
+    </button>
+    <button class="cat-btn" data-cat="nature" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--green)"></span> 🌿 Adventure & Nature
+    </button>
+    <button class="cat-btn" data-cat="luxury" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--amber)"></span> 💎 Luxury
+    </button>
+    <button class="cat-btn" data-cat="budget" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--green)"></span> 💰 Budget Travel
+    </button>
+    <button class="cat-btn" data-cat="food" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--amber)"></span> 🍽️ Food & Gastronomy
+    </button>
+    <button class="cat-btn" data-cat="history" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--violet2)"></span> 🏛️ History & Architecture
+    </button>
+    <button class="cat-btn" data-cat="family" onclick="toggleCat(this)">
+      <span class="dot" style="background:var(--coral)"></span> 👨‍👩‍👧 Family Friendly
+    </button>
+  </div>
+
+  <div class="budget-filters">
+    <button class="bud-btn active" data-budget="all" onclick="toggleBudget(this)">💰 All budgets</button>
+    <button class="bud-btn" data-budget="cheap" onclick="toggleBudget(this)">Under €500</button>
+    <button class="bud-btn" data-budget="mid" onclick="toggleBudget(this)">€500 – €1,000</button>
+    <button class="bud-btn" data-budget="high" onclick="toggleBudget(this)">€1,000 – €2,000</button>
+    <button class="bud-btn" data-budget="luxury" onclick="toggleBudget(this)">€2,000+</button>
+  </div>
+
+  <div class="results-bar">
+    <div class="results-count">Showing <span id="results-count">20</span> destinations</div>
+    <button class="clear-btn" onclick="clearFilters()">Clear all filters</button>
+  </div>
+
+  <div class="dest-grid" id="dest-grid"></div>
+  <div class="no-results" id="no-results">
+    <h3>No destinations match your filters</h3>
+    <p>Try removing some filters or clearing all.</p>
+  </div>
+</div>
+
+<div class="compare-bar" id="compare-bar">
+  <div class="compare-label">Compare:</div>
+  <div class="compare-items" id="compare-items"></div>
+  <button class="compare-cta" onclick="goCompare()">Compare now →</button>
+</div>
+
+<script src="data.js"></script>
+<script>
+const DEST_META = {
+  "santorini":   {cats:["beach","luxury","party"],budgetNum:1044,flightH:3,season:"May–Oct"},
+  "bali":        {cats:["beach","nature","budget","party"],budgetNum:900,flightH:14,season:"Apr–Oct"},
+  "barcelona":   {cats:["city","beach","party","food"],budgetNum:1000,flightH:3,season:"May–Oct"},
+  "dubai":       {cats:["luxury","city","beach"],budgetNum:1800,flightH:5,season:"Nov–Mar"},
+  "paris":       {cats:["city","luxury","food","history"],budgetNum:1200,flightH:3,season:"Apr–Oct"},
+  "rome":        {cats:["history","city","food"],budgetNum:950,flightH:2,season:"Apr–Oct"},
+  "lisbon":      {cats:["city","budget","food","history"],budgetNum:850,flightH:4,season:"Mar–Oct"},
+  "tokyo":       {cats:["city","food","history","nature"],budgetNum:2000,flightH:12,season:"Mar–May"},
+  "amsterdam":   {cats:["city","history","budget"],budgetNum:1100,flightH:3,season:"Apr–Sep"},
+  "prague":      {cats:["history","budget","city","party"],budgetNum:700,flightH:2,season:"Apr–Oct"},
+  "mykonos":     {cats:["beach","party","luxury"],budgetNum:2000,flightH:3,season:"Jun–Sep"},
+  "ibiza":       {cats:["party","beach"],budgetNum:1800,flightH:4,season:"Jun–Sep"},
+  "new york":    {cats:["city","food","luxury"],budgetNum:2500,flightH:10,season:"Apr–Nov"},
+  "bangkok":     {cats:["city","food","budget","party"],budgetNum:1200,flightH:10,season:"Nov–Feb"},
+  "phuket":      {cats:["beach","budget","nature","party"],budgetNum:1300,flightH:11,season:"Nov–Apr"},
+  "vienna":      {cats:["history","city","food","family"],budgetNum:900,flightH:2,season:"Apr–Oct"},
+  "budapest":    {cats:["history","budget","party","city"],budgetNum:650,flightH:2,season:"Apr–Oct"},
+  "tenerife":    {cats:["beach","family","nature"],budgetNum:1100,flightH:5,season:"Year-round"},
+  "marrakech":   {cats:["history","budget","food","nature"],budgetNum:700,flightH:4,season:"Oct–Apr"},
+  "maldives":    {cats:["beach","luxury"],budgetNum:3500,flightH:12,season:"Nov–Apr"},
+};
+
+const MALDIVES = {
+  name:"Maldives",country:"Maldives",emoji:"🇲🇻",
+  tags:["Best: Nov–Apr","Flight ~12h","Ultimate luxury beach","Overwater bungalows"],
+  description:"The Maldives is the world's ultimate beach escape — a nation of 1,200 coral islands scattered across the Indian Ocean, famous for overwater bungalows, crystal-clear lagoons, and some of the world's best snorkeling and diving. A once-in-a-lifetime destination for those seeking pure luxury and total isolation.",
+  budget:{min:"€1,500",ideal:"€3,500+"}
+};
+
+let activeCat = "all";
+let activeBudget = "all";
+let compareList = [];
+
+function budgetInRange(num, range){
+  if(range==="all") return true;
+  if(range==="cheap") return num < 500;
+  if(range==="mid") return num >= 500 && num < 1000;
+  if(range==="high") return num >= 1000 && num < 2000;
+  if(range==="luxury") return num >= 2000;
+  return true;
+}
+
+function buildCards(){
+  const grid = document.getElementById("dest-grid");
+  grid.innerHTML = "";
+
+  const allKeys = Object.keys(DEST_META);
+
+  allKeys.forEach(key => {
+    const meta = DEST_META[key];
+    const data = key === "maldives" ? MALDIVES : (DESTINATIONS[key] || null);
+    if(!data) return;
+
+    const card = document.createElement("div");
+    card.className = "dest-card";
+    card.dataset.key = key;
+    card.dataset.cats = meta.cats.join(",");
+    card.dataset.budget = meta.budgetNum;
+    card.dataset.flight = meta.flightH;
+    card.dataset.name = data.name.toLowerCase();
+
+    const badgesHTML = meta.cats.slice(0,3).map(c => {
+      const labels = {beach:"Beach",party:"Nightlife",luxury:"Luxury",budget:"Budget",city:"City",nature:"Nature",family:"Family",food:"Food",history:"History",winter:"Winter"};
+      return `<span class="dc-badge ${c}">${labels[c]||c}</span>`;
+    }).join("");
+
+    const budgetText = data.budget ? data.budget.min + " – " + data.budget.ideal : "€500+";
+    const inCompare = compareList.includes(key);
+
+    card.innerHTML = `
+      <div class="dc-top">
+        <div class="dc-flag">${data.emoji}</div>
+        <div class="dc-badges">${badgesHTML}</div>
+      </div>
+      <div class="dc-name">${data.name}</div>
+      <div class="dc-country">${data.country}</div>
+      <div class="dc-desc">${data.description.substring(0,120)}...</div>
+      <div class="dc-meta">
+        <div class="dc-meta-item"><i class="ti ti-plane"></i> ${meta.flightH < 5 ? "~" + meta.flightH + "h direct" : "~" + meta.flightH + "h with stop"}</div>
+        <div class="dc-meta-item"><i class="ti ti-calendar"></i> ${meta.season}</div>
+      </div>
+      <div class="dc-footer">
+        <div>
+          <div class="dc-price">${budgetText} <span>/ person 7n</span></div>
+          <button class="add-compare ${inCompare?"added":""}" onclick="toggleCompare(event,'${key}','${data.name} ${data.emoji}')">
+            <i class="ti ti-${inCompare?"check":"plus"}"></i> ${inCompare?"Added to compare":"Compare"}
+          </button>
+        </div>
+        <button class="dc-btn" onclick="window.location.href='results.html?dest=${encodeURIComponent(data.name)}'">Explore →</button>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+
+  filterDestinations();
+}
+
+function toggleCat(btn){
+  activeCat = btn.dataset.cat;
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  filterDestinations();
+}
+
+function toggleBudget(btn){
+  activeBudget = btn.dataset.budget;
+  document.querySelectorAll(".bud-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  filterDestinations();
+}
+
+function filterDestinations(){
+  const searchVal = document.getElementById("search-input").value.toLowerCase().trim();
+  const sortVal = document.getElementById("sort-select").value;
+  const cards = Array.from(document.querySelectorAll(".dest-card"));
+
+  let visible = 0;
+  cards.forEach(card => {
+    const cats = card.dataset.cats.split(",");
+    const budget = parseInt(card.dataset.budget);
+    const name = card.dataset.name;
+
+    const catOk = activeCat === "all" || cats.includes(activeCat);
+    const budgetOk = budgetInRange(budget, activeBudget);
+    const searchOk = !searchVal || name.includes(searchVal);
+
+    if(catOk && budgetOk && searchOk){
+      card.classList.remove("hidden");
+      visible++;
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+
+  // Sort
+  const grid = document.getElementById("dest-grid");
+  const visibleCards = cards.filter(c => !c.classList.contains("hidden"));
+  visibleCards.sort((a,b) => {
+    if(sortVal === "name") return a.dataset.name.localeCompare(b.dataset.name);
+    if(sortVal === "budget-asc") return parseInt(a.dataset.budget) - parseInt(b.dataset.budget);
+    if(sortVal === "budget-desc") return parseInt(b.dataset.budget) - parseInt(a.dataset.budget);
+    if(sortVal === "flight") return parseInt(a.dataset.flight) - parseInt(b.dataset.flight);
+    return 0;
+  });
+  visibleCards.forEach(c => grid.appendChild(c));
+
+  document.getElementById("results-count").textContent = visible;
+  document.getElementById("no-results").style.display = visible === 0 ? "block" : "none";
+}
+
+function clearFilters(){
+  activeCat = "all";
+  activeBudget = "all";
+  document.getElementById("search-input").value = "";
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(".cat-btn[data-cat='all']").classList.add("active");
+  document.querySelectorAll(".bud-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(".bud-btn[data-budget='all']").classList.add("active");
+  filterDestinations();
+}
+
+function toggleCompare(e, key, label){
+  e.stopPropagation();
+  if(compareList.includes(key)){
+    compareList = compareList.filter(k => k !== key);
+  } else {
+    if(compareList.length >= 3){ alert("You can compare up to 3 destinations at once."); return; }
+    compareList.push(key);
+  }
+  updateCompareBar();
+  // Read URL param ?cat=xxx
+const urlCat = new URLSearchParams(window.location.search).get("cat");
+if(urlCat){
+  const btn = document.querySelector(`.cat-btn[data-cat="${urlCat}"]`);
+  if(btn){ activeCat = urlCat; document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+}
+buildCards();
+}
+
+function updateCompareBar(){
+  const bar = document.getElementById("compare-bar");
+  const items = document.getElementById("compare-items");
+  if(compareList.length === 0){
+    bar.classList.remove("visible");
+    items.innerHTML = "";
+    return;
+  }
+  bar.classList.add("visible");
+  items.innerHTML = compareList.map(key => {
+    const data = DESTINATIONS[key] || MALDIVES;
+    return `<div class="compare-item">${data.emoji} ${data.name} <button onclick="removeCompare('${key}')" title="Remove">×</button></div>`;
+  }).join("");
+}
+
+function removeCompare(key){
+  compareList = compareList.filter(k => k !== key);
+  updateCompareBar();
+  // Read URL param ?cat=xxx
+const urlCat = new URLSearchParams(window.location.search).get("cat");
+if(urlCat){
+  const btn = document.querySelector(`.cat-btn[data-cat="${urlCat}"]`);
+  if(btn){ activeCat = urlCat; document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+}
+buildCards();
+}
+
+function goCompare(){
+  if(compareList.length < 2){ alert("Select at least 2 destinations to compare."); return; }
+  window.location.href = "compare.html?dests=" + compareList.map(k => encodeURIComponent(k)).join(",");
+}
+
+// Read URL param ?cat=xxx
+const urlCat = new URLSearchParams(window.location.search).get("cat");
+if(urlCat){
+  const btn = document.querySelector(`.cat-btn[data-cat="${urlCat}"]`);
+  if(btn){ activeCat = urlCat; document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+}
+buildCards();
+</script>
+</body>
+</html>
