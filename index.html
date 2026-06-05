@@ -175,9 +175,9 @@ h1{animation:fadeUp .6s .1s ease both}
 <nav>
   <div class="logo">Trip<em>One</em></div>
   <div class="nav-links">
-    <a>Destinations</a>
-    <a>Categories</a>
-    <a>How it works</a>
+    <a href="categories.html">Destinations</a>
+    <a href="categories.html">Categories</a>
+    <a href="#how">How it works</a>
   </div>
   <button class="nav-btn">Get Started</button>
 </nav>
@@ -342,6 +342,49 @@ h1{animation:fadeUp .6s .1s ease both}
   </div>
 </div>
 
+
+<!-- CATEGORIES SECTION -->
+<div style="position:relative;z-index:1;padding:0 32px 80px;max-width:1100px;margin:0 auto">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--ink)">Browse by travel style</div>
+      <div style="font-size:13px;color:var(--ink3);margin-top:4px">Filter destinations by what you love</div>
+    </div>
+    <a href="categories.html" style="font-size:13px;color:var(--cyan);text-decoration:none;display:flex;align-items:center;gap:4px">See all <i class="ti ti-arrow-right" style="font-size:14px"></i></a>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <a href="categories.html?cat=beach" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--cyan2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:28px;margin-bottom:10px">🏖️</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Beach & Sun</div>
+      <div style="font-size:11px;color:var(--ink3)">7 destinations</div>
+    </a>
+    <a href="categories.html?cat=city" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--amber)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:28px;margin-bottom:10px">🏙️</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">City & Culture</div>
+      <div style="font-size:11px;color:var(--ink3)">9 destinations</div>
+    </a>
+    <a href="categories.html?cat=party" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--violet2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:28px;margin-bottom:10px">🎵</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Party & Nightlife</div>
+      <div style="font-size:11px;color:var(--ink3)">8 destinations</div>
+    </a>
+    <a href="categories.html?cat=budget" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--green)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:28px;margin-bottom:10px">💰</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Budget Travel</div>
+      <div style="font-size:11px;color:var(--ink3)">6 destinations</div>
+    </a>
+    <a href="categories.html?cat=luxury" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:all .2s;display:block" onmouseover="this.style.borderColor='var(--amber)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:28px;margin-bottom:10px">💎</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Luxury</div>
+      <div style="font-size:11px;color:var(--ink3)">5 destinations</div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-top:20px">
+    <a href="categories.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:9px 20px;font-size:13px;color:var(--ink2);text-decoration:none;transition:all .2s" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">
+      <i class="ti ti-world" style="font-size:15px"></i> Browse all 20 destinations with full filters
+    </a>
+  </div>
+</div>
 <footer>
   <div class="footer-logo">Trip<em>One</em></div>
   <div class="footer-note">v0.2 — built step by step</div>
@@ -366,3 +409,4 @@ document.getElementById('main-search').addEventListener('keydown', e => {
 </script>
 </body>
 </html>
+<!-- This file already exists — section injected via categories page link -->
