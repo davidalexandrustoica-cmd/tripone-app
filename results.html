@@ -192,17 +192,24 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   .main{padding:16px}
   .side{padding:16px}
 }
+
+/* NAV CTA */
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta:hover{opacity:.88}
+@media(max-width:768px){.nav-links{display:none}}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">Trip<em>One</em></a>
-  <div class="nav-search">
-    <i class="ti ti-map-pin"></i>
-    <input type="text" id="nav-input" placeholder="Search another destination...">
-    <button class="nav-go" onclick="goSearch()">Go</button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="categories.html">Destinations</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html">Compare</a>
   </div>
+  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
 
 <div id="hero-bar" class="hero-bar">

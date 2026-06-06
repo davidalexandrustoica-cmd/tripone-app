@@ -166,6 +166,11 @@ h1{animation:fadeUp .6s .1s ease both}
   .categories,.top-dests,.features,.ai-section{padding-left:16px;padding-right:16px}
   .dest-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* NAV CTA */
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta:hover{opacity:.88}
+@media(max-width:768px){.nav-links{display:none}}
 </style>
 </head>
 <body>
@@ -173,13 +178,14 @@ h1{animation:fadeUp .6s .1s ease both}
 <div class="orb orb2"></div>
 
 <nav>
-  <div class="logo">Trip<em>One</em></div>
+  <a href="index.html" class="logo">Trip<em>One</em></a>
   <div class="nav-links">
+    <a href="index.html" style="color:var(--ink)">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="categories.html">Categories</a>
-    <a href="#how">How it works</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html">Compare</a>
   </div>
-  <button class="nav-btn">Get Started</button>
+  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
 
 <div class="hero">

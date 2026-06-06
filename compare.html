@@ -108,6 +108,11 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   nav{padding:12px 16px}
   .nav-links{display:none}
 }
+
+/* NAV CTA */
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta:hover{opacity:.88}
+@media(max-width:768px){.nav-links{display:none}}
 </style>
 </head>
 <body>
@@ -117,8 +122,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="categories.html">Finder</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html" style="color:var(--ink)">Compare</a>
   </div>
+  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
 
 <div class="page-hero">
