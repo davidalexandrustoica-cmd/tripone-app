@@ -123,7 +123,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
     <a href="finder.html">Finder</a>
-    <a href="compare.html" style="color:var(--ink)">Compare</a>
+    <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
@@ -449,8 +450,15 @@ function selectDest(key){
 }
 
 // INIT
-renderPickers();
-renderCompare();
+function init(){
+  renderPickers();
+  renderCompare();
+}
+if(typeof DESTINATIONS !== "undefined"){
+  init();
+} else {
+  window.addEventListener("load", init);
+}
 </script>
 </body>
 </html>

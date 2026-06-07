@@ -140,8 +140,9 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="finder.html" style="color:var(--ink)">Finder</a>
+    <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
@@ -357,14 +358,10 @@ Only recommend destinations from the list. Order by best match first. Be specifi
   }, 1800);
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("/api/claude", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }]
-      })
+      body: JSON.stringify({ prompt: prompt, max_tokens: 1000 })
     });
 
     const data = await response.json();

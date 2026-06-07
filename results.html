@@ -208,6 +208,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="categories.html">Destinations</a>
     <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
@@ -320,7 +321,7 @@ async function renderPage(){
       <span class="btotal">${data.budget.min} – ${data.budget.ideal}</span>
     </div>
     <div class="warnbox"><i class="ti ti-info-circle"></i><div>Book flights at least 6 weeks in advance for the best prices.</div></div>
-    <button class="aibtn"><i class="ti ti-sparkles"></i> Generate AI Itinerary</button>
+    <button class="aibtn" onclick="window.location.href='itinerary.html?dest='+encodeURIComponent(DEST)"><i class="ti ti-sparkles"></i> Generate AI Itinerary</button>
     <button class="sbtn" onclick="window.location.href='index.html'">← Back to search</button>
     <div class="scard" style="margin-top:12px">
       <div class="stitle"><i class="ti ti-info-circle"></i> Quick Facts</div>
@@ -498,7 +499,11 @@ document.getElementById("nav-input").addEventListener("keydown", e => {
   if(e.key === "Enter") goSearch();
 });
 
-renderPage();
+if(typeof getDestination === "function"){
+  renderPage();
+} else {
+  window.addEventListener("load", renderPage);
+}
 </script>
 </body>
 </html>

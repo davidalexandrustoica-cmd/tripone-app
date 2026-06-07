@@ -124,9 +124,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <a href="index.html" class="logo">Trip<em>One</em></a>
   <div class="nav-links">
     <a href="index.html">Home</a>
-    <a href="categories.html" style="color:var(--ink)">Destinations</a>
+    <a href="categories.html">Destinations</a>
     <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
@@ -429,7 +430,11 @@ if(urlCat){
   const btn = document.querySelector(`.cat-btn[data-cat="${urlCat}"]`);
   if(btn){ activeCat = urlCat; document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 }
-buildCards();
+if(typeof DESTINATIONS !== "undefined"){
+  buildCards();
+} else {
+  window.addEventListener("load", buildCards);
+}
 </script>
 </body>
 </html>
