@@ -1,3 +1,4 @@
+// TripOne destination database v2
 const DESTINATIONS = {
   "santorini": {
     name:"Santorini",country:"Greece",emoji:"🇬🇷",
@@ -305,6 +306,7 @@ const DESTINATIONS = {
   }
 };
 
+console.log("TripOne data.js loaded - " + Object.keys(DESTINATIONS).length + " destinations");
 function getDestination(query) {
   const key = query.toLowerCase().trim();
   return DESTINATIONS[key] || null;

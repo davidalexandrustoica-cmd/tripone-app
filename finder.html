@@ -271,7 +271,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   </div>
 </div>
 
-<script src="data.js"></script>
+<script src="data.js?v=2"></script>
 <script>
 // Multi-select chips
 document.querySelectorAll(".chip-opt").forEach(chip => {
@@ -365,6 +365,9 @@ Only recommend destinations from the list. Order by best match first. Be specifi
     });
 
     const data = await response.json();
+    console.log("API response:", JSON.stringify(data).substring(0, 300));
+    if(data.error) throw new Error("API error: " + (data.error.message || data.error));
+    if(!data.content || !data.content[0]) throw new Error("Empty response from API. Check your API key on Vercel.");
     const text = data.content[0].text;
 
     // Parse JSON
