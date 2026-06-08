@@ -231,12 +231,16 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 
 <script src="data.js?v=2"></script>
 <script>
-const WEATHER_KEY = "ad16f6c9657d9eca6c06f3bf9cac3f4c";
-const params = new URLSearchParams(window.location.search);
-const DEST = params.get("dest") || "Santorini";
+const WEATHER_KEY = "ad16f6c9657d9eca6c06f3bf9cac3f4c"; //
+const params = new URLSearchParams(window.location.search); //
+const DEST = params.get("dest") || "Santorini"; //[cite: 1]
 
-document.getElementById("nav-input").value = DEST;
-document.title = "TripOne — " + DEST;
+// REPARAȚIE: Punem o verificare ca să nu mai crape scriptul dacă id-ul nu există
+const navInput = document.getElementById("nav-input");
+if (navInput) {
+  navInput.value = DEST;
+}
+document.title = "TripOne — " + DEST; //[cite: 1]
 
 function stars(n){ return "★".repeat(n) + "☆".repeat(5-n); }
 
@@ -416,12 +420,17 @@ async function renderPage(){
 }
 
 function goSearch(){
-  const v = document.getElementById("nav-input").value.trim();
+  const inputEl = document.getElementById("nav-input") || document.getElementById("main-search");
+  const v = inputEl ? inputEl.value.trim() : "";
   if(v) window.location.href = "results.html?dest=" + encodeURIComponent(v);
 }
-document.getElementById("nav-input").addEventListener("keydown", e => {
-  if(e.key === "Enter") goSearch();
-});
+// REPARAȚIE SECURIZATĂ
+const searchInputEl = document.getElementById("nav-input");
+if (searchInputEl) {
+  searchInputEl.addEventListener("keydown", e => {
+    if(e.key === "Enter") goSearch();
+  });
+}
 
 function safeInit(){
   try {
