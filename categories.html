@@ -249,7 +249,20 @@ const MALDIVES = {
 let activeCat = "all";
 let activeBudget = "all";
 let compareList = [];
+// REPARAȚIE PASUL 2: Funcțiile care activează butoanele de filtrare
+function toggleCat(btn){
+  activeCat = btn.dataset.cat;[cite: 4]
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));[cite: 4]
+  btn.classList.add("active");[cite: 4]
+  filterDestinations();[cite: 4]
+}
 
+function toggleBudget(btn){
+  activeBudget = btn.dataset.budget;[cite: 4]
+  document.querySelectorAll(".bud-btn").forEach(b => b.classList.remove("active"));[cite: 4]
+  btn.classList.add("active");[cite: 4]
+  filterDestinations();[cite: 4]
+}
 function budgetInRange(num, range){
   if(range==="all") return true;
   if(range==="cheap") return num < 500;
