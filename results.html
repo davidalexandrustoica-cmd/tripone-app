@@ -297,193 +297,117 @@ async function renderPage(){
 
   if(!data){
     document.getElementById("dest-title").textContent = DEST;
-    document.getElementById("main-content").innerHTML = `
-      <div class="not-found">
-        <h2>Destination not in our database yet</h2>
-        <p>We are constantly adding new destinations. Try one of our top 20.</p>
-        <button onclick="window.location.href='index.html'">← Back to search</button>
-      </div>`;
-    document.getElementById("side-content").innerHTML = "";
-    return;
+    // Build HTML sections safely
+  function buildFlights(flights) {
+    return flights.map(function(f) {
+      var cls = f.best ? "fl best" : "fl";
+      var badge = f.best ? '<div class="flbadge">Cheapest</div>' : "";
+      return '<div class="' + cls + '">' +
+        '<div class="fll"><div><div class="flair">' + f.airline + '</div>' + badge + '</div>' +
+        '<div><div class="flrt">' + f.route + '</div><div class="fldt">' + f.detail + '</div></div></div>' +
+        '<div class="flp"><strong>' + f.price + '</strong><span>round trip</span><button class="flbtn">Book →</button></div>' +
+        '</div>';
+    }).join("");
   }
 
-  // Hero
-  document.getElementById("dest-title").textContent = data.name + ", " + data.country + " " + data.emoji;
-  document.getElementById("dest-sub").textContent = "Everything you need for the perfect trip — updated today";
-  document.getElementById("dest-tags").innerHTML = data.tags.map((t,i)=>`<div class="htag ${i===0?"good":""}">${t}</div>`).join("");
+  function buildHotels(hotels) {
+    return hotels.map(function(h) {
+      var starsStr = "★".repeat(h.stars) + "☆".repeat(5 - h.stars);
+      return '<div class="hcard"><div class="hn">' + h.name + '</div><div class="ht">' + h.type + '</div>' +
+        '<div class="hr"><div class="hst">' + starsStr + '</div><div class="hp">' + h.price + '</div></div></div>';
+    }).join("");
+  }
 
-  // Sidebar budget summary
-  const flightMin = data.flights[0].price;
-  document.getElementById("side-content").innerHTML = `
-    <div class="scard">
-      <div class="stitle"><i class="ti ti-calculator"></i> Budget Summary (7 nights)</div>
-      ${data.budget.breakdown.map(r=>`<div class="sb-brow"><span>${r[0]}</span><span>${r[1]}</span></div>`).join("")}
-      <span class="btotal">${data.budget.min} – ${data.budget.ideal}</span>
-    </div>
-    <div class="warnbox"><i class="ti ti-info-circle"></i><div>Book flights at least 6 weeks in advance for the best prices.</div></div>
-    <button class="aibtn" onclick="window.location.href='itinerary.html?dest='+encodeURIComponent(DEST)"><i class="ti ti-sparkles"></i> Generate AI Itinerary</button>
-    <button class="sbtn" onclick="window.location.href='index.html'">← Back to search</button>
-    <div class="scard" style="margin-top:12px">
-      <div class="stitle"><i class="ti ti-info-circle"></i> Quick Facts</div>
-      <div class="sb-brow"><span>Best months</span><span>${data.best_months}</span></div>
-      <div class="sb-brow"><span>Peak season</span><span>${data.peak}</span></div>
-      <div class="sb-brow"><span>Language</span><span>${data.language}</span></div>
-      <div class="sb-brow"><span>Currency</span><span>${data.currency}</span></div>
-      <div class="sb-brow"><span>Timezone</span><span>${data.timezone}</span></div>
-      <div class="sb-brow"><span>Flight time</span><span>${data.flight_time}</span></div>
-    </div>`;
+  function buildActivities(acts) {
+    return acts.map(function(a) {
+      var priceClass = a.free ? "ap free" : "ap paid";
+      return '<div class="ac"><div class="aic">' + a.icon + '</div>' +
+        '<div><div class="an">' + a.name + '</div><div class="ad">' + a.detail + '</div></div>' +
+        '<div class="' + priceClass + '">' + a.price + '</div></div>';
+    }).join("");
+  }
 
-  // Main content
-  document.getElementById("main-content").innerHTML = `
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-book" style="color:var(--violet2);font-size:18px"></i><h2>About ${data.name}</h2></div>
-      <div class="desc-card">${data.description}</div>
-    </div>
+  function buildFood(foods) {
+    return foods.map(function(f, i) {
+      return '<div class="rc"><div class="rnum">' + (i+1) + '</div>' +
+        '<div><div class="rl">' + f.name + '</div><div class="rd">' + f.detail + '</div></div>' +
+        '<div class="rp">' + f.price + '</div></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-sun" style="color:var(--cyan);font-size:18px"></i><h2>Live Weather <span class="live-badge">LIVE</span></h2></div>
-      <div id="weather-box"><div class="weather-loading"><i class="ti ti-loader ti-spin"></i> Loading real weather data...</div></div>
-    </div>
+  function buildNightlife(night) {
+    return night.map(function(n) {
+      return '<div class="nc"><div class="ncicon"><i class="ti ti-building"></i></div>' +
+        '<div><div class="ncn">' + n.name + '</div><div class="ncd">' + n.detail + '</div></div></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2);font-size:18px"></i><h2>Flights from Bucharest (OTP)</h2></div>
-      <div class="flist">
-        ${data.flights.map(f=>`
-          <div class="fl ${f.best?"best":""}">
-            <div class="fll">
-              <div>
-                <div class="flair">${f.airline}</div>
-                ${f.best?'<div class="flbadge">Cheapest</div>':""}
-              </div>
-              <div>
-                <div class="flrt">${f.route}</div>
-                <div class="fldt">${f.detail}</div>
-              </div>
-            </div>
-            <div class="flp">
-              <strong>${f.price}</strong>
-              <span>round trip</span>
-              <button class="flbtn">Book →</button>
-            </div>
-          </div>`).join("")}
-      </div>
-    </div>
+  function buildWarnings(warns) {
+    return warns.map(function(w) {
+      return '<div class="warn-item"><i class="ti ti-alert-circle"></i>' +
+        '<div class="warn-text"><strong>' + w.title + '</strong><p>' + w.text + '</p></div></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-bed" style="color:var(--violet2);font-size:18px"></i><h2>Hotels & Stays</h2></div>
-      <div class="hgrid">
-        ${data.hotels.map(h=>`
-          <div class="hcard">
-            <div class="hn">${h.name}</div>
-            <div class="ht">${h.type}</div>
-            <div class="hr">
-              <div class="hst">${stars(h.stars)}</div>
-              <div class="hp">${h.price}</div>
-            </div>
-          </div>`).join("")}
-      </div>
-    </div>
+  function buildDiscounts(discs) {
+    return discs.map(function(d) {
+      return '<div class="disc"><i class="ti ti-ticket"></i>' +
+        '<div class="disc-text"><strong>' + d.title + '</strong><p>' + d.text + '</p></div></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-coin" style="color:var(--amber);font-size:18px"></i><h2>Budget Breakdown</h2></div>
-      <div class="budget-split">
-        <div class="bcard">
-          <div class="bcard-label">Minimum budget</div>
-          <div class="bcard-amount">${data.budget.min}</div>
-          <div class="bcard-desc">${data.budget.min_desc}</div>
-        </div>
-        <div class="bcard ideal">
-          <div class="bcard-label">Ideal budget</div>
-          <div class="bcard-amount">${data.budget.ideal}</div>
-          <div class="bcard-desc">${data.budget.ideal_desc}</div>
-        </div>
-      </div>
-      <div class="bdown">
-        ${data.budget.breakdown.map(r=>`<div class="brow"><span>${r[0]}</span><span>${r[1]}</span></div>`).join("")}
-      </div>
-    </div>
+  function buildTransport(trans) {
+    return trans.map(function(t) {
+      return '<div class="trans"><div class="trans-icon">' + t.icon + '</div>' +
+        '<div><div class="trans-name">' + t.name + '</div><div class="trans-desc">' + t.detail + '</div></div>' +
+        '<div class="trans-price">' + t.price + '</div></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-map-2" style="color:var(--green);font-size:18px"></i><h2>Top Activities</h2></div>
-      <div class="alist">
-        ${data.activities.map(a=>`
-          <div class="ac">
-            <div class="aic">${a.icon}</div>
-            <div>
-              <div class="an">${a.name}</div>
-              <div class="ad">${a.detail}</div>
-            </div>
-            <div class="ap ${a.free?"free":"paid"}">${a.price}</div>
-          </div>`).join("")}
-      </div>
-    </div>
+  function buildBudgetBreakdown(breakdown) {
+    return breakdown.map(function(r) {
+      return '<div class="brow"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+    }).join("");
+  }
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-tools-kitchen-2" style="color:var(--amber);font-size:18px"></i><h2>Food & Restaurants</h2></div>
-      <div class="rlist">
-        ${data.food.map((f,i)=>`
-          <div class="rc">
-            <div class="rnum">${i+1}</div>
-            <div>
-              <div class="rl">${f.name}</div>
-              <div class="rd">${f.detail}</div>
-            </div>
-            <div class="rp">${f.price}</div>
-          </div>`).join("")}
-      </div>
-    </div>
+  var mainHTML =
+    '<div class="sec"><div class="sechd"><i class="ti ti-book" style="color:var(--violet2);font-size:18px"></i><h2>About ' + data.name + '</h2></div>' +
+    '<div class="desc-card">' + data.description + '</div></div>' +
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-music" style="color:var(--violet2);font-size:18px"></i><h2>Nightlife</h2></div>
-      <div class="nlist">
-        ${data.nightlife.map(n=>`
-          <div class="nc">
-            <div class="ncicon"><i class="ti ti-building"></i></div>
-            <div>
-              <div class="ncn">${n.name}</div>
-              <div class="ncd">${n.detail}</div>
-            </div>
-          </div>`).join("")}
-      </div>
-    </div>
+    '<div class="sec"><div class="sechd"><i class="ti ti-sun" style="color:var(--cyan);font-size:18px"></i><h2>Live Weather <span class="live-badge">LIVE</span></h2></div>' +
+    '<div id="weather-box"><div class="weather-loading"><i class="ti ti-loader ti-spin"></i> Loading real weather data...</div></div></div>' +
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:18px"></i><h2>Safety & Warnings</h2></div>
-      <div class="warnlist">
-        ${data.warnings.map(w=>`
-          <div class="warn-item">
-            <i class="ti ti-alert-circle"></i>
-            <div class="warn-text"><strong>${w.title}</strong><p>${w.text}</p></div>
-          </div>`).join("")}
-      </div>
-    </div>
+    '<div class="sec"><div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2);font-size:18px"></i><h2>Flights from Bucharest (OTP)</h2></div>' +
+    '<div class="flist">' + buildFlights(data.flights) + '</div></div>' +
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-tag" style="color:var(--green);font-size:18px"></i><h2>Discounts & Deals</h2></div>
-      <div class="disc-list">
-        ${data.discounts.map(d=>`
-          <div class="disc">
-            <i class="ti ti-ticket"></i>
-            <div class="disc-text"><strong>${d.title}</strong><p>${d.text}</p></div>
-          </div>`).join("")}
-      </div>
-    </div>
+    '<div class="sec"><div class="sechd"><i class="ti ti-bed" style="color:var(--violet2);font-size:18px"></i><h2>Hotels & Stays</h2></div>' +
+    '<div class="hgrid">' + buildHotels(data.hotels) + '</div></div>' +
 
-    <div class="sec">
-      <div class="sechd"><i class="ti ti-bus" style="color:var(--cyan2);font-size:18px"></i><h2>Local Transport</h2></div>
-      <div class="tlist">
-        ${data.transport.map(t=>`
-          <div class="trans">
-            <div class="trans-icon">${t.icon}</div>
-            <div>
-              <div class="trans-name">${t.name}</div>
-              <div class="trans-desc">${t.detail}</div>
-            </div>
-            <div class="trans-price">${t.price}</div>
-          </div>`).join("")}
-      </div>
-    </div>
-  `;
+    '<div class="sec"><div class="sechd"><i class="ti ti-coin" style="color:var(--amber);font-size:18px"></i><h2>Budget Breakdown</h2></div>' +
+    '<div class="budget-split">' +
+      '<div class="bcard"><div class="bcard-label">Minimum budget</div><div class="bcard-amount">' + data.budget.min + '</div><div class="bcard-desc">' + data.budget.min_desc + '</div></div>' +
+      '<div class="bcard ideal"><div class="bcard-label">Ideal budget</div><div class="bcard-amount">' + data.budget.ideal + '</div><div class="bcard-desc">' + data.budget.ideal_desc + '</div></div>' +
+    '</div><div class="bdown">' + buildBudgetBreakdown(data.budget.breakdown) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-map-2" style="color:var(--green);font-size:18px"></i><h2>Top Activities</h2></div>' +
+    '<div class="alist">' + buildActivities(data.activities) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-tools-kitchen-2" style="color:var(--amber);font-size:18px"></i><h2>Food & Restaurants</h2></div>' +
+    '<div class="rlist">' + buildFood(data.food) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-music" style="color:var(--violet2);font-size:18px"></i><h2>Nightlife</h2></div>' +
+    '<div class="nlist">' + buildNightlife(data.nightlife) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:18px"></i><h2>Safety & Warnings</h2></div>' +
+    '<div class="warnlist">' + buildWarnings(data.warnings) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-tag" style="color:var(--green);font-size:18px"></i><h2>Discounts & Deals</h2></div>' +
+    '<div class="disc-list">' + buildDiscounts(data.discounts) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-bus" style="color:var(--cyan2);font-size:18px"></i><h2>Local Transport</h2></div>' +
+    '<div class="tlist">' + buildTransport(data.transport) + '</div></div>';
+
+  document.getElementById("main-content").innerHTML = mainHTML;
 
   // Load weather async
   const weatherHTML = await loadWeather(data.weather_city);
@@ -499,10 +423,18 @@ document.getElementById("nav-input").addEventListener("keydown", e => {
   if(e.key === "Enter") goSearch();
 });
 
+function safeInit(){
+  try {
+    renderPage();
+  } catch(e) {
+    console.error("TripOne results error:", e);
+    document.getElementById("main-content").innerHTML = '<div style="padding:40px;text-align:center;color:var(--coral)"><i class="ti ti-alert-circle" style="font-size:32px"></i><p style="margin-top:12px">Error loading destination: ' + e.message + '</p><br><a href="index.html" style="color:var(--cyan)">← Back to home</a></div>';
+  }
+}
 if(typeof getDestination === "function"){
-  renderPage();
+  safeInit();
 } else {
-  window.addEventListener("load", renderPage);
+  window.addEventListener("load", safeInit);
 }
 </script>
 </body>

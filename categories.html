@@ -285,28 +285,29 @@ function buildCards(){
 
     const budgetText = data.budget ? data.budget.min + " – " + data.budget.ideal : "€500+";
     const inCompare = compareList.includes(key);
+    const compareClass = inCompare ? "add-compare added" : "add-compare";
+    const compareIcon = inCompare ? "check" : "plus";
+    const compareLabel = inCompare ? "Added" : "Compare";
+    const flightText = meta.flightH < 5 ? "~" + meta.flightH + "h direct" : "~" + meta.flightH + "h with stop";
+    const destUrl = "results.html?dest=" + encodeURIComponent(data.name);
 
-    card.innerHTML = `
-      <div class="dc-top">
-        <div class="dc-flag">${data.emoji}</div>
-        <div class="dc-badges">${badgesHTML}</div>
-      </div>
-      <div class="dc-name">${data.name}</div>
-      <div class="dc-country">${data.country}</div>
-      <div class="dc-desc">${data.description.substring(0,120)}...</div>
-      <div class="dc-meta">
-        <div class="dc-meta-item"><i class="ti ti-plane"></i> ${meta.flightH < 5 ? "~" + meta.flightH + "h direct" : "~" + meta.flightH + "h with stop"}</div>
-        <div class="dc-meta-item"><i class="ti ti-calendar"></i> ${meta.season}</div>
-      </div>
-      <div class="dc-footer">
-        <div>
-          <div class="dc-price">${budgetText} <span>/ person 7n</span></div>
-          <button class="add-compare ${inCompare?"added":""}" onclick="toggleCompare(event,'${key}','${data.name} ${data.emoji}')">
-            <i class="ti ti-${inCompare?"check":"plus"}"></i> ${inCompare?"Added to compare":"Compare"}
-          </button>
-        </div>
-        <button class="dc-btn" onclick="window.location.href='results.html?dest=${encodeURIComponent(data.name)}'">Explore →</button>
-      </div>`;
+    card.innerHTML =
+      '<div class="dc-top"><div class="dc-flag">' + data.emoji + '</div><div class="dc-badges">' + badgesHTML + '</div></div>' +
+      '<div class="dc-name">' + data.name + '</div>' +
+      '<div class="dc-country">' + data.country + '</div>' +
+      '<div class="dc-desc">' + data.description.substring(0,120) + '...</div>' +
+      '<div class="dc-meta">' +
+        '<div class="dc-meta-item"><i class="ti ti-plane"></i> ' + flightText + '</div>' +
+        '<div class="dc-meta-item"><i class="ti ti-calendar"></i> ' + meta.season + '</div>' +
+      '</div>' +
+      '<div class="dc-footer"><div>' +
+        '<div class="dc-price">' + budgetText + ' <span>/ person 7n</span></div>' +
+        '<button class="' + compareClass + '" onclick="toggleCompare(event,\'' + key + '\',\'' + data.name + '\')">' +
+          '<i class="ti ti-' + compareIcon + '"></i> ' + compareLabel +
+        '</button>' +
+      '</div>' +
+      '<button class="dc-btn" onclick="window.location.href=\'' + destUrl + '\'">Explore →</button>' +
+      '</div>';
 
     grid.appendChild(card);
   });
@@ -434,10 +435,18 @@ if(urlCat){
   const btn = document.querySelector(`.cat-btn[data-cat="${urlCat}"]`);
   if(btn){ activeCat = urlCat; document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 }
+function safeInit(){
+  try {
+    buildCards();
+  } catch(e) {
+    console.error("TripOne init error in categories.html:", e);
+    document.body.innerHTML += '<div style="position:fixed;bottom:20px;right:20px;background:#ff6b6b;color:#000;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999">Error: ' + e.message + '</div>';
+  }
+}
 if(typeof DESTINATIONS !== "undefined"){
-  buildCards();
+  safeInit();
 } else {
-  window.addEventListener("load", buildCards);
+  window.addEventListener("load", safeInit);
 }
 </script>
 </body>

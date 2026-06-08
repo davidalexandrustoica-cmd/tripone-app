@@ -160,7 +160,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   </div>
 </div>
 
-<script src="data.js"></script>
+<script src="data.js?v=2"></script>
 <script>
 const DEST_META = {
   "santorini":  {cats:["beach","luxury","party"],budgetNum:1044,flightH:3,season:"May–Oct",tempSummer:28,tempWinter:14,crowd:4,safety:5,nightlife:4,food:4,nature:3,value:3},
@@ -454,10 +454,18 @@ function init(){
   renderPickers();
   renderCompare();
 }
+function safeInit(){
+  try {
+    init();
+  } catch(e) {
+    console.error("TripOne init error in compare.html:", e);
+    document.body.innerHTML += '<div style="position:fixed;bottom:20px;right:20px;background:#ff6b6b;color:#000;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999">Error: ' + e.message + '</div>';
+  }
+}
 if(typeof DESTINATIONS !== "undefined"){
-  init();
+  safeInit();
 } else {
-  window.addEventListener("load", init);
+  window.addEventListener("load", safeInit);
 }
 </script>
 </body>
