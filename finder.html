@@ -365,9 +365,8 @@ Only recommend destinations from the list. Order by best match first. Be specifi
     });
 
     const data = await response.json();
-    console.log("API response:", JSON.stringify(data).substring(0, 300));
-    if(data.error) throw new Error("API error: " + (data.error.message || data.error));
-    if(!data.content || !data.content[0]) throw new Error("Empty response from API. Check your API key on Vercel.");
+    if (data.error) throw new Error("API error: " + (data.error.message || data.error));
+    if (!data.content || !data.content[0]) throw new Error("No response from API. Check your Anthropic credits at console.anthropic.com");
     const text = data.content[0].text;
 
     // Parse JSON

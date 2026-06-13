@@ -460,6 +460,8 @@ Make every day different and interesting. Be specific with names of places, rest
     }
 
     const data = await res.json();
+    if (data.error) throw new Error("API error: " + (data.error.message || data.error));
+    if (!data.content || !data.content[0]) throw new Error("No response from API. Check your Anthropic API key and credits.");
     const text = data.content[0].text;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if(!jsonMatch) throw new Error("Could not parse itinerary");
