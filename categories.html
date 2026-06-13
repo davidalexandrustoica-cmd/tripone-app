@@ -214,7 +214,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <button class="compare-cta" onclick="goCompare()">Compare now →</button>
 </div>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 const DEST_META = {
   "santorini":   {cats:["beach","luxury","party"],budgetNum:1044,flightH:3,season:"May–Oct"},
@@ -249,20 +249,7 @@ const MALDIVES = {
 let activeCat = "all";
 let activeBudget = "all";
 let compareList = [];
-// REPARAȚIE PASUL 2: Funcțiile care activează butoanele de filtrare
-function toggleCat(btn){
-  activeCat = btn.dataset.cat;[cite: 4]
-  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));[cite: 4]
-  btn.classList.add("active");[cite: 4]
-  filterDestinations();[cite: 4]
-}
 
-function toggleBudget(btn){
-  activeBudget = btn.dataset.budget;[cite: 4]
-  document.querySelectorAll(".bud-btn").forEach(b => b.classList.remove("active"));[cite: 4]
-  btn.classList.add("active");[cite: 4]
-  filterDestinations();[cite: 4]
-}
 function budgetInRange(num, range){
   if(range==="all") return true;
   if(range==="cheap") return num < 500;
@@ -456,11 +443,9 @@ function safeInit(){
     document.body.innerHTML += '<div style="position:fixed;bottom:20px;right:20px;background:#ff6b6b;color:#000;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999">Error: ' + e.message + '</div>';
   }
 }
-if(typeof DESTINATIONS !== "undefined"){
+window.addEventListener("load", function() {
   safeInit();
-} else {
-  window.addEventListener("load", safeInit);
-}
+});
 </script>
 </body>
 </html>
