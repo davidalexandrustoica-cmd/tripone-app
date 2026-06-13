@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripOne — About & How it works</title>
+<meta name="description" content="TripOne is your all-in-one travel planning tool. Find destinations, compare options, get AI itineraries — all in one place.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--card:#1c1c21;--border:#2a2a32;--border2:#333340;
+  --ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
+  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
+  --amber:#f59e0b;--green:#10b981;
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
+.logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:72px 28px 56px;text-align:center;max-width:720px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--violet2);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:24px}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,48px);letter-spacing:-1.5px;line-height:1.05;margin-bottom:18px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:16px;color:var(--ink2);line-height:1.8;max-width:560px;margin:0 auto}
+
+/* PROBLEM SECTION */
+.problem{position:relative;z-index:1;padding:0 28px 64px;max-width:900px;margin:0 auto}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.problem-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.problem-card.bad{border-color:rgba(255,107,107,.2);background:rgba(255,107,107,.03)}
+.problem-card.good{border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.03)}
+.prob-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.prob-label.bad{color:#ff6b6b}
+.prob-label.good{color:var(--cyan)}
+.prob-label i{font-size:14px}
+.prob-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;font-size:13px;color:var(--ink2);line-height:1.5}
+.prob-item:last-child{margin-bottom:0}
+.prob-item i{font-size:15px;flex-shrink:0;margin-top:1px}
+.prob-item i.bad{color:#ff6b6b}
+.prob-item i.good{color:var(--green)}
+
+/* HOW IT WORKS */
+.how{position:relative;z-index:1;padding:0 28px 64px;max-width:900px;margin:0 auto}
+.steps{display:flex;flex-direction:column;gap:0;margin-top:32px}
+.step{display:flex;gap:24px;position:relative;padding-bottom:32px}
+.step:last-child{padding-bottom:0}
+.step:not(:last-child)::after{content:"";position:absolute;left:19px;top:44px;bottom:0;width:2px;background:var(--border)}
+.step-num{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;flex-shrink:0;position:relative;z-index:1}
+.step-num.s1{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--cyan)}
+.step-num.s2{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);color:var(--violet2)}
+.step-num.s3{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
+.step-num.s4{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--green)}
+.step-content{flex:1;padding-top:8px}
+.step-title{font-family:"Syne",sans-serif;font-weight:700;font-size:17px;color:var(--ink);margin-bottom:6px}
+.step-desc{font-size:14px;color:var(--ink2);line-height:1.7}
+.step-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;color:var(--ink3);margin-top:8px}
+
+/* FEATURES GRID */
+.features{position:relative;z-index:1;padding:0 28px 64px;max-width:900px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.feat-icon{font-size:26px;margin-bottom:12px}
+.feat-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:5px}
+.feat-desc{font-size:12px;color:var(--ink3);line-height:1.6}
+
+/* PILLARS */
+.pillars{position:relative;z-index:1;padding:0 28px 64px;max-width:900px;margin:0 auto}
+.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.pillar{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;text-align:center;transition:border-color .2s}
+.pillar:hover{border-color:var(--border2)}
+.pillar-icon{font-size:36px;margin-bottom:14px}
+.pillar-title{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px}
+.pillar-desc{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px}
+.pillar-btn{display:inline-block;padding:8px 18px;border-radius:100px;font-size:12px;font-weight:500;text-decoration:none;font-family:"DM Sans",sans-serif;transition:opacity .2s}
+.pillar-btn:hover{opacity:.85}
+.pillar-btn.cyan{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--cyan)}
+.pillar-btn.violet{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);color:var(--violet2)}
+.pillar-btn.amber{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
+
+/* FAQ */
+.faq{position:relative;z-index:1;padding:0 28px 64px;max-width:700px;margin:0 auto}
+.faq-list{display:flex;flex-direction:column;gap:8px;margin-top:28px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.faq-q{padding:16px 20px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none}
+.faq-q i{font-size:16px;color:var(--ink3);transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-q i{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 20px 16px;font-size:13px;color:var(--ink2);line-height:1.7}
+.faq-item.open .faq-a{display:block}
+
+/* CTA */
+.cta{position:relative;z-index:1;padding:0 28px 80px;max-width:700px;margin:0 auto;text-align:center}
+.cta-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:48px 32px;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.04),rgba(124,58,237,.04));pointer-events:none}
+.cta-card h2{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-.5px;margin-bottom:12px}
+.cta-card p{font-size:15px;color:var(--ink2);margin-bottom:28px;line-height:1.6}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta-btn{padding:13px 26px;border-radius:12px;font-family:"DM Sans",sans-serif;font-size:15px;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s}
+.cta-btn:hover{opacity:.88}
+.cta-btn.primary{background:linear-gradient(135deg,var(--cyan2),var(--violet));color:#fff}
+.cta-btn.secondary{background:var(--bg);border:1px solid var(--border2);color:var(--ink)}
+
+/* SECTION HEADERS */
+.sec-hd{text-align:center;margin-bottom:0}
+.sec-hd h2{font-family:"Syne",sans-serif;font-weight:700;font-size:22px;color:var(--ink);margin-bottom:6px}
+.sec-hd p{font-size:13px;color:var(--ink3)}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-logo{font-family:"Syne",sans-serif;font-weight:800;font-size:16px}
+.footer-logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:var(--ink3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--ink2)}
+.footer-note{font-size:12px;color:var(--ink3)}
+
+@media(max-width:700px){
+  .problem-grid,.feat-grid,.pillars-grid{grid-template-columns:1fr}
+  nav{padding:12px 16px}
+  .nav-links{display:none}
+  .hero,.problem,.how,.features,.pillars,.faq,.cta{padding-left:16px;padding-right:16px}
+  .cta-card{padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Trip<em>One</em></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="categories.html">Destinations</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
+    <a href="about.html" class="active">About</a>
+  </div>
+  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><i class="ti ti-info-circle"></i> About TripOne</div>
+  <h1>Travel planning<br><em>without the chaos</em></h1>
+  <p>TripOne brings together everything you need to plan a trip — weather, flights, hotels, activities, nightlife, food, budget, safety tips — all in one place, so you never have to open 10 tabs again.</p>
+</div>
+
+<!-- PROBLEM vs SOLUTION -->
+<div class="problem">
+  <div class="sec-hd">
+    <h2>Why TripOne exists</h2>
+    <p>Planning a trip should be exciting, not exhausting</p>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card bad">
+      <div class="prob-label bad"><i class="ti ti-x"></i> The old way</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Google flights on one tab</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Booking.com on another</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> TripAdvisor for activities</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Weather app separately</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Reddit for local tips</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Google Maps for transport</div>
+      <div class="prob-item"><i class="ti ti-x bad"></i> Hours wasted, still unsure</div>
+    </div>
+    <div class="problem-card good">
+      <div class="prob-label good"><i class="ti ti-check"></i> The TripOne way</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> One search, everything appears</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Live weather for any destination</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Best flights from Bucharest</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Hotels by budget</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Top activities with prices</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Safety warnings & discounts</div>
+      <div class="prob-item"><i class="ti ti-check good"></i> Ready to book in minutes</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="sec-hd">
+    <h2>How it works</h2>
+    <p>Four steps from idea to itinerary</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num s1">1</div>
+      <div class="step-content">
+        <div class="step-title">Search or discover your destination</div>
+        <div class="step-desc">Type any destination in the search bar, browse by category (Beach, Party, Budget, Luxury...), or let the AI Finder suggest the perfect place based on your budget, travel style, and preferences.</div>
+        <span class="step-tag"><i class="ti ti-map-pin"></i> Works for 20+ top destinations worldwide</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num s2">2</div>
+      <div class="step-content">
+        <div class="step-title">Get everything in one page</div>
+        <div class="step-desc">Instantly see live weather, cheapest flights from Bucharest, hotel options by budget, top activities with prices, best restaurants, nightlife, safety warnings, local discounts, and transport tips — all on a single page.</div>
+        <span class="step-tag"><i class="ti ti-sparkles"></i> No switching between sites</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num s3">3</div>
+      <div class="step-content">
+        <div class="step-title">Compare destinations side by side</div>
+        <div class="step-desc">Can't decide between Santorini and Mykonos? Or Prague vs Budapest? Select up to 3 destinations and compare them across budget, weather, nightlife, food, safety and more — with a TripOne verdict on which fits you best.</div>
+        <span class="step-tag"><i class="ti ti-arrows-diff"></i> Compare up to 3 destinations</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num s4">4</div>
+      <div class="step-content">
+        <div class="step-title">Generate your AI itinerary</div>
+        <div class="step-desc">Tell us your destination, how many days, your travel style and budget — and our AI builds a complete day-by-day plan for you. Morning, afternoon, and evening activities, restaurant recommendations, estimated daily spend, and insider tips.</div>
+        <span class="step-tag"><i class="ti ti-route"></i> Printable & shareable</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THREE PILLARS -->
+<div class="pillars">
+  <div class="sec-hd">
+    <h2>What TripOne offers</h2>
+    <p>Three tools, one platform</p>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar">
+      <div class="pillar-icon">🔍</div>
+      <div class="pillar-title">Destination Intelligence</div>
+      <div class="pillar-desc">Complete guides for 20+ destinations — weather, budget, activities, food, nightlife, warnings, discounts and transport. Everything a traveler needs to know.</div>
+      <a href="categories.html" class="pillar-btn cyan">Browse destinations →</a>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">✨</div>
+      <div class="pillar-title">AI Destination Finder</div>
+      <div class="pillar-desc">Not sure where to go? Tell us your budget, travel style, what you want to avoid — and our AI matches you with the perfect destination, with a personalized explanation.</div>
+      <a href="finder.html" class="pillar-btn violet">Try the Finder →</a>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🗺️</div>
+      <div class="pillar-title">AI Itinerary Generator</div>
+      <div class="pillar-desc">Enter your destination, duration and travel style — get a complete day-by-day itinerary with activities, restaurants, and budget estimates for each day.</div>
+      <a href="itinerary.html" class="pillar-btn amber">Generate itinerary →</a>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT'S COVERED -->
+<div class="features">
+  <div class="sec-hd">
+    <h2>What you get for every destination</h2>
+    <p>12 modules, zero tab switching</p>
+  </div>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-icon">🌤️</div><div class="feat-title">Live Weather</div><div class="feat-desc">Real-time 7-day forecast + best months to visit</div></div>
+    <div class="feat"><div class="feat-icon">✈️</div><div class="feat-title">Flights</div><div class="feat-desc">Cheapest options from Bucharest with airlines</div></div>
+    <div class="feat"><div class="feat-icon">🏨</div><div class="feat-title">Hotels & Stays</div><div class="feat-desc">From budget hostels to 5-star resorts</div></div>
+    <div class="feat"><div class="feat-icon">💰</div><div class="feat-title">Budget Breakdown</div><div class="feat-desc">Minimum and ideal budget per person for 7 nights</div></div>
+    <div class="feat"><div class="feat-icon">🎯</div><div class="feat-title">Top Activities</div><div class="feat-desc">Must-do experiences with exact prices</div></div>
+    <div class="feat"><div class="feat-icon">🍽️</div><div class="feat-title">Food & Restaurants</div><div class="feat-desc">Best spots from street food to fine dining</div></div>
+    <div class="feat"><div class="feat-icon">🎵</div><div class="feat-title">Nightlife</div><div class="feat-desc">Top clubs, bars and the local scene</div></div>
+    <div class="feat"><div class="feat-icon">⚠️</div><div class="feat-title">Safety & Warnings</div><div class="feat-desc">Common scams, safety tips and what to avoid</div></div>
+    <div class="feat"><div class="feat-icon">🏷️</div><div class="feat-title">Discounts & Deals</div><div class="feat-desc">Tourist cards, free days, seasonal savings</div></div>
+    <div class="feat"><div class="feat-icon">🚌</div><div class="feat-title">Local Transport</div><div class="feat-desc">How to get around with prices</div></div>
+    <div class="feat"><div class="feat-icon">📖</div><div class="feat-title">Destination Guide</div><div class="feat-desc">Overview, culture and what to know before you go</div></div>
+    <div class="feat"><div class="feat-icon">🔄</div><div class="feat-title">Compare Tool</div><div class="feat-desc">Side-by-side comparison of up to 3 destinations</div></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <div class="sec-hd">
+    <h2>Frequently asked questions</h2>
+    <p>Quick answers to common questions</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is TripOne free to use? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Yes, TripOne is completely free. Destination guides, weather, comparisons and browsing are all free. The AI Finder and Itinerary Generator use AI credits but are accessible to all users.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How many destinations are covered? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Currently 20 top destinations worldwide: Santorini, Bali, Barcelona, Dubai, Paris, Rome, Lisbon, Tokyo, Amsterdam, Prague, Mykonos, Ibiza, New York, Bangkok, Phuket, Vienna, Budapest, Tenerife, Marrakech and Maldives. More are being added regularly.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is the weather data real? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Yes. Weather data is live and updated in real-time using the OpenWeatherMap API. You see the actual current temperature and 7-day forecast for each destination.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I book flights and hotels through TripOne? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">TripOne shows you the best options and prices, then links you directly to the booking platform (Skyscanner, Booking.com etc.) where you complete the reservation. We don't handle payments directly.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How does the AI Itinerary work? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">You tell us your destination, how many days, your travel style and daily budget. Our AI (powered by Claude) generates a complete day-by-day plan with morning, afternoon and evening activities, restaurant recommendations, estimated costs and insider tips — all personalized to your preferences.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is the AI Destination Finder? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">The Finder helps you choose where to go when you're not sure. You enter your budget, when you're traveling, who you're going with, what vibe you want, and what you want to avoid — and our AI recommends the top 3 destinations that match, with a personalized explanation for each.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Who is TripOne for? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">TripOne is for anyone who wants to plan a trip without the hassle. Whether you're a solo traveler, a couple, a group of friends or a family — if you've ever had 10 tabs open trying to plan a vacation, TripOne is for you.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-card">
+    <h2>Ready to plan your trip?</h2>
+    <p>Join thousands of travelers who plan smarter with TripOne. Search any destination and get everything you need in seconds.</p>
+    <div class="cta-btns">
+      <a href="index.html" class="cta-btn primary">Start planning →</a>
+      <a href="finder.html" class="cta-btn secondary">✨ Find my destination</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Trip<em>One</em></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="categories.html">Destinations</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="footer-note">Built step by step · v0.3</div>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  var item = el.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>

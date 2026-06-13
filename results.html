@@ -4,140 +4,199 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TripOne — Results</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#09090b;--card:#1c1c21;--border:#2a2a32;--border2:#333340;
-  --ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
-  --cyan:#00e5ff;--cyan2:#00b8d4;--violet2:#a78bfa;
+  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--card:#1c1c21;--card2:#222228;
+  --border:#2a2a32;--border2:#333340;--ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
+  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
   --amber:#f59e0b;--coral:#ff6b6b;--green:#10b981;--r:12px;
 }
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 24px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink);flex-shrink:0}
 .logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-links{display:flex;gap:20px;margin-left:auto}
-.nav-links a{font-size:14px;color:var(--ink2);text-decoration:none}
-.nav-links a:hover{color:var(--ink)}
-.nav-cta{background:linear-gradient(135deg,#7c3aed,var(--cyan2));color:#fff;border:none;padding:8px 16px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;font-family:"DM Sans",sans-serif}
-.hero{padding:20px 24px 16px;border-bottom:1px solid var(--border)}
-.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-.5px;margin-bottom:6px}
-.hero p{font-size:13px;color:var(--ink2);margin-bottom:12px}
-.tags{display:flex;flex-wrap:wrap;gap:7px}
-.tag{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px 14px;font-size:12px;color:var(--ink2)}
-.tag.good{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);color:var(--green)}
-.layout{display:grid;grid-template-columns:1fr 260px;max-width:1200px;margin:0 auto}
-.main{padding:20px 24px;border-right:1px solid var(--border)}
-.side{padding:18px 16px}
-.sec{margin-bottom:24px}
-.sechd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.sechd i{font-size:17px}
-.sechd h2{font-family:"Syne",sans-serif;font-weight:700;font-size:14px}
+.nav-search{flex:1;max-width:460px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:8px 16px;transition:border-color .2s}
+.nav-search:focus-within{border-color:var(--cyan2)}
+.nav-search i{color:var(--ink3);font-size:15px}
+.nav-search input{border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--ink);outline:none;flex:1}
+.nav-search input::placeholder{color:var(--ink3)}
+.nav-go{background:var(--cyan2);color:#000;border:none;border-radius:100px;padding:5px 16px;font-size:13px;font-family:"DM Sans",sans-serif;font-weight:500;cursor:pointer;white-space:nowrap}
+
+/* HERO BAR */
+.hero-bar{position:relative;z-index:1;padding:24px 28px 20px;border-bottom:1px solid var(--border)}
+.hero-bar h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;letter-spacing:-.5px;margin-bottom:6px}
+.hero-sub{font-size:13px;color:var(--ink2);margin-bottom:14px}
+.htags{display:flex;flex-wrap:wrap;gap:7px}
+.htag{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px 14px;font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:5px}
+.htag i{font-size:13px}
+.htag.good{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);color:var(--green)}
+.htag.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.25);color:var(--amber)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 270px;position:relative;z-index:1;max-width:1200px;margin:0 auto}
+.main{padding:24px 28px;border-right:1px solid var(--border)}
+.side{padding:20px 18px}
+
+/* SECTIONS */
+.sec{margin-bottom:28px}
+.sechd{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.sechd h2{font-family:"Syne",sans-serif;font-weight:700;font-size:15px}
 .live-badge{font-size:10px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--green);border-radius:100px;padding:2px 8px;margin-left:4px}
-.desc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;font-size:13px;color:var(--ink2);line-height:1.8}
-.weather-now{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px}
-.wtemp{font-family:"Syne",sans-serif;font-size:52px;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* WEATHER */
+.weather-now{display:flex;align-items:center;gap:20px;background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px 24px;margin-bottom:10px}
+.wtemp{font-family:"Syne",sans-serif;font-size:56px;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .winfo{flex:1}
-.wdesc{font-size:15px;font-weight:500;text-transform:capitalize;margin-bottom:6px}
-.wdetails{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
-.wrow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.wd{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:8px 3px;text-align:center}
+.wdesc{font-size:16px;font-weight:500;text-transform:capitalize;margin-bottom:6px}
+.wdetails{display:flex;gap:16px;flex-wrap:wrap}
+.wdetails span{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px}
+.wdetails i{font-size:13px;color:var(--cyan2)}
+.wicon{font-size:52px;color:var(--cyan)}
+.wrow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 4px;text-align:center;transition:border-color .2s}
+.wd:hover{border-color:var(--border2)}
 .wd.today{border-color:var(--cyan2);background:rgba(0,229,255,.05)}
-.wdn{font-size:10px;color:var(--ink3);margin-bottom:4px}
-.wdi{font-size:18px;color:var(--cyan);line-height:1.4}
+.wdn{font-size:10px;color:var(--ink3);margin-bottom:5px}
+.wdi{font-size:20px;color:var(--cyan);line-height:1.3}
 .wdt{font-size:13px;font-weight:500}
 .wdl{font-size:10px;color:var(--ink3)}
-.wloading{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center;font-size:14px;color:var(--ink2)}
+.weather-loading,.weather-error{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;text-align:center;font-size:14px;color:var(--ink2)}
+.weather-error{background:rgba(255,107,107,.05);border-color:rgba(255,107,107,.2);color:var(--coral)}
+
+/* FLIGHTS */
 .flist{display:flex;flex-direction:column;gap:8px}
-.fl{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fl{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s}
+.fl:hover{border-color:var(--border2)}
 .fl.best{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.03)}
-.flair{font-size:12px;color:var(--ink2);width:68px;flex-shrink:0}
+.fll{display:flex;align-items:center;gap:12px}
+.flair{font-size:12px;color:var(--ink2);width:70px;flex-shrink:0}
 .flbadge{font-size:10px;background:rgba(0,229,255,.1);color:var(--cyan);border-radius:100px;padding:2px 8px;display:inline-block;margin-top:3px}
-.flrt{font-size:13px;font-weight:500}
+.flrt{font-size:14px;font-weight:500}
 .fldt{font-size:11px;color:var(--ink3)}
 .flp{text-align:right;flex-shrink:0}
-.flp strong{font-family:"Syne",sans-serif;font-size:16px;font-weight:700}
+.flp strong{font-family:"Syne",sans-serif;font-size:18px;font-weight:700}
 .flp span{font-size:11px;color:var(--ink3);display:block}
-.flbtn{font-size:11px;background:var(--cyan2);color:#000;border:none;border-radius:7px;padding:5px 10px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500;display:block;margin-top:4px;margin-left:auto}
+.flbtn{font-size:11px;background:var(--cyan2);color:#000;border:none;border-radius:7px;padding:5px 12px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500;display:block;margin-top:5px;margin-left:auto}
+
+/* HOTELS */
 .hgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.hcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.hcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:border-color .2s}
+.hcard:hover{border-color:var(--border2)}
 .hn{font-size:13px;font-weight:500;margin-bottom:2px}
-.ht{font-size:11px;color:var(--ink3);margin-bottom:8px}
-.hrow{display:flex;justify-content:space-between;align-items:center}
+.ht{font-size:11px;color:var(--ink3);margin-bottom:10px}
+.hr{display:flex;justify-content:space-between;align-items:center}
 .hst{color:var(--amber);font-size:11px}
-.hp{font-size:13px;font-weight:500}
-.budget-split{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.bcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.hp{font-size:14px;font-weight:500}
+.hps{font-size:10px;color:var(--ink3);font-weight:400}
+
+/* BUDGET */
+.budget-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.bcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
 .bcard.ideal{border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.03)}
-.bcard-label{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.bcard-amount{font-family:"Syne",sans-serif;font-size:22px;font-weight:800;margin-bottom:3px}
+.bcard-label{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.bcard-amount{font-family:"Syne",sans-serif;font-size:26px;font-weight:800;margin-bottom:4px}
 .bcard.ideal .bcard-amount{background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.bcard-desc{font-size:11px;color:var(--ink3);line-height:1.4}
-.bdown{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px}
-.brow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.bcard-desc{font-size:11px;color:var(--ink3);line-height:1.5}
+.bdown{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.brow{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)}
 .brow:last-child{border:none}
 .brow span:first-child{color:var(--ink3)}
-.alist{display:flex;flex-direction:column;gap:6px}
-.ac{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.aic{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:#18181c}
+
+/* ACTIVITIES */
+.alist{display:flex;flex-direction:column;gap:7px}
+.ac{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;transition:border-color .2s}
+.ac:hover{border-color:var(--border2)}
+.aic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--bg3)}
 .an{font-size:13px;font-weight:500}
 .ad{font-size:11px;color:var(--ink3)}
 .ap{font-size:12px;font-weight:500;margin-left:auto;white-space:nowrap}
 .ap.free{color:var(--green)}
 .ap.paid{color:var(--amber)}
+
+/* FOOD */
 .rlist{display:flex;flex-direction:column}
-.rc{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)}
+.rc{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
 .rc:last-child{border:none}
-.rnum{font-family:"Syne",sans-serif;font-size:14px;font-weight:700;color:var(--cyan);width:18px;flex-shrink:0}
+.rnum{font-family:"Syne",sans-serif;font-size:15px;font-weight:700;color:var(--cyan);width:20px;flex-shrink:0}
 .rl{font-size:13px;font-weight:500}
 .rd{font-size:11px;color:var(--ink3)}
 .rp{font-size:11px;color:var(--ink3);margin-left:auto;white-space:nowrap}
-.nlist,.warnlist,.disc-list,.tlist{display:flex;flex-direction:column;gap:6px}
-.nc{display:flex;align-items:flex-start;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px}
-.ncicon{width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,.1);display:flex;align-items:center;justify-content:center;color:var(--violet2);font-size:15px;flex-shrink:0}
+
+/* NIGHTLIFE */
+.nlist{display:flex;flex-direction:column;gap:8px}
+.nc{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;transition:border-color .2s}
+.nc:hover{border-color:var(--border2)}
+.ncicon{width:34px;height:34px;border-radius:8px;background:rgba(124,58,237,.1);display:flex;align-items:center;justify-content:center;color:var(--violet2);font-size:16px;flex-shrink:0}
 .ncn{font-size:13px;font-weight:500}
 .ncd{font-size:11px;color:var(--ink3);margin-top:2px}
-.warn-item{display:flex;align-items:flex-start;gap:9px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:var(--r);padding:11px 13px}
-.warn-item i{color:var(--amber);font-size:15px;flex-shrink:0;margin-top:1px}
-.warn-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
-.warn-text{font-size:12px;color:var(--ink2);line-height:1.5}
-.disc{display:flex;align-items:flex-start;gap:9px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:var(--r);padding:11px 13px}
-.disc i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px}
-.disc-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
-.disc-text{font-size:12px;color:var(--ink2);line-height:1.5}
-.trans{display:flex;align-items:flex-start;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.trans-icon{font-size:19px;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
+
+/* WARNINGS */
+.warnlist{display:flex;flex-direction:column;gap:7px}
+.warn-item{display:flex;align-items:flex-start;gap:10px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:var(--r);padding:12px 14px}
+.warn-item i{color:var(--amber);font-size:16px;flex-shrink:0;margin-top:1px}
+.warn-text strong{color:var(--ink);font-size:13px;display:block;margin-bottom:2px}
+.warn-text p{font-size:12px;color:var(--ink2);line-height:1.5}
+
+/* DISCOUNTS */
+.disc-list{display:flex;flex-direction:column;gap:7px}
+.disc{display:flex;align-items:flex-start;gap:10px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:var(--r);padding:12px 14px}
+.disc i{color:var(--green);font-size:16px;flex-shrink:0;margin-top:1px}
+.disc-text strong{color:var(--ink);font-size:13px;display:block;margin-bottom:2px}
+.disc-text p{font-size:12px;color:var(--ink2);line-height:1.5}
+
+/* TRANSPORT */
+.tlist{display:flex;flex-direction:column;gap:7px}
+.trans{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;transition:border-color .2s}
+.trans:hover{border-color:var(--border2)}
+.trans-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;margin-top:1px}
 .trans-name{font-size:13px;font-weight:500}
 .trans-desc{font-size:11px;color:var(--ink3);margin-top:2px}
 .trans-price{font-size:12px;color:var(--cyan);font-weight:500;margin-left:auto;white-space:nowrap;flex-shrink:0}
-.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.stitle{font-family:"Syne",sans-serif;font-size:12px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:5px}
-.stitle i{color:var(--cyan)}
-.sb-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
-.sb-row:last-child{border:none}
-.sb-row span:first-child{color:var(--ink3)}
-.btotal{font-family:"Syne",sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-top:6px}
-.warnbox{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:9px;padding:9px 11px;font-size:12px;color:var(--amber);display:flex;gap:7px;margin-bottom:10px;line-height:1.5}
-.warnbox i{font-size:14px;flex-shrink:0;margin-top:1px}
-.aibtn{width:100%;background:linear-gradient(135deg,#7c3aed,var(--cyan2));color:#fff;border:none;border-radius:9px;padding:11px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:7px}
-.sbtn{width:100%;background:#18181c;border:1px solid var(--border);border-radius:9px;padding:8px;font-family:"DM Sans",sans-serif;font-size:12px;cursor:pointer;color:var(--ink2);margin-bottom:6px;text-align:left;padding-left:12px}
-.sbtn:hover{color:var(--ink)}
+
+/* DESCRIPTION */
+.desc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;font-size:14px;color:var(--ink2);line-height:1.8}
+
+/* NOT FOUND */
 .not-found{text-align:center;padding:60px 20px;color:var(--ink2)}
-.not-found h2{font-family:"Syne",sans-serif;font-size:20px;color:var(--ink);margin-bottom:10px}
+.not-found h2{font-family:"Syne",sans-serif;font-size:22px;color:var(--ink);margin-bottom:12px}
 .not-found p{margin-bottom:24px}
-.nf-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.nf-btn{padding:11px 22px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;text-decoration:none;display:inline-block}
-.nf-btn.primary{background:var(--cyan2);color:#000}
-.nf-btn.secondary{background:#7c3aed;color:#fff}
-@media(max-width:700px){
+.not-found button{background:var(--cyan2);color:#000;border:none;padding:12px 24px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+
+/* SIDEBAR */
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.stitle{font-family:"Syne",sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.stitle i{color:var(--cyan)}
+.sb-brow{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)}
+.sb-brow:last-child{border:none;font-weight:500;font-size:13px;padding-top:8px}
+.sb-brow span:first-child{color:var(--ink3)}
+.btotal{font-family:"Syne",sans-serif;font-size:24px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-top:8px}
+.warnbox{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--amber);display:flex;gap:7px;margin-bottom:12px;line-height:1.5}
+.warnbox i{font-size:15px;flex-shrink:0;margin-top:1px}
+.aibtn{width:100%;background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;border-radius:10px;padding:12px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;transition:opacity .2s}
+.aibtn:hover{opacity:.88}
+.sbtn{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px;font-family:"DM Sans",sans-serif;font-size:12px;cursor:pointer;color:var(--ink2);margin-bottom:6px;transition:all .15s;text-align:left;padding-left:14px}
+.sbtn:hover{border-color:var(--border2);color:var(--ink)}
+
+@media(max-width:768px){
   .layout{grid-template-columns:1fr}
+  .side{border-top:1px solid var(--border)}
   .hgrid,.budget-split{grid-template-columns:1fr}
   .wrow{grid-template-columns:repeat(4,1fr)}
   nav{padding:12px 16px}
-  .nav-links{display:none}
+  .main{padding:16px}
+  .side{padding:16px}
 }
+
+/* NAV CTA */
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta:hover{opacity:.88}
+@media(max-width:768px){.nav-links{display:none}}
 </style>
 </head>
 <body>
@@ -150,365 +209,234 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
     <a href="itinerary.html">Itinerary</a>
+    <a href="about.html">About</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
 
-<div id="hero" class="hero">
+<div id="hero-bar" class="hero-bar">
   <h1 id="dest-title">Loading...</h1>
-  <p id="dest-sub">Everything you need for the perfect trip</p>
-  <div class="tags" id="dest-tags"></div>
+  <p class="hero-sub" id="dest-sub">Everything you need for the perfect trip</p>
+  <div class="htags" id="dest-tags"></div>
 </div>
 
 <div class="layout">
-  <div class="main" id="main-col">
-    <div class="wloading"><i class="ti ti-loader ti-spin"></i> Loading destination data...</div>
+<div class="main" id="main-content">
+  <div style="text-align:center;padding:60px;color:var(--ink2)">
+    <i class="ti ti-loader ti-spin" style="font-size:32px;color:var(--cyan)"></i>
+    <p style="margin-top:12px">Loading destination data...</p>
   </div>
-  <div class="side" id="side-col"></div>
+</div>
+<div class="side" id="side-content"></div>
 </div>
 
-<script src="data.js?v=3"></script>
+<script src="data.js?v=2"></script>
 <script>
-var WEATHER_KEY = "ad16f6c9657d9eca6c06f3bf9cac3f4c";
-var params = new URLSearchParams(window.location.search);
-var DEST = params.get("dest") || "Santorini";
+const WEATHER_KEY = "ad16f6c9657d9eca6c06f3bf9cac3f4c";
+const params = new URLSearchParams(window.location.search);
+const DEST = params.get("dest") || "Santorini";
+
+document.getElementById("nav-input").value = DEST;
 document.title = "TripOne — " + DEST;
 
-function wIcon(icon, size) {
-  var s = size || 18;
-  if (icon.indexOf("01") !== -1) return '<i class="ti ti-sun" style="font-size:' + s + 'px"></i>';
-  if (icon.indexOf("02") !== -1 || icon.indexOf("03") !== -1) return '<i class="ti ti-cloud-sun" style="font-size:' + s + 'px"></i>';
-  if (icon.indexOf("04") !== -1) return '<i class="ti ti-cloud" style="font-size:' + s + 'px"></i>';
-  if (icon.indexOf("09") !== -1 || icon.indexOf("10") !== -1) return '<i class="ti ti-cloud-rain" style="font-size:' + s + 'px"></i>';
-  if (icon.indexOf("11") !== -1) return '<i class="ti ti-cloud-storm" style="font-size:' + s + 'px"></i>';
-  if (icon.indexOf("13") !== -1) return '<i class="ti ti-snow" style="font-size:' + s + 'px"></i>';
-  return '<i class="ti ti-cloud" style="font-size:' + s + 'px"></i>';
+function stars(n){ return "★".repeat(n) + "☆".repeat(5-n); }
+
+function weatherIcon(icon, size){
+  const s = size||18;
+  if(icon.includes("01")) return `<i class="ti ti-sun" style="font-size:${s}px"></i>`;
+  if(icon.includes("02")||icon.includes("03")) return `<i class="ti ti-cloud-sun" style="font-size:${s}px"></i>`;
+  if(icon.includes("04")) return `<i class="ti ti-cloud" style="font-size:${s}px"></i>`;
+  if(icon.includes("09")||icon.includes("10")) return `<i class="ti ti-cloud-rain" style="font-size:${s}px"></i>`;
+  if(icon.includes("11")) return `<i class="ti ti-cloud-storm" style="font-size:${s}px"></i>`;
+  if(icon.includes("13")) return `<i class="ti ti-snow" style="font-size:${s}px"></i>`;
+  return `<i class="ti ti-cloud" style="font-size:${s}px"></i>`;
 }
 
-async function loadWeather(city) {
-  try {
-    var r1 = await fetch("https://api.openweathermap.org/data/2.5/weather?q=" + encodeURIComponent(city) + "&appid=" + WEATHER_KEY + "&units=metric&lang=en");
-    var r2 = await fetch("https://api.openweathermap.org/data/2.5/forecast?q=" + encodeURIComponent(city) + "&appid=" + WEATHER_KEY + "&units=metric&lang=en&cnt=40");
-    if (!r1.ok) throw new Error("Weather unavailable");
-    var cur = await r1.json();
-    var fore = await r2.json();
-    var days = {};
-    var dn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    fore.list.forEach(function(item) {
-      var d = item.dt_txt.split(" ")[0];
-      if (!days[d]) days[d] = {temps:[], icons:[]};
-      days[d].temps.push(item.main.temp);
-      days[d].icons.push(item.weather[0].icon);
+async function loadWeather(city){
+  try{
+    const [cr, fr] = await Promise.all([
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${WEATHER_KEY}&units=metric&lang=en`),
+      fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${WEATHER_KEY}&units=metric&lang=en&cnt=40`)
+    ]);
+    if(!cr.ok) throw new Error("Weather data not available for this destination.");
+    const cur = await cr.json();
+    const fore = await fr.json();
+    const days={};
+    const dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    fore.list.forEach(i=>{
+      const d=i.dt_txt.split(" ")[0];
+      if(!days[d]) days[d]={temps:[],icons:[]};
+      days[d].temps.push(i.main.temp);
+      days[d].icons.push(i.weather[0].icon);
     });
-    var proc = Object.entries(days).slice(0,7).map(function(entry, i) {
-      var d = new Date(entry[0]);
-      var v = entry[1];
-      return {
-        name: i === 0 ? "Today" : dn[d.getDay()],
-        max: Math.round(Math.max.apply(null, v.temps)),
-        min: Math.round(Math.min.apply(null, v.temps)),
-        icon: v.icons[Math.floor(v.icons.length / 2)]
-      };
+    const proc=Object.entries(days).slice(0,7).map(([date,v],i)=>{
+      const d=new Date(date);
+      return{name:i===0?"Today":dn[d.getDay()],max:Math.round(Math.max(...v.temps)),min:Math.round(Math.min(...v.temps)),icon:v.icons[Math.floor(v.icons.length/2)]};
     });
-    var t = Math.round(cur.main.temp);
-    var fl = Math.round(cur.main.feels_like);
-    var hum = cur.main.humidity;
-    var wind = Math.round(cur.wind.speed * 3.6);
-    var desc = cur.weather[0].description;
-    var icon = cur.weather[0].icon;
-    var dayCards = proc.map(function(d, i) {
-      return '<div class="wd ' + (i === 0 ? "today" : "") + '">' +
-        '<div class="wdn">' + d.name + '</div>' +
-        '<div class="wdi">' + wIcon(d.icon, 18) + '</div>' +
-        '<div class="wdt">' + d.max + '°</div>' +
-        '<div class="wdl">' + d.min + '°</div>' +
+    const t=Math.round(cur.main.temp),fl=Math.round(cur.main.feels_like),hum=cur.main.humidity,wind=Math.round(cur.wind.speed*3.6),desc=cur.weather[0].description,icon=cur.weather[0].icon;
+    return `
+      <div class="weather-now">
+        <div class="wtemp">${t}°</div>
+        <div class="winfo">
+          <div class="wdesc">${desc}</div>
+          <div class="wdetails">
+            <span><i class="ti ti-thermometer"></i> Feels like ${fl}°C</span>
+            <span><i class="ti ti-droplet"></i> Humidity ${hum}%</span>
+            <span><i class="ti ti-wind"></i> Wind ${wind} km/h</span>
+          </div>
+        </div>
+        <div class="wicon">${weatherIcon(icon,48)}</div>
+      </div>
+      <div class="wrow">${proc.map((d,i)=>`<div class="wd ${i===0?"today":""}"><div class="wdn">${d.name}</div><div class="wdi">${weatherIcon(d.icon,18)}</div><div class="wdt">${d.max}°</div><div class="wdl">${d.min}°</div></div>`).join("")}</div>`;
+  }catch(e){
+    return `<div class="weather-error"><i class="ti ti-alert-circle"></i> ${e.message}</div>`;
+  }
+}
+
+async function renderPage(){
+  const data = getDestination(DEST);
+
+  if(!data){
+    document.getElementById("dest-title").textContent = DEST;
+    // Build HTML sections safely
+  function buildFlights(flights) {
+    return flights.map(function(f) {
+      var cls = f.best ? "fl best" : "fl";
+      var badge = f.best ? '<div class="flbadge">Cheapest</div>' : "";
+      return '<div class="' + cls + '">' +
+        '<div class="fll"><div><div class="flair">' + f.airline + '</div>' + badge + '</div>' +
+        '<div><div class="flrt">' + f.route + '</div><div class="fldt">' + f.detail + '</div></div></div>' +
+        '<div class="flp"><strong>' + f.price + '</strong><span>round trip</span><button class="flbtn">Book →</button></div>' +
         '</div>';
     }).join("");
-    return '<div class="weather-now">' +
-      '<div class="wtemp">' + t + '°</div>' +
-      '<div class="winfo">' +
-        '<div class="wdesc">' + desc + '</div>' +
-        '<div class="wdetails">' +
-          '<span>Feels like ' + fl + '°C</span>' +
-          '<span>Humidity ' + hum + '%</span>' +
-          '<span>Wind ' + wind + ' km/h</span>' +
-        '</div>' +
-      '</div>' +
-      '<div style="font-size:46px;color:var(--cyan)">' + wIcon(icon, 46) + '</div>' +
-      '</div>' +
-      '<div class="wrow">' + dayCards + '</div>';
-  } catch(e) {
-    return '<div class="wloading" style="color:var(--coral)">Weather unavailable for this destination.</div>';
   }
+
+  function buildHotels(hotels) {
+    return hotels.map(function(h) {
+      var starsStr = "★".repeat(h.stars) + "☆".repeat(5 - h.stars);
+      return '<div class="hcard"><div class="hn">' + h.name + '</div><div class="ht">' + h.type + '</div>' +
+        '<div class="hr"><div class="hst">' + starsStr + '</div><div class="hp">' + h.price + '</div></div></div>';
+    }).join("");
+  }
+
+  function buildActivities(acts) {
+    return acts.map(function(a) {
+      var priceClass = a.free ? "ap free" : "ap paid";
+      return '<div class="ac"><div class="aic">' + a.icon + '</div>' +
+        '<div><div class="an">' + a.name + '</div><div class="ad">' + a.detail + '</div></div>' +
+        '<div class="' + priceClass + '">' + a.price + '</div></div>';
+    }).join("");
+  }
+
+  function buildFood(foods) {
+    return foods.map(function(f, i) {
+      return '<div class="rc"><div class="rnum">' + (i+1) + '</div>' +
+        '<div><div class="rl">' + f.name + '</div><div class="rd">' + f.detail + '</div></div>' +
+        '<div class="rp">' + f.price + '</div></div>';
+    }).join("");
+  }
+
+  function buildNightlife(night) {
+    return night.map(function(n) {
+      return '<div class="nc"><div class="ncicon"><i class="ti ti-building"></i></div>' +
+        '<div><div class="ncn">' + n.name + '</div><div class="ncd">' + n.detail + '</div></div></div>';
+    }).join("");
+  }
+
+  function buildWarnings(warns) {
+    return warns.map(function(w) {
+      return '<div class="warn-item"><i class="ti ti-alert-circle"></i>' +
+        '<div class="warn-text"><strong>' + w.title + '</strong><p>' + w.text + '</p></div></div>';
+    }).join("");
+  }
+
+  function buildDiscounts(discs) {
+    return discs.map(function(d) {
+      return '<div class="disc"><i class="ti ti-ticket"></i>' +
+        '<div class="disc-text"><strong>' + d.title + '</strong><p>' + d.text + '</p></div></div>';
+    }).join("");
+  }
+
+  function buildTransport(trans) {
+    return trans.map(function(t) {
+      return '<div class="trans"><div class="trans-icon">' + t.icon + '</div>' +
+        '<div><div class="trans-name">' + t.name + '</div><div class="trans-desc">' + t.detail + '</div></div>' +
+        '<div class="trans-price">' + t.price + '</div></div>';
+    }).join("");
+  }
+
+  function buildBudgetBreakdown(breakdown) {
+    return breakdown.map(function(r) {
+      return '<div class="brow"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+    }).join("");
+  }
+
+  var mainHTML =
+    '<div class="sec"><div class="sechd"><i class="ti ti-book" style="color:var(--violet2);font-size:18px"></i><h2>About ' + data.name + '</h2></div>' +
+    '<div class="desc-card">' + data.description + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-sun" style="color:var(--cyan);font-size:18px"></i><h2>Live Weather <span class="live-badge">LIVE</span></h2></div>' +
+    '<div id="weather-box"><div class="weather-loading"><i class="ti ti-loader ti-spin"></i> Loading real weather data...</div></div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2);font-size:18px"></i><h2>Flights from Bucharest (OTP)</h2></div>' +
+    '<div class="flist">' + buildFlights(data.flights) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-bed" style="color:var(--violet2);font-size:18px"></i><h2>Hotels & Stays</h2></div>' +
+    '<div class="hgrid">' + buildHotels(data.hotels) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-coin" style="color:var(--amber);font-size:18px"></i><h2>Budget Breakdown</h2></div>' +
+    '<div class="budget-split">' +
+      '<div class="bcard"><div class="bcard-label">Minimum budget</div><div class="bcard-amount">' + data.budget.min + '</div><div class="bcard-desc">' + data.budget.min_desc + '</div></div>' +
+      '<div class="bcard ideal"><div class="bcard-label">Ideal budget</div><div class="bcard-amount">' + data.budget.ideal + '</div><div class="bcard-desc">' + data.budget.ideal_desc + '</div></div>' +
+    '</div><div class="bdown">' + buildBudgetBreakdown(data.budget.breakdown) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-map-2" style="color:var(--green);font-size:18px"></i><h2>Top Activities</h2></div>' +
+    '<div class="alist">' + buildActivities(data.activities) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-tools-kitchen-2" style="color:var(--amber);font-size:18px"></i><h2>Food & Restaurants</h2></div>' +
+    '<div class="rlist">' + buildFood(data.food) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-music" style="color:var(--violet2);font-size:18px"></i><h2>Nightlife</h2></div>' +
+    '<div class="nlist">' + buildNightlife(data.nightlife) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:18px"></i><h2>Safety & Warnings</h2></div>' +
+    '<div class="warnlist">' + buildWarnings(data.warnings) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-tag" style="color:var(--green);font-size:18px"></i><h2>Discounts & Deals</h2></div>' +
+    '<div class="disc-list">' + buildDiscounts(data.discounts) + '</div></div>' +
+
+    '<div class="sec"><div class="sechd"><i class="ti ti-bus" style="color:var(--cyan2);font-size:18px"></i><h2>Local Transport</h2></div>' +
+    '<div class="tlist">' + buildTransport(data.transport) + '</div></div>';
+
+  document.getElementById("main-content").innerHTML = mainHTML;
+
+  // Load weather async
+  const weatherHTML = await loadWeather(data.weather_city);
+  const wb = document.getElementById("weather-box");
+  if(wb) wb.innerHTML = weatherHTML;
 }
 
-function renderPage() {
-  var data = getDestination(DEST);
-
-  if (!data) {
-    document.getElementById("dest-title").textContent = DEST;
-    document.getElementById("dest-sub").textContent = "Destination not in our database yet";
-    document.getElementById("main-col").innerHTML =
-      '<div class="not-found">' +
-        '<h2>"' + DEST + '" is not in our database yet</h2>' +
-        '<p>We currently cover 20 top destinations. Try one of those or use the AI Finder.</p>' +
-        '<div class="nf-btns">' +
-          '<a href="index.html" class="nf-btn primary">← Back to search</a>' +
-          '<a href="finder.html" class="nf-btn secondary">✨ AI Finder</a>' +
-        '</div>' +
-      '</div>';
-    document.getElementById("side-col").innerHTML = "";
-    return;
-  }
-
-  // Hero
-  document.getElementById("dest-title").textContent = data.name + ", " + data.country + " " + data.emoji;
-  document.getElementById("dest-sub").textContent = "Everything you need for the perfect trip — updated today";
-  var tagsHTML = "";
-  for (var i = 0; i < data.tags.length; i++) {
-    tagsHTML += '<div class="tag ' + (i === 0 ? "good" : "") + '">' + data.tags[i] + '</div>';
-  }
-  document.getElementById("dest-tags").innerHTML = tagsHTML;
-
-  // Sidebar
-  var bdRows = "";
-  for (var i = 0; i < data.budget.breakdown.length; i++) {
-    var r = data.budget.breakdown[i];
-    bdRows += '<div class="sb-row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
-  }
-  document.getElementById("side-col").innerHTML =
-    '<div class="scard">' +
-      '<div class="stitle"><i class="ti ti-calculator"></i> Budget (7 nights)</div>' +
-      bdRows +
-      '<span class="btotal">' + data.budget.min + ' – ' + data.budget.ideal + '</span>' +
-    '</div>' +
-    '<div class="warnbox"><i class="ti ti-info-circle"></i>Book flights 6+ weeks ahead for best prices.</div>' +
-    '<button class="aibtn" onclick="window.location.href=\'itinerary.html?dest=\' + encodeURIComponent(DEST)">' +
-      '<i class="ti ti-sparkles"></i> Generate AI Itinerary' +
-    '</button>' +
-    '<button class="sbtn" onclick="window.location.href=\'categories.html\'">Browse all destinations</button>' +
-    '<button class="sbtn" onclick="window.location.href=\'index.html\'">← Back to search</button>' +
-    '<div class="scard" style="margin-top:10px">' +
-      '<div class="stitle"><i class="ti ti-info-circle"></i> Quick Facts</div>' +
-      '<div class="sb-row"><span>Best months</span><span>' + data.best_months + '</span></div>' +
-      '<div class="sb-row"><span>Peak season</span><span>' + data.peak + '</span></div>' +
-      '<div class="sb-row"><span>Language</span><span>' + data.language + '</span></div>' +
-      '<div class="sb-row"><span>Currency</span><span>' + data.currency + '</span></div>' +
-      '<div class="sb-row"><span>Timezone</span><span>' + data.timezone + '</span></div>' +
-      '<div class="sb-row"><span>Flight time</span><span>' + data.flight_time + '</span></div>' +
-    '</div>';
-
-  // Main content
-  var flightsHTML = "";
-  for (var i = 0; i < data.flights.length; i++) {
-    var f = data.flights[i];
-    var badge = f.best ? '<div class="flbadge">Cheapest</div>' : "";
-    var cls = f.best ? "fl best" : "fl";
-    flightsHTML +=
-      '<div class="' + cls + '">' +
-        '<div style="display:flex;align-items:center;gap:10px">' +
-          '<div><div class="flair">' + f.airline + '</div>' + badge + '</div>' +
-          '<div><div class="flrt">' + f.route + '</div><div class="fldt">' + f.detail + '</div></div>' +
-        '</div>' +
-        '<div class="flp">' +
-          '<strong>' + f.price + '</strong>' +
-          '<span>round trip</span>' +
-          '<button class="flbtn">Book →</button>' +
-        '</div>' +
-      '</div>';
-  }
-
-  var hotelsHTML = "";
-  for (var i = 0; i < data.hotels.length; i++) {
-    var h = data.hotels[i];
-    var stars = "★".repeat(h.stars) + "☆".repeat(5 - h.stars);
-    hotelsHTML +=
-      '<div class="hcard">' +
-        '<div class="hn">' + h.name + '</div>' +
-        '<div class="ht">' + h.type + '</div>' +
-        '<div class="hrow">' +
-          '<div class="hst">' + stars + '</div>' +
-          '<div class="hp">' + h.price + '</div>' +
-        '</div>' +
-      '</div>';
-  }
-
-  var bdBreak = "";
-  for (var i = 0; i < data.budget.breakdown.length; i++) {
-    var r = data.budget.breakdown[i];
-    bdBreak += '<div class="brow"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
-  }
-
-  var actsHTML = "";
-  for (var i = 0; i < data.activities.length; i++) {
-    var a = data.activities[i];
-    var pc = a.free ? "ap free" : "ap paid";
-    actsHTML +=
-      '<div class="ac">' +
-        '<div class="aic">' + a.icon + '</div>' +
-        '<div>' +
-          '<div class="an">' + a.name + '</div>' +
-          '<div class="ad">' + a.detail + '</div>' +
-        '</div>' +
-        '<div class="' + pc + '">' + a.price + '</div>' +
-      '</div>';
-  }
-
-  var foodHTML = "";
-  for (var i = 0; i < data.food.length; i++) {
-    var f = data.food[i];
-    foodHTML +=
-      '<div class="rc">' +
-        '<div class="rnum">' + (i + 1) + '</div>' +
-        '<div>' +
-          '<div class="rl">' + f.name + '</div>' +
-          '<div class="rd">' + f.detail + '</div>' +
-        '</div>' +
-        '<div class="rp">' + f.price + '</div>' +
-      '</div>';
-  }
-
-  var nightHTML = "";
-  for (var i = 0; i < data.nightlife.length; i++) {
-    var n = data.nightlife[i];
-    nightHTML +=
-      '<div class="nc">' +
-        '<div class="ncicon"><i class="ti ti-building"></i></div>' +
-        '<div>' +
-          '<div class="ncn">' + n.name + '</div>' +
-          '<div class="ncd">' + n.detail + '</div>' +
-        '</div>' +
-      '</div>';
-  }
-
-  var warnHTML = "";
-  for (var i = 0; i < data.warnings.length; i++) {
-    var w = data.warnings[i];
-    warnHTML +=
-      '<div class="warn-item">' +
-        '<i class="ti ti-alert-circle"></i>' +
-        '<div>' +
-          '<div class="warn-title">' + w.title + '</div>' +
-          '<div class="warn-text">' + w.text + '</div>' +
-        '</div>' +
-      '</div>';
-  }
-
-  var discHTML = "";
-  for (var i = 0; i < data.discounts.length; i++) {
-    var d = data.discounts[i];
-    discHTML +=
-      '<div class="disc">' +
-        '<i class="ti ti-ticket"></i>' +
-        '<div>' +
-          '<div class="disc-title">' + d.title + '</div>' +
-          '<div class="disc-text">' + d.text + '</div>' +
-        '</div>' +
-      '</div>';
-  }
-
-  var transHTML = "";
-  for (var i = 0; i < data.transport.length; i++) {
-    var t = data.transport[i];
-    transHTML +=
-      '<div class="trans">' +
-        '<div class="trans-icon">' + t.icon + '</div>' +
-        '<div>' +
-          '<div class="trans-name">' + t.name + '</div>' +
-          '<div class="trans-desc">' + t.detail + '</div>' +
-        '</div>' +
-        '<div class="trans-price">' + t.price + '</div>' +
-      '</div>';
-  }
-
-  document.getElementById("main-col").innerHTML =
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-book" style="color:var(--violet2)"></i><h2>About ' + data.name + '</h2></div>' +
-      '<div class="desc-card">' + data.description + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-sun" style="color:var(--cyan)"></i><h2>Live Weather <span class="live-badge">LIVE</span></h2></div>' +
-      '<div id="weather-box"><div class="wloading"><i class="ti ti-loader ti-spin"></i> Loading weather...</div></div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2)"></i><h2>Flights from Bucharest (OTP)</h2></div>' +
-      '<div class="flist">' + flightsHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-bed" style="color:var(--violet2)"></i><h2>Hotels & Stays</h2></div>' +
-      '<div class="hgrid">' + hotelsHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-coin" style="color:var(--amber)"></i><h2>Budget Breakdown</h2></div>' +
-      '<div class="budget-split">' +
-        '<div class="bcard">' +
-          '<div class="bcard-label">Minimum budget</div>' +
-          '<div class="bcard-amount">' + data.budget.min + '</div>' +
-          '<div class="bcard-desc">' + data.budget.min_desc + '</div>' +
-        '</div>' +
-        '<div class="bcard ideal">' +
-          '<div class="bcard-label">Ideal budget</div>' +
-          '<div class="bcard-amount">' + data.budget.ideal + '</div>' +
-          '<div class="bcard-desc">' + data.budget.ideal_desc + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="bdown">' + bdBreak + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-map-2" style="color:var(--green)"></i><h2>Top Activities</h2></div>' +
-      '<div class="alist">' + actsHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-tools-kitchen-2" style="color:var(--amber)"></i><h2>Food & Restaurants</h2></div>' +
-      '<div class="rlist">' + foodHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-music" style="color:var(--violet2)"></i><h2>Nightlife</h2></div>' +
-      '<div class="nlist">' + nightHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-alert-triangle" style="color:var(--amber)"></i><h2>Safety & Warnings</h2></div>' +
-      '<div class="warnlist">' + warnHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-tag" style="color:var(--green)"></i><h2>Discounts & Deals</h2></div>' +
-      '<div class="disc-list">' + discHTML + '</div>' +
-    '</div>' +
-
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-bus" style="color:var(--cyan2)"></i><h2>Local Transport</h2></div>' +
-      '<div class="tlist">' + transHTML + '</div>' +
-    '</div>';
-
-  // Load weather async after main content
-  loadWeather(data.weather_city).then(function(html) {
-    var wb = document.getElementById("weather-box");
-    if (wb) wb.innerHTML = html;
-  });
+function goSearch(){
+  const v = document.getElementById("nav-input").value.trim();
+  if(v) window.location.href = "results.html?dest=" + encodeURIComponent(v);
 }
-
-// Wait for data.js then run
-window.addEventListener("load", function() {
-  if (typeof getDestination === "function") {
-    renderPage();
-  } else {
-    document.getElementById("main-col").innerHTML =
-      '<div class="not-found">' +
-        '<h2>Failed to load destination data</h2>' +
-        '<p>Please refresh the page or try again.</p>' +
-        '<a href="index.html" class="nf-btn primary">← Home</a>' +
-      '</div>';
-  }
+document.getElementById("nav-input").addEventListener("keydown", e => {
+  if(e.key === "Enter") goSearch();
 });
+
+function safeInit(){
+  try {
+    renderPage();
+  } catch(e) {
+    console.error("TripOne results error:", e);
+    document.getElementById("main-content").innerHTML = '<div style="padding:40px;text-align:center;color:var(--coral)"><i class="ti ti-alert-circle" style="font-size:32px"></i><p style="margin-top:12px">Error loading destination: ' + e.message + '</p><br><a href="index.html" style="color:var(--cyan)">← Back to home</a></div>';
+  }
+}
+if(typeof getDestination === "function"){
+  safeInit();
+} else {
+  window.addEventListener("load", safeInit);
+}
 </script>
 </body>
 </html>
