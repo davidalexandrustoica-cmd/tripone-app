@@ -183,7 +183,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   </div>
 </div>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 const DEST_META = {
   "santorini":  {cats:["beach","luxury","party"],budgetNum:1044,flightH:3,season:"May–Oct",tempSummer:28,tempWinter:14,crowd:4,safety:5,nightlife:4,food:4,nature:3,value:3},
@@ -235,8 +235,8 @@ function getData(key){
 function getMeta(key){ return DEST_META[key] || null; }
 
 function starsBar(val, max){
-  const pct = Math.round((val/max)*100);
-  return `<div class="bar-wrap"><div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div><span style="font-size:11px;color:var(--ink3);width:16px">${val}/${max}</span></div>`;
+  var pct = Math.round((val/max)*100);
+  return "<div class=\"bar-wrap\"><div class=\"bar\"><div class=\"bar-fill\" style=\"width:" + pct + "%\"></div></div><span style=\"font-size:11px;color:var(--ink3);width:16px\">" + val + "/" + max + "</span></div>";
 }
 
 function budgetColor(nums, idx){
@@ -247,28 +247,28 @@ function budgetColor(nums, idx){
 }
 
 function renderPickers(){
-  const row = document.getElementById("picker-row");
+  var row = document.getElementById("picker-row");
   row.innerHTML = "";
-  selected.forEach((key, i) => {
-    const data = getData(key);
+  selected.forEach(function(key, i) {
+    var data = getData(key);
     if(!data) return;
-    const div = document.createElement("div");
+    var div = document.createElement("div");
     div.className = "picker";
-    div.innerHTML = `
-      <div class="picker-emoji">${data.emoji}</div>
-      <div class="picker-info">
-        <div class="picker-name">${data.name}</div>
-        <div class="picker-sub">${data.country}</div>
-      </div>
-      <button class="picker-change" onclick="openModal(${i})">Change</button>
-      <button style="background:none;border:none;color:var(--ink3);cursor:pointer;font-size:18px;padding:0 0 0 4px" onclick="removeSlot(${i})" title="Remove">×</button>`;
+    div.innerHTML =
+      "<div class=\"picker-emoji\">" + data.emoji + "</div>" +
+      "<div class=\"picker-info\">" +
+        "<div class=\"picker-name\">" + data.name + "</div>" +
+        "<div class=\"picker-sub\">" + data.country + "</div>" +
+      "</div>" +
+      "<button class=\"picker-change\" onclick=\"openModal(" + i + ")\">Change</button>" +
+      "<button style=\"background:none;border:none;color:var(--ink3);cursor:pointer;font-size:18px;padding:0 0 0 4px\" onclick=\"removeSlot(" + i + ")\" title=\"Remove\">×</button>";
     row.appendChild(div);
   });
   if(selected.length < 3){
-    const add = document.createElement("div");
+    var add = document.createElement("div");
     add.className = "picker-add";
-    add.onclick = () => openModal(selected.length);
-    add.innerHTML = `<i class="ti ti-plus" style="font-size:18px"></i> Add destination`;
+    add.onclick = function(){ openModal(selected.length); };
+    add.innerHTML = "<i class=\"ti ti-plus\" style=\"font-size:18px\"></i> Add destination";
     row.appendChild(add);
   }
 }
@@ -297,16 +297,19 @@ function renderCompare(){
   const bestBudgetIdx = budgetNums.indexOf(Math.min(...budgetNums));
 
   // Build header cells
-  const hdCols = datas.map((d,i) => {
-    const isBest = i === bestBudgetIdx && N > 1;
-    return `<th style="padding:0 12px 20px ${i===0?0:12}px">
-      <div class="dest-hd ${isBest?"winner":""}">
-        <span class="dest-hd-flag">${d.emoji}</span>
-        <div class="dest-hd-name">${d.name}</div>
-        <div class="dest-hd-country">${d.country}</div>
-        <button class="dest-hd-btn" onclick="window.location.href='results.html?dest=${encodeURIComponent(d.name)}'">Explore →</button>
-      </div>
-    </th>`;
+  const hdCols = datas.map(function(d,i) {
+    var isBest = i === bestBudgetIdx && N > 1;
+    var pad = i===0 ? 0 : 12;
+    var hdCls = isBest ? "dest-hd winner" : "dest-hd";
+    var destUrl = "results.html?dest=" + encodeURIComponent(d.name);
+    return "<th style=\"padding:0 12px 20px " + pad + "px\">" +
+      "<div class=\"" + hdCls + "\">" +
+        "<span class=\"dest-hd-flag\">" + d.emoji + "</span>" +
+        "<div class=\"dest-hd-name\">" + d.name + "</div>" +
+        "<div class=\"dest-hd-country\">" + d.country + "</div>" +
+        "<button class=\"dest-hd-btn\" onclick=\"window.location.href='" + destUrl + "'\">Explore →</button>" +
+      "</div>" +
+    "</th>";
   }).join("");
 
   // Helper: best value highlight
@@ -321,7 +324,7 @@ function renderCompare(){
     // OVERVIEW
     {label:"🌍 Country", cells: datas.map(d => d.country)},
     {label:"📅 Best season", cells: datas.map(d => d.best_months)},
-    {label:"✈️ Flight time", cells: metas.map(m => m ? `~${m.flightH}h` : "—"), best:"lower"},
+    {label:"✈️ Flight time", cells: metas.map(m => m ? "~" + m.flightH + "h" : "—"), best:"lower"},
     {label:"💬 Language", cells: datas.map(d => d.language)},
     {label:"💱 Currency", cells: datas.map(d => d.currency)},
     {label:"🕐 Timezone", cells: datas.map(d => d.timezone)},
@@ -339,15 +342,15 @@ function renderCompare(){
     {label:"☀️ Summer temp", cells: metas.map(m => m ? m.tempSummer + "°C" : "—"), section:"Weather"},
     {label:"❄️ Winter temp", cells: metas.map(m => m ? m.tempWinter + "°C" : "—")},
     // ACTIVITIES
-    {label:"🎯 Top activity", cells: datas.map(d => d.activities && d.activities[0] ? `${d.activities[0].icon} ${d.activities[0].name}` : "—")},
-    {label:"🎉 Must-do", cells: datas.map(d => d.activities && d.activities[1] ? `${d.activities[1].icon} ${d.activities[1].name}` : "—")},
+    {label:"🎯 Top activity", cells: datas.map(d => d.activities && d.activities[0] ? d.activities[0].icon + " " + d.activities[0].name : "—")},
+    {label:"🎉 Must-do", cells: datas.map(d => d.activities && d.activities[1] ? d.activities[1].icon + " " + d.activities[1].name : "—")},
     // FOOD
     {label:"🍴 Best restaurant", cells: datas.map(d => d.food && d.food[0] ? d.food[0].name : "—"), section:"Food"},
     {label:"🥙 Street food", cells: datas.map(d => d.food && d.food[2] ? d.food[2].name : "—")},
     // NIGHTLIFE
     {label:"🎶 Top venue", cells: datas.map(d => d.nightlife && d.nightlife[0] ? d.nightlife[0].name : "—"), section:"Nightlife"},
     // TRANSPORT
-    {label:"🚇 Getting around", cells: datas.map(d => d.transport && d.transport[0] ? `${d.transport[0].icon} ${d.transport[0].name}` : "—"), section:"Transport"},
+    {label:"🚇 Getting around", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].icon + " " + d.transport[0].name : "—"), section:"Transport"},
     {label:"💸 Transport cost", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].price : "—")},
     // TIPS
     {label:"⚠️ Main warning", cells: datas.map(d => d.warnings && d.warnings[0] ? d.warnings[0].title : "None"), section:"Key Tips"},
@@ -355,60 +358,31 @@ function renderCompare(){
   ];
 
   let lastSection = "";
-  const rowsHTML = rows.map(row => {
-    let sectionRow = "";
+  var lastSection = "";
+  var rowsHTML = rows.map(function(row) {
+    var sectionRow = "";
     if(row.section && row.section !== lastSection){
       lastSection = row.section;
-      sectionRow = `<tr><td colspan="${N+1}" style="padding:20px 0 8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;border-top:2px solid var(--border2)">${row.section}</td></tr>`;
+      sectionRow = "<tr><td colspan=\"" + (N+1) + "\" style=\"padding:20px 0 8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;border-top:2px solid var(--border2)\">" + row.section + "</td></tr>";
     }
-    const cells = row.cells.map((cell, idx) => {
-      if(row.raw) return `<td>${cell}</td>`;
-      const cls = "";
-      return `<td class="${cls}">${cell}</td>`;
+    var cells = row.cells.map(function(cell) {
+      if(row.raw) return "<td>" + cell + "</td>";
+      return "<td>" + cell + "</td>";
     }).join("");
-    return sectionRow + `<tr><td class="row-label">${row.label}</td>${cells}</tr>`;
-  }).join("");
-
-  // AI Verdict
-  const verdicts = datas.map((d, i) => {
-    const meta = metas[i];
-    if(!meta) return "";
-    const strengths = [];
-    const weaknesses = [];
-    if(meta.food >= 5) strengths.push("outstanding food scene");
-    if(meta.nightlife >= 5) strengths.push("world-class nightlife");
-    if(meta.safety >= 5) strengths.push("very safe destination");
-    if(meta.value >= 5) strengths.push("exceptional value for money");
-    if(meta.nature >= 5) strengths.push("stunning natural beauty");
-    if(meta.budgetNum === Math.min(...budgetNums)) strengths.push("most affordable of the selection");
-    if(meta.flightH === Math.min(...metas.map(m => m?.flightH||99))) strengths.push("shortest flight from Bucharest");
-    if(meta.nightlife <= 2) weaknesses.push("limited nightlife");
-    if(meta.value <= 2) weaknesses.push("expensive destination");
-    if(meta.flightH >= 10) weaknesses.push("long flight");
-    const strengthText = strengths.length ? `<strong>Best for:</strong> ${strengths.slice(0,2).join(", ")}.` : "";
-    const weakText = weaknesses.length ? ` <strong>Consider:</strong> ${weaknesses[0]}.` : "";
-    return `<div class="verdict-item">
-      <div class="verdict-dest">${d.emoji} ${d.name}</div>
-      <div class="verdict-text">${strengthText}${weakText} ${budgetNums[i] === Math.min(...budgetNums) && N > 1 ? "<strong>Most budget-friendly choice.</strong>" : ""}</div>
-    </div>`;
+    return sectionRow + "<tr><td class=\"row-label\">" + row.label + "</td>" + cells + "</tr>";
   }).join("");
 
   const colWidth = N === 2 ? "50%" : N === 3 ? "33%" : "25%";
 
-  content.innerHTML = `
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th style="width:140px"></th>
-          ${hdCols}
-        </tr>
-      </thead>
-      <tbody>${rowsHTML}</tbody>
-    </table>
-    <div class="verdict-card">
-      <h3><i class="ti ti-sparkles"></i> TripOne Verdict</h3>
-      <div class="verdict-grid">${verdicts}</div>
-    </div>`;
+  content.innerHTML =
+    "<table class=\"compare-table\">" +
+      "<thead><tr><th style=\"width:140px\"></th>" + hdCols + "</tr></thead>" +
+      "<tbody>" + rowsHTML + "</tbody>" +
+    "</table>" +
+    "<div class=\"verdict-card\">" +
+      "<h3><i class=\"ti ti-sparkles\"></i> TripOne Verdict</h3>" +
+      "<div class=\"verdict-grid\">" + verdicts + "</div>" +
+    "</div>";
 }
 
 // MODAL
@@ -436,24 +410,28 @@ function filterModal(){
 }
 
 function renderModalGrid(search){
-  const grid = document.getElementById("modal-grid");
+  var grid = document.getElementById("modal-grid");
   grid.innerHTML = modalAllKeys
-    .filter(k => {
-      const d = getData(k);
+    .filter(function(k) {
+      var d = getData(k);
       return d && d.name.toLowerCase().includes(search);
     })
-    .map(k => {
-      const d = getData(k);
-      const already = selected.includes(k) && selected.indexOf(k) !== editingSlot;
-      return `<div class="modal-dest ${already?"":"" }" onclick="${already?"":"selectDest('"+k+"')"}" style="${already?"opacity:.4;cursor:not-allowed":""}">
-        <div class="modal-dest-flag">${d.emoji}</div>
-        <div>
-          <div class="modal-dest-name">${d.name}</div>
-          <div class="modal-dest-country">${d.country}</div>
-        </div>
-      </div>`;
+    .map(function(k) {
+      var d = getData(k);
+      var already = selected.includes(k) && selected.indexOf(k) !== editingSlot;
+      var cls = "modal-dest" + (already ? " disabled" : "");
+      var onclick = already ? "" : "selectDest('" + k + "')";
+      var style = already ? "opacity:.4;cursor:not-allowed" : "";
+      return "<div class=\"" + cls + "\" onclick=\"" + onclick + "\" style=\"" + style + "\">" +
+        "<div class=\"modal-dest-flag\">" + d.emoji + "</div>" +
+        "<div>" +
+          "<div class=\"modal-dest-name\">" + d.name + "</div>" +
+          "<div class=\"modal-dest-country\">" + d.country + "</div>" +
+        "</div>" +
+      "</div>";
     }).join("");
 }
+
 
 function selectDest(key){
   if(editingSlot !== null){
