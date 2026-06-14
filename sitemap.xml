@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://tripone-app.vercel.app/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/categories.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/finder.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/compare.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/itinerary.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/about.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Santorini</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Bali</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Barcelona</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Dubai</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Paris</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Rome</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Lisbon</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Tokyo</loc><priority>0.8</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Amsterdam</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Prague</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Budapest</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Mykonos</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Ibiza</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Bangkok</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Phuket</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Vienna</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Tenerife</loc><priority>0.7</priority></url>
+  <url><loc>https://tripone-app.vercel.app/results.html?dest=Marrakech</loc><priority>0.7</priority></url>
+</urlset>
