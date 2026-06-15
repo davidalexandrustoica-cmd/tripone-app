@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare Destinations — TripOne</title>
+<meta name="description" content="Compare up to 3 travel destinations side by side. Budget, weather, nightlife, food, safety and more — with an AI verdict on which fits you best.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="TripOne">
+<meta name="theme-color" content="#09090b">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tripone-app.vercel.app/compare.html">
+<meta property="og:title" content="Compare Destinations — TripOne">
+<meta property="og:description" content="Compare up to 3 travel destinations side by side. Budget, weather, nightlife, food, safety and more — with an AI verdict on which fits you best.">
+<meta property="og:image" content="https://tripone-app.vercel.app/og-image.png">
+<meta property="og:site_name" content="TripOne">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compare Destinations — TripOne">
+<meta name="twitter:description" content="Compare up to 3 travel destinations side by side. Budget, weather, nightlife, food, safety and more — with an AI verdict on which fits you best.">
+<meta name="twitter:image" content="https://tripone-app.vercel.app/og-image.png">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://tripone-app.vercel.app/compare.html">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--card:#1c1c21;--card2:#222228;
+  --border:#2a2a32;--border2:#333340;--ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
+  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
+  --amber:#f59e0b;--coral:#ff6b6b;--green:#10b981;--r:12px;
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
+.logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;cursor:pointer;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+
+.page-hero{position:relative;z-index:1;padding:44px 28px 32px;text-align:center}
+.page-hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(24px,4vw,40px);letter-spacing:-1px;margin-bottom:10px}
+.page-hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hero p{font-size:14px;color:var(--ink2)}
+
+/* DEST PICKER ROW */
+.picker-row{position:relative;z-index:1;display:flex;gap:12px;padding:0 28px 28px;max-width:1200px;margin:0 auto;justify-content:center;flex-wrap:wrap}
+.picker{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;gap:10px;min-width:200px;cursor:pointer;transition:border-color .2s}
+.picker:hover{border-color:var(--border2)}
+.picker-emoji{font-size:22px}
+.picker-info{flex:1}
+.picker-name{font-size:14px;font-weight:500;color:var(--ink)}
+.picker-sub{font-size:11px;color:var(--ink3)}
+.picker-change{font-size:11px;color:var(--cyan);background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;white-space:nowrap}
+.picker-add{background:var(--bg3);border:2px dashed var(--border2);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:8px;min-width:200px;cursor:pointer;color:var(--ink3);font-size:13px;transition:all .2s}
+.picker-add:hover{border-color:var(--cyan2);color:var(--cyan)}
+
+/* DEST SELECTOR MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:500px;padding:24px;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:16px}
+.modal-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 14px;margin-bottom:16px}
+.modal-search i{color:var(--ink3);font-size:15px}
+.modal-search input{border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--ink);outline:none;flex:1}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-dest{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
+.modal-dest:hover{border-color:var(--cyan2);background:rgba(0,229,255,.04)}
+.modal-dest-flag{font-size:18px}
+.modal-dest-name{font-size:13px;font-weight:500}
+.modal-dest-country{font-size:11px;color:var(--ink3)}
+.modal-close{float:right;background:none;border:none;color:var(--ink3);cursor:pointer;font-size:20px;line-height:1;margin-top:-4px}
+
+/* COMPARE TABLE */
+.compare-wrap{position:relative;z-index:1;padding:0 28px 60px;max-width:1200px;margin:0 auto}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0}
+.compare-table th{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:0 0 20px;vertical-align:bottom}
+.row-label{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;padding:14px 0 14px;border-top:1px solid var(--border);white-space:nowrap;vertical-align:middle;width:140px}
+.compare-table td{padding:14px 12px;border-top:1px solid var(--border);vertical-align:middle;font-size:13px;color:var(--ink2)}
+.compare-table td:first-child{padding-left:0}
+
+/* DEST HEADER CARD */
+.dest-hd{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;margin-bottom:8px;position:relative}
+.dest-hd.winner{border-color:var(--cyan2);background:rgba(0,229,255,.04)}
+.dest-hd.winner::after{content:"✨ Best pick";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--cyan2);color:#000;font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px;white-space:nowrap}
+.dest-hd-flag{font-size:36px;margin-bottom:8px;display:block}
+.dest-hd-name{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--ink);margin-bottom:2px}
+.dest-hd-country{font-size:11px;color:var(--ink3);margin-bottom:10px}
+.dest-hd-btn{background:var(--cyan2);color:#000;border:none;border-radius:8px;padding:7px 16px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;width:100%}
+
+/* CELL TYPES */
+.cell-good{color:var(--green) !important;font-weight:500}
+.cell-warn{color:var(--amber) !important}
+.cell-bad{color:var(--coral) !important}
+.cell-best{background:rgba(0,229,255,.04);border-radius:6px;padding:4px 8px;color:var(--cyan) !important;font-weight:500}
+.bar-wrap{display:flex;align-items:center;gap:8px}
+.bar{height:6px;border-radius:3px;background:var(--border);flex:1;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cyan2),var(--violet2));transition:width .6s ease}
+.badges-cell{display:flex;flex-wrap:wrap;gap:4px}
+.mini-badge{font-size:10px;border-radius:100px;padding:2px 8px;background:var(--bg3);border:1px solid var(--border);color:var(--ink2)}
+.star-row{color:var(--amber);font-size:14px;letter-spacing:1px}
+.verdict-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;margin-top:28px}
+.verdict-card h3{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.verdict-card h3 i{color:var(--cyan)}
+.verdict-grid{display:grid;gap:12px}
+.verdict-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px}
+.verdict-dest{font-size:11px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.verdict-text{font-size:13px;color:var(--ink2);line-height:1.6}
+.verdict-text strong{color:var(--ink)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--ink2)}
+.empty-state h2{font-family:"Syne",sans-serif;font-size:20px;color:var(--ink);margin-bottom:10px}
+.empty-state p{margin-bottom:24px}
+.empty-state a{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block}
+
+@media(max-width:768px){
+  .picker-row{flex-direction:column;align-items:stretch}
+  .picker,.picker-add{min-width:unset}
+  .compare-wrap{padding:0 16px 40px;overflow-x:auto}
+  .compare-table{min-width:500px}
+  .row-label{width:110px;font-size:11px}
+  nav{padding:12px 16px}
+  .nav-links{display:none}
+}
+
+/* NAV CTA */
+.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta:hover{opacity:.88}
+@media(max-width:768px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Trip<em>One</em></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="categories.html">Destinations</a>
+    <a href="finder.html">Finder</a>
+    <a href="compare.html">Compare</a>
+    <a href="itinerary.html">Itinerary</a>
+    <a href="about.html">About</a>
+  </div>
+  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Compare <em>destinations</em> side by side</h1>
+  <p>Pick 2 or 3 destinations and see everything compared — budget, vibe, weather, activities and more.</p>
+</div>
+
+<!-- DESTINATION PICKERS -->
+<div class="picker-row" id="picker-row"></div>
+
+<!-- COMPARE TABLE -->
+<div class="compare-wrap" id="compare-wrap">
+  <div class="empty-state" id="empty-state">
+    <h2>Select destinations above to compare</h2>
+    <p>Choose at least 2 destinations to see a full side-by-side comparison.</p>
+    <a href="categories.html">Browse destinations →</a>
+  </div>
+  <div id="compare-content" style="display:none"></div>
+</div>
+
+<!-- DEST SELECTOR MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <h3>Choose a destination</h3>
+    <div class="modal-search">
+      <i class="ti ti-search"></i>
+      <input type="text" id="modal-search" placeholder="Search..." oninput="filterModal()">
+    </div>
+    <div class="modal-grid" id="modal-grid"></div>
+  </div>
+</div>
+
+<script src="data.js?v=3"></script>
+<script>
+const DEST_META = {
+  "santorini":  {cats:["beach","luxury","party"],budgetNum:1044,flightH:3,season:"May–Oct",tempSummer:28,tempWinter:14,crowd:4,safety:5,nightlife:4,food:4,nature:3,value:3},
+  "bali":       {cats:["beach","nature","budget","party"],budgetNum:900,flightH:14,season:"Apr–Oct",tempSummer:30,tempWinter:28,crowd:3,safety:4,nightlife:4,food:5,nature:5,value:5},
+  "barcelona":  {cats:["city","beach","party","food"],budgetNum:1000,flightH:3,season:"May–Oct",tempSummer:28,tempWinter:12,crowd:4,safety:3,nightlife:5,food:5,nature:3,value:4},
+  "dubai":      {cats:["luxury","city","beach"],budgetNum:1800,flightH:5,season:"Nov–Mar",tempSummer:42,tempWinter:22,crowd:3,safety:5,nightlife:3,food:4,nature:2,value:2},
+  "paris":      {cats:["city","luxury","food","history"],budgetNum:1200,flightH:3,season:"Apr–Oct",tempSummer:23,tempWinter:5,crowd:5,safety:3,nightlife:4,food:5,nature:3,value:3},
+  "rome":       {cats:["history","city","food"],budgetNum:950,flightH:2,season:"Apr–Oct",tempSummer:30,tempWinter:8,crowd:4,safety:3,nightlife:3,food:5,nature:3,value:4},
+  "lisbon":     {cats:["city","budget","food","history"],budgetNum:850,flightH:4,season:"Mar–Oct",tempSummer:27,tempWinter:13,crowd:3,safety:4,nightlife:4,food:5,nature:3,value:5},
+  "tokyo":      {cats:["city","food","history","nature"],budgetNum:2000,flightH:12,season:"Mar–May",tempSummer:30,tempWinter:5,crowd:4,safety:5,nightlife:4,food:5,nature:4,value:3},
+  "amsterdam":  {cats:["city","history","budget"],budgetNum:1100,flightH:3,season:"Apr–Sep",tempSummer:21,tempWinter:4,crowd:4,safety:4,nightlife:4,food:4,nature:4,value:4},
+  "prague":     {cats:["history","budget","city","party"],budgetNum:700,flightH:2,season:"Apr–Oct",tempSummer:23,tempWinter:1,crowd:3,safety:4,nightlife:5,food:4,nature:3,value:5},
+  "mykonos":    {cats:["beach","party","luxury"],budgetNum:2000,flightH:3,season:"Jun–Sep",tempSummer:27,tempWinter:13,crowd:5,safety:5,nightlife:5,food:4,nature:3,value:2},
+  "ibiza":      {cats:["party","beach"],budgetNum:1800,flightH:4,season:"Jun–Sep",tempSummer:29,tempWinter:13,crowd:4,safety:4,nightlife:5,food:4,nature:3,value:2},
+  "new york":   {cats:["city","food","luxury"],budgetNum:2500,flightH:10,season:"Apr–Nov",tempSummer:28,tempWinter:1,crowd:5,safety:3,nightlife:5,food:5,nature:3,value:2},
+  "bangkok":    {cats:["city","food","budget","party"],budgetNum:1200,flightH:10,season:"Nov–Feb",tempSummer:35,tempWinter:28,crowd:4,safety:3,nightlife:5,food:5,nature:3,value:5},
+  "phuket":     {cats:["beach","budget","nature","party"],budgetNum:1300,flightH:11,season:"Nov–Apr",tempSummer:32,tempWinter:30,crowd:4,safety:3,nightlife:4,food:4,nature:4,value:4},
+  "vienna":     {cats:["history","city","food","family"],budgetNum:900,flightH:2,season:"Apr–Oct",tempSummer:24,tempWinter:1,crowd:3,safety:5,nightlife:3,food:4,nature:3,value:4},
+  "budapest":   {cats:["history","budget","party","city"],budgetNum:650,flightH:2,season:"Apr–Oct",tempSummer:26,tempWinter:2,crowd:3,safety:4,nightlife:5,food:4,nature:3,value:5},
+  "tenerife":   {cats:["beach","family","nature"],budgetNum:1100,flightH:5,season:"Year-round",tempSummer:26,tempWinter:19,crowd:3,safety:5,nightlife:3,food:3,nature:5,value:4},
+  "marrakech":  {cats:["history","budget","food","nature"],budgetNum:700,flightH:4,season:"Oct–Apr",tempSummer:38,tempWinter:16,crowd:3,safety:3,nightlife:2,food:5,nature:4,value:5},
+  "maldives":   {cats:["beach","luxury"],budgetNum:3500,flightH:12,season:"Nov–Apr",tempSummer:30,tempWinter:28,crowd:2,safety:5,nightlife:1,food:3,nature:5,value:1},
+};
+
+const MALDIVES_DATA = {
+  name:"Maldives",country:"Maldives",emoji:"🇲🇻",
+  description:"The world's ultimate luxury beach escape — overwater bungalows, crystal lagoons, world-class diving.",
+  best_months:"November – April",peak:"December – January",language:"Dhivehi / English",currency:"USD / MVR",timezone:"GMT+5",flight_time:"~12h (1 stop)",
+  budget:{min:"€1,500",ideal:"€3,500+",min_desc:"Budget resort, all-inclusive deal.",ideal_desc:"Overwater villa, private island resort.",breakdown:[["Flights","€600–€800"],["Resort (7n)","€700–€2,500"],["Food (all-incl)","€0–€200"],["Activities","€100–€300"],["Transport","€50–€100"]]},
+  activities:[{icon:"🤿",name:"Snorkeling & Diving",detail:"World's best coral reefs",price:"€30–80/dive",free:false},{icon:"🌅",name:"Overwater bungalow",detail:"Stay above the ocean",price:"Included in resort",free:false},{icon:"🐠",name:"Whale shark swimming",detail:"Seasonal · unforgettable",price:"€80/person",free:false}],
+  food:[{name:"Resort restaurants",detail:"All-inclusive packages available",price:"Included"},{name:"Local island warungs",detail:"If visiting local islands",price:"€5–10/meal"}],
+  nightlife:[{name:"Beach bars",detail:"Sunset cocktails on the sand"},{name:"Very limited nightlife",detail:"Alcohol only in resort areas — Muslim country"}],
+  warnings:[{title:"Alcohol laws",text:"Alcohol only available at resort islands. Local islands are dry."},{title:"Very expensive",text:"One of the world's most expensive destinations. Budget carefully."}],
+  discounts:[{title:"All-inclusive packages",text:"Book AI packages — food and activities included often saves 30–40%."},{title:"Book early",text:"Holiday periods sell out 6–12 months ahead at best resorts."}],
+  transport:[{icon:"✈️",name:"Seaplane",detail:"Most resorts accessed by seaplane transfer.",price:"€150–300 return"},{icon:"⛵",name:"Speedboat",detail:"Cheaper than seaplane for closer resorts.",price:"€30–80 return"}]
+};
+
+const params = new URLSearchParams(window.location.search);
+const destParam = params.get("dests");
+let selected = destParam ? destParam.split(",").map(d => decodeURIComponent(d).toLowerCase()) : [];
+if(selected.length > 3) selected = selected.slice(0,3);
+let editingSlot = null;
+
+function getData(key){
+  if(key === "maldives") return MALDIVES_DATA;
+  return DESTINATIONS[key] || null;
+}
+
+function getMeta(key){ return DEST_META[key] || null; }
+
+function starsBar(val, max){
+  var pct = Math.round((val/max)*100);
+  return "<div class=\"bar-wrap\"><div class=\"bar\"><div class=\"bar-fill\" style=\"width:" + pct + "%\"></div></div><span style=\"font-size:11px;color:var(--ink3);width:16px\">" + val + "/" + max + "</span></div>";
+}
+
+function budgetColor(nums, idx){
+  const min = Math.min(...nums), max = Math.max(...nums);
+  if(nums[idx] === min) return "cell-good";
+  if(nums[idx] === max) return "cell-bad";
+  return "";
+}
+
+function renderPickers(){
+  var row = document.getElementById("picker-row");
+  row.innerHTML = "";
+  selected.forEach(function(key, i) {
+    var data = getData(key);
+    if(!data) return;
+    var div = document.createElement("div");
+    div.className = "picker";
+    div.innerHTML =
+      "<div class=\"picker-emoji\">" + data.emoji + "</div>" +
+      "<div class=\"picker-info\">" +
+        "<div class=\"picker-name\">" + data.name + "</div>" +
+        "<div class=\"picker-sub\">" + data.country + "</div>" +
+      "</div>" +
+      "<button class=\"picker-change\" onclick=\"openModal(" + i + ")\">Change</button>" +
+      "<button style=\"background:none;border:none;color:var(--ink3);cursor:pointer;font-size:18px;padding:0 0 0 4px\" onclick=\"removeSlot(" + i + ")\" title=\"Remove\">×</button>";
+    row.appendChild(div);
+  });
+  if(selected.length < 3){
+    var add = document.createElement("div");
+    add.className = "picker-add";
+    add.onclick = function(){ openModal(selected.length); };
+    add.innerHTML = "<i class=\"ti ti-plus\" style=\"font-size:18px\"></i> Add destination";
+    row.appendChild(add);
+  }
+}
+
+function removeSlot(i){
+  selected.splice(i,1);
+  renderPickers();
+  renderCompare();
+}
+
+function renderCompare(){
+  const content = document.getElementById("compare-content");
+  const empty = document.getElementById("empty-state");
+  if(selected.length < 2){
+    content.style.display = "none";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+  content.style.display = "block";
+
+  const datas = selected.map(k => getData(k));
+  const metas = selected.map(k => getMeta(k));
+  const N = selected.length;
+  const budgetNums = metas.map(m => m ? m.budgetNum : 9999);
+  const bestBudgetIdx = budgetNums.indexOf(Math.min(...budgetNums));
+
+  // Build header cells
+  const hdCols = datas.map(function(d,i) {
+    var isBest = i === bestBudgetIdx && N > 1;
+    var pad = i===0 ? 0 : 12;
+    var hdCls = isBest ? "dest-hd winner" : "dest-hd";
+    var destUrl = "results.html?dest=" + encodeURIComponent(d.name);
+    return "<th style=\"padding:0 12px 20px " + pad + "px\">" +
+      "<div class=\"" + hdCls + "\">" +
+        "<span class=\"dest-hd-flag\">" + d.emoji + "</span>" +
+        "<div class=\"dest-hd-name\">" + d.name + "</div>" +
+        "<div class=\"dest-hd-country\">" + d.country + "</div>" +
+        "<button class=\"dest-hd-btn\" onclick=\"window.location.href='" + destUrl + "'\">Explore →</button>" +
+      "</div>" +
+    "</th>";
+  }).join("");
+
+  // Helper: best value highlight
+  const hi = (vals, idx, lowerIsBetter=false) => {
+    const nums = vals.map(v => parseFloat(v)||0);
+    const best = lowerIsBetter ? Math.min(...nums) : Math.max(...nums);
+    return nums[idx] === best ? "cell-best" : "";
+  };
+
+  // Rows
+  const rows = [
+    // OVERVIEW
+    {label:"🌍 Country", cells: datas.map(d => d.country)},
+    {label:"📅 Best season", cells: datas.map(d => d.best_months)},
+    {label:"✈️ Flight time", cells: metas.map(m => m ? "~" + m.flightH + "h" : "—"), best:"lower"},
+    {label:"💬 Language", cells: datas.map(d => d.language)},
+    {label:"💱 Currency", cells: datas.map(d => d.currency)},
+    {label:"🕐 Timezone", cells: datas.map(d => d.timezone)},
+    // BUDGET
+    {label:"💰 Min budget", cells: datas.map(d => d.budget ? d.budget.min : "—"), best:"lower", section:"Budget"},
+    {label:"✨ Ideal budget", cells: datas.map(d => d.budget ? d.budget.ideal : "—"), best:"lower"},
+    {label:"📊 Value for money", cells: metas.map(m => m ? starsBar(m.value,5) : "—"), raw:true},
+    // VIBE RATINGS
+    {label:"🎵 Nightlife", cells: metas.map(m => m ? starsBar(m.nightlife,5) : "—"), raw:true, section:"Vibe Ratings"},
+    {label:"🍽️ Food scene", cells: metas.map(m => m ? starsBar(m.food,5) : "—"), raw:true},
+    {label:"🌿 Nature", cells: metas.map(m => m ? starsBar(m.nature,5) : "—"), raw:true},
+    {label:"🛡️ Safety", cells: metas.map(m => m ? starsBar(m.safety,5) : "—"), raw:true},
+    {label:"👥 Crowd level", cells: metas.map(m => m ? starsBar(m.crowd,5) : "—"), raw:true},
+    // WEATHER
+    {label:"☀️ Summer temp", cells: metas.map(m => m ? m.tempSummer + "°C" : "—"), section:"Weather"},
+    {label:"❄️ Winter temp", cells: metas.map(m => m ? m.tempWinter + "°C" : "—")},
+    // ACTIVITIES
+    {label:"🎯 Top activity", cells: datas.map(d => d.activities && d.activities[0] ? d.activities[0].icon + " " + d.activities[0].name : "—")},
+    {label:"🎉 Must-do", cells: datas.map(d => d.activities && d.activities[1] ? d.activities[1].icon + " " + d.activities[1].name : "—")},
+    // FOOD
+    {label:"🍴 Best restaurant", cells: datas.map(d => d.food && d.food[0] ? d.food[0].name : "—"), section:"Food"},
+    {label:"🥙 Street food", cells: datas.map(d => d.food && d.food[2] ? d.food[2].name : "—")},
+    // NIGHTLIFE
+    {label:"🎶 Top venue", cells: datas.map(d => d.nightlife && d.nightlife[0] ? d.nightlife[0].name : "—"), section:"Nightlife"},
+    // TRANSPORT
+    {label:"🚇 Getting around", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].icon + " " + d.transport[0].name : "—"), section:"Transport"},
+    {label:"💸 Transport cost", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].price : "—")},
+    // TIPS
+    {label:"⚠️ Main warning", cells: datas.map(d => d.warnings && d.warnings[0] ? d.warnings[0].title : "None"), section:"Key Tips"},
+    {label:"🏷️ Best discount", cells: datas.map(d => d.discounts && d.discounts[0] ? d.discounts[0].title : "—")},
+  ];
+
+  let lastSection = "";
+  var lastSection = "";
+  var rowsHTML = rows.map(function(row) {
+    var sectionRow = "";
+    if(row.section && row.section !== lastSection){
+      lastSection = row.section;
+      sectionRow = "<tr><td colspan=\"" + (N+1) + "\" style=\"padding:20px 0 8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;border-top:2px solid var(--border2)\">" + row.section + "</td></tr>";
+    }
+    var cells = row.cells.map(function(cell) {
+      if(row.raw) return "<td>" + cell + "</td>";
+      return "<td>" + cell + "</td>";
+    }).join("");
+    return sectionRow + "<tr><td class=\"row-label\">" + row.label + "</td>" + cells + "</tr>";
+  }).join("");
+
+  const colWidth = N === 2 ? "50%" : N === 3 ? "33%" : "25%";
+
+  content.innerHTML =
+    "<table class=\"compare-table\">" +
+      "<thead><tr><th style=\"width:140px\"></th>" + hdCols + "</tr></thead>" +
+      "<tbody>" + rowsHTML + "</tbody>" +
+    "</table>" +
+    "<div class=\"verdict-card\">" +
+      "<h3><i class=\"ti ti-sparkles\"></i> TripOne Verdict</h3>" +
+      "<div class=\"verdict-grid\">" + verdicts + "</div>" +
+    "</div>";
+}
+
+// MODAL
+let modalAllKeys = Object.keys(DEST_META);
+
+function openModal(slot){
+  editingSlot = slot;
+  document.getElementById("modal-overlay").classList.add("open");
+  document.getElementById("modal-search").value = "";
+  renderModalGrid("");
+  setTimeout(() => document.getElementById("modal-search").focus(), 100);
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById("modal-overlay")) closeModalDirect();
+}
+
+function closeModalDirect(){
+  document.getElementById("modal-overlay").classList.remove("open");
+  editingSlot = null;
+}
+
+function filterModal(){
+  renderModalGrid(document.getElementById("modal-search").value.toLowerCase());
+}
+
+function renderModalGrid(search){
+  var grid = document.getElementById("modal-grid");
+  grid.innerHTML = modalAllKeys
+    .filter(function(k) {
+      var d = getData(k);
+      return d && d.name.toLowerCase().includes(search);
+    })
+    .map(function(k) {
+      var d = getData(k);
+      var already = selected.includes(k) && selected.indexOf(k) !== editingSlot;
+      var cls = "modal-dest" + (already ? " disabled" : "");
+      var onclick = already ? "" : "selectDest('" + k + "')";
+      var style = already ? "opacity:.4;cursor:not-allowed" : "";
+      return "<div class=\"" + cls + "\" onclick=\"" + onclick + "\" style=\"" + style + "\">" +
+        "<div class=\"modal-dest-flag\">" + d.emoji + "</div>" +
+        "<div>" +
+          "<div class=\"modal-dest-name\">" + d.name + "</div>" +
+          "<div class=\"modal-dest-country\">" + d.country + "</div>" +
+        "</div>" +
+      "</div>";
+    }).join("");
+}
+
+
+function selectDest(key){
+  if(editingSlot !== null){
+    if(editingSlot < selected.length){
+      selected[editingSlot] = key;
+    } else {
+      selected.push(key);
+    }
+  }
+  closeModalDirect();
+  renderPickers();
+  renderCompare();
+  // Update URL
+  const url = new URL(window.location);
+  url.searchParams.set("dests", selected.map(k => encodeURIComponent(k)).join(","));
+  window.history.replaceState({}, "", url);
+}
+
+// INIT
+function init(){
+  renderPickers();
+  renderCompare();
+}
+function safeInit(){
+  try {
+    init();
+  } catch(e) {
+    console.error("TripOne init error in compare.html:", e);
+    document.body.innerHTML += '<div style="position:fixed;bottom:20px;right:20px;background:#ff6b6b;color:#000;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999">Error: ' + e.message + '</div>';
+  }
+}
+if(typeof DESTINATIONS !== "undefined"){
+  safeInit();
+} else {
+  window.addEventListener("load", safeInit);
+}
+</script>
+</body>
+</html>
