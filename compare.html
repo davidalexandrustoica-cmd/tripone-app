@@ -223,7 +223,7 @@ const MALDIVES_DATA = {
 
 const params = new URLSearchParams(window.location.search);
 const destParam = params.get("dests");
-let selected = destParam ? destParam.split(",").map(d => decodeURIComponent(d).toLowerCase()) : [];
+let selected = destParam ? destParam.split(",").map(function(d){ return decodeURIComponent(d).toLowerCase(); }) : [];
 if(selected.length > 3) selected = selected.slice(0,3);
 let editingSlot = null;
 
@@ -280,21 +280,37 @@ function removeSlot(i){
 }
 
 function renderCompare(){
-  const content = document.getElementById("compare-content");
-  const empty = document.getElementById("empty-state");
+  var content = document.getElementById("compare-content");
+  var empty = document.getElementById("empty-state");
   if(selected.length < 2){
     content.style.display = "none";
     empty.style.display = "block";
     return;
   }
+
+  // Get data for each selected destination
+  var datas = [];
+  for(var i=0; i<selected.length; i++){
+    var d = getData(selected[i]);
+    if(d) datas.push(d);
+  }
+
+  if(datas.length < 2){
+    content.style.display = "none";
+    empty.style.display = "block";
+    empty.innerHTML = "<h2>Could not load destination data</h2><p>Please try selecting destinations again.</p><a href='categories.html' style='color:var(--cyan)'>← Back to destinations</a>";
+    return;
+  }
+
   empty.style.display = "none";
   content.style.display = "block";
 
-  const datas = selected.map(k => getData(k));
-  const metas = selected.map(k => getMeta(k));
-  const N = selected.length;
-  const budgetNums = metas.map(m => m ? m.budgetNum : 9999);
-  const bestBudgetIdx = budgetNums.indexOf(Math.min(...budgetNums));
+  var metas = datas.map(function(d){ return getMeta(d.name.toLowerCase()); });
+  var N = datas.length;
+  var budgetNums = metas.map(function(m){ return m ? m.budgetNum : 9999; });
+  var bestBudgetIdx = 0;
+  var minBudget = budgetNums[0];
+  for(var i=1; i<budgetNums.length; i++){ if(budgetNums[i] < minBudget){ minBudget = budgetNums[i]; bestBudgetIdx = i; } }
 
   // Build header cells
   const hdCols = datas.map(function(d,i) {
@@ -313,49 +329,42 @@ function renderCompare(){
   }).join("");
 
   // Helper: best value highlight
-  const hi = (vals, idx, lowerIsBetter=false) => {
-    const nums = vals.map(v => parseFloat(v)||0);
+  function hi(vals, idx, lowerIsBetter){
+  lowerIsBetter = lowerIsBetter || false;
+    var nums = vals.map(function(v){ return parseFloat(v)||0; });
     const best = lowerIsBetter ? Math.min(...nums) : Math.max(...nums);
     return nums[idx] === best ? "cell-best" : "";
   };
 
   // Rows
-  const rows = [
-    // OVERVIEW
-    {label:"🌍 Country", cells: datas.map(d => d.country)},
-    {label:"📅 Best season", cells: datas.map(d => d.best_months)},
-    {label:"✈️ Flight time", cells: metas.map(m => m ? "~" + m.flightH + "h" : "—"), best:"lower"},
-    {label:"💬 Language", cells: datas.map(d => d.language)},
-    {label:"💱 Currency", cells: datas.map(d => d.currency)},
-    {label:"🕐 Timezone", cells: datas.map(d => d.timezone)},
-    // BUDGET
-    {label:"💰 Min budget", cells: datas.map(d => d.budget ? d.budget.min : "—"), best:"lower", section:"Budget"},
-    {label:"✨ Ideal budget", cells: datas.map(d => d.budget ? d.budget.ideal : "—"), best:"lower"},
-    {label:"📊 Value for money", cells: metas.map(m => m ? starsBar(m.value,5) : "—"), raw:true},
-    // VIBE RATINGS
-    {label:"🎵 Nightlife", cells: metas.map(m => m ? starsBar(m.nightlife,5) : "—"), raw:true, section:"Vibe Ratings"},
-    {label:"🍽️ Food scene", cells: metas.map(m => m ? starsBar(m.food,5) : "—"), raw:true},
-    {label:"🌿 Nature", cells: metas.map(m => m ? starsBar(m.nature,5) : "—"), raw:true},
-    {label:"🛡️ Safety", cells: metas.map(m => m ? starsBar(m.safety,5) : "—"), raw:true},
-    {label:"👥 Crowd level", cells: metas.map(m => m ? starsBar(m.crowd,5) : "—"), raw:true},
-    // WEATHER
-    {label:"☀️ Summer temp", cells: metas.map(m => m ? m.tempSummer + "°C" : "—"), section:"Weather"},
-    {label:"❄️ Winter temp", cells: metas.map(m => m ? m.tempWinter + "°C" : "—")},
-    // ACTIVITIES
-    {label:"🎯 Top activity", cells: datas.map(d => d.activities && d.activities[0] ? d.activities[0].icon + " " + d.activities[0].name : "—")},
-    {label:"🎉 Must-do", cells: datas.map(d => d.activities && d.activities[1] ? d.activities[1].icon + " " + d.activities[1].name : "—")},
-    // FOOD
-    {label:"🍴 Best restaurant", cells: datas.map(d => d.food && d.food[0] ? d.food[0].name : "—"), section:"Food"},
-    {label:"🥙 Street food", cells: datas.map(d => d.food && d.food[2] ? d.food[2].name : "—")},
-    // NIGHTLIFE
-    {label:"🎶 Top venue", cells: datas.map(d => d.nightlife && d.nightlife[0] ? d.nightlife[0].name : "—"), section:"Nightlife"},
-    // TRANSPORT
-    {label:"🚇 Getting around", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].icon + " " + d.transport[0].name : "—"), section:"Transport"},
-    {label:"💸 Transport cost", cells: datas.map(d => d.transport && d.transport[0] ? d.transport[0].price : "—")},
-    // TIPS
-    {label:"⚠️ Main warning", cells: datas.map(d => d.warnings && d.warnings[0] ? d.warnings[0].title : "None"), section:"Key Tips"},
-    {label:"🏷️ Best discount", cells: datas.map(d => d.discounts && d.discounts[0] ? d.discounts[0].title : "—")},
-  ];
+  var rows = [
+    {label:"🌍 Country", cells: datas.map(function(d){ return d.country; })},
+    {label:"📅 Best season", cells: datas.map(function(d){ return d.best_months; })},
+    {label:"✈️ Flight time", cells: metas.map(function(m){ return m ? "~"+m.flightH+"h" : "—"; }), best:"lower"},
+    {label:"💬 Language", cells: datas.map(function(d){ return d.language; })},
+    {label:"💱 Currency", cells: datas.map(function(d){ return d.currency; })},
+    {label:"🕐 Timezone", cells: datas.map(function(d){ return d.timezone; })},
+    {label:"💰 Min budget", cells: datas.map(function(d){ return d.budget ? d.budget.min : "—"; }), section:"Budget"},
+    {label:"✨ Ideal budget", cells: datas.map(function(d){ return d.budget ? d.budget.ideal : "—"; })},
+    {label:"📊 Value for money", cells: metas.map(function(m){ return m ? starsBar(m.value,5) : "—"; }), raw:true},
+    {label:"🎵 Nightlife", cells: metas.map(function(m){ return m ? starsBar(m.nightlife,5) : "—"; }), raw:true, section:"Vibe Ratings"},
+    {label:"🍽️ Food scene", cells: metas.map(function(m){ return m ? starsBar(m.food,5) : "—"; }), raw:true},
+    {label:"🌿 Nature", cells: metas.map(function(m){ return m ? starsBar(m.nature,5) : "—"; }), raw:true},
+    {label:"🛡️ Safety", cells: metas.map(function(m){ return m ? starsBar(m.safety,5) : "—"; }), raw:true},
+    {label:"👥 Crowd level", cells: metas.map(function(m){ return m ? starsBar(m.crowd,5) : "—"; }), raw:true},
+    {label:"☀️ Summer temp", cells: metas.map(function(m){ return m ? m.tempSummer+"°C" : "—"; }), section:"Weather"},
+    {label:"❄️ Winter temp", cells: metas.map(function(m){ return m ? m.tempWinter+"°C" : "—"; })},
+    {label:"🎯 Top activity", cells: datas.map(function(d){ return d.activities && d.activities[0] ? d.activities[0].icon+" "+d.activities[0].name : "—"; })},
+    {label:"🎉 Must-do", cells: datas.map(function(d){ return d.activities && d.activities[1] ? d.activities[1].icon+" "+d.activities[1].name : "—"; })},
+    {label:"🍴 Best restaurant", cells: datas.map(function(d){ return d.food && d.food[0] ? d.food[0].name : "—"; }), section:"Food"},
+    {label:"🥙 Street food", cells: datas.map(function(d){ return d.food && d.food[2] ? d.food[2].name : "—"; })},
+    {label:"🎶 Top venue", cells: datas.map(function(d){ return d.nightlife && d.nightlife[0] ? d.nightlife[0].name : "—"; }), section:"Nightlife"},
+    {label:"🚇 Getting around", cells: datas.map(function(d){ return d.transport && d.transport[0] ? d.transport[0].icon+" "+d.transport[0].name : "—"; }), section:"Transport"},
+    {label:"💸 Transport cost", cells: datas.map(function(d){ return d.transport && d.transport[0] ? d.transport[0].price : "—"; })},
+    {label:"⚠️ Main warning", cells: datas.map(function(d){ return d.warnings && d.warnings[0] ? d.warnings[0].title : "None"; }), section:"Key Tips"},
+    {label:"🏷️ Best discount", cells: datas.map(function(d){ return d.discounts && d.discounts[0] ? d.discounts[0].title : "—"; })}
+];
+
 
   let lastSection = "";
   var lastSection = "";
@@ -393,7 +402,7 @@ function openModal(slot){
   document.getElementById("modal-overlay").classList.add("open");
   document.getElementById("modal-search").value = "";
   renderModalGrid("");
-  setTimeout(() => document.getElementById("modal-search").focus(), 100);
+  setTimeout(function(){ document.getElementById("modal-search").focus(); }, 100);
 }
 
 function closeModal(e){
@@ -446,7 +455,7 @@ function selectDest(key){
   renderCompare();
   // Update URL
   const url = new URL(window.location);
-  url.searchParams.set("dests", selected.map(k => encodeURIComponent(k)).join(","));
+  url.searchParams.set("dests", selected.map(function(k){ return encodeURIComponent(k); }).join(","));
   window.history.replaceState({}, "", url);
 }
 
