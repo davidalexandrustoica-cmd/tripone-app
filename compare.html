@@ -173,8 +173,11 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 <!-- DEST SELECTOR MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModalDirect()">×</button>
-    <h3>Choose a destination</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="margin:0">Choose a destination</h3>
+      <button onclick="closeModalDirect()" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-family:DM Sans,sans-serif;font-size:13px;color:var(--ink2);cursor:pointer">Close ×</button>
+    </div>
+    <p style="font-size:12px;color:var(--ink3);margin-bottom:12px">Click on a destination to select it and compare</p>
     <div class="modal-search">
       <i class="ti ti-search"></i>
       <input type="text" id="modal-search" placeholder="Search..." oninput="filterModal()">
@@ -313,7 +316,7 @@ function renderCompare(){
   for(var i=1; i<budgetNums.length; i++){ if(budgetNums[i] < minBudget){ minBudget = budgetNums[i]; bestBudgetIdx = i; } }
 
   // Build header cells
-  const hdCols = datas.map(function(d,i) {
+  const var hdCols = datas.map(function(d,i) {
     var isBest = i === bestBudgetIdx && N > 1;
     var pad = i===0 ? 0 : 12;
     var hdCls = isBest ? "dest-hd winner" : "dest-hd";
@@ -366,6 +369,7 @@ function renderCompare(){
 ];
 
 
+  let lastSection = "";
   var lastSection = "";
   var rowsHTML = rows.map(function(row) {
     var sectionRow = "";
@@ -380,7 +384,32 @@ function renderCompare(){
     return sectionRow + "<tr><td class=\"row-label\">" + row.label + "</td>" + cells + "</tr>";
   }).join("");
 
-  const colWidth = N === 2 ? "50%" : N === 3 ? "33%" : "25%";
+  // Generate verdicts
+  var verdicts = datas.map(function(d, i) {
+    var meta = metas[i];
+    if(!meta) return "";
+    var strengths = [];
+    var weaknesses = [];
+    if(meta.food >= 5) strengths.push("outstanding food scene");
+    if(meta.nightlife >= 5) strengths.push("world-class nightlife");
+    if(meta.safety >= 5) strengths.push("very safe destination");
+    if(meta.value >= 5) strengths.push("exceptional value for money");
+    if(meta.nature >= 5) strengths.push("stunning natural beauty");
+    if(meta.budgetNum === Math.min.apply(null, budgetNums)) strengths.push("most affordable option");
+    if(meta.flightH <= 3) strengths.push("short flight from Bucharest");
+    if(meta.nightlife <= 2) weaknesses.push("limited nightlife");
+    if(meta.value <= 2) weaknesses.push("expensive destination");
+    if(meta.flightH >= 10) weaknesses.push("long flight required");
+    var strengthText = strengths.length ? "<strong>Best for:</strong> " + strengths.slice(0,2).join(", ") + "." : "";
+    var weakText = weaknesses.length ? " <strong>Consider:</strong> " + weaknesses[0] + "." : "";
+    var budgetText = (meta.budgetNum === Math.min.apply(null, budgetNums) && N > 1) ? " <strong>Most budget-friendly.</strong>" : "";
+    return "<div class=\"verdict-item\">" +
+      "<div class=\"verdict-dest\">" + d.emoji + " " + d.name + "</div>" +
+      "<div class=\"verdict-text\">" + (strengthText || "Good all-round destination.") + weakText + budgetText + "</div>" +
+      "</div>";
+  }).join("");
+
+  var colWidth = N === 2 ? "50%" : N === 3 ? "33%" : "25%";
 
   content.innerHTML =
     "<table class=\"compare-table\">" +
