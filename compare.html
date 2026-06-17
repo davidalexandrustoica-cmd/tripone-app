@@ -366,7 +366,6 @@ function renderCompare(){
 ];
 
 
-  let lastSection = "";
   var lastSection = "";
   var rowsHTML = rows.map(function(row) {
     var sectionRow = "";
@@ -465,11 +464,6 @@ function init(){
   renderCompare();
 }
 function safeInit(){
-  if(typeof DESTINATIONS === "undefined"){
-    console.error("DESTINATIONS not loaded yet, retrying...");
-    setTimeout(safeInit, 300);
-    return;
-  }
   try {
     init();
   } catch(e) {
@@ -480,7 +474,7 @@ function safeInit(){
 if(typeof DESTINATIONS !== "undefined"){
   safeInit();
 } else {
-  document.addEventListener("DOMContentLoaded", function(){ setTimeout(safeInit, 100); });
+  window.addEventListener("load", safeInit);
 }
 </script>
 </body>
