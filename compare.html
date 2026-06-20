@@ -131,6 +131,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 <div class="hero">
   <h1>Compare <em>destinations</em> side by side</h1>
   <p>Pick 2 or 3 destinations and see budget, weather, nightlife, food, safety and more — all compared.</p>
+  <div id="example-note" style="display:none;margin-top:14px;font-size:12px;color:var(--ink3)">
+    <i class="ti ti-info-circle" style="color:var(--cyan2);font-size:13px"></i>
+    Showing an example comparison — change any destination above to compare your own
+  </div>
 </div>
 
 <div class="picker-row" id="picker-row"></div>
@@ -171,6 +175,9 @@ if (destParam) {
   for (var i = 0; i < parts.length && i < 3; i++) {
     selected.push(decodeURIComponent(parts[i]).toLowerCase().trim());
   }
+} else {
+  // Default example comparison so first-time visitors see the tool in action
+  selected = ["barcelona", "prague", "budapest"];
 }
 var editingSlot = null;
 
@@ -497,6 +504,9 @@ function selectDest(key) {
 function init() {
   renderPickers();
   renderCompare();
+  if (!destParam) {
+    document.getElementById("example-note").style.display = "block";
+  }
 }
 
 // Wait for DESTINATIONS to be available
