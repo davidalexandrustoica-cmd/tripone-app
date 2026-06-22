@@ -169,11 +169,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
-    <a href="itinerary.html">Itinerary</a>
+    <a href="about.html">About</a>
   </div>
-  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
+  <a href="categories.html" class="nav-cta">Explore destinations →</a>
 </nav>
 
 <div id="hero" class="hero">
@@ -305,8 +304,8 @@ function renderPage() {
       '<span class="btotal">' + data.budget.min + ' – ' + data.budget.ideal + '</span>' +
     '</div>' +
     '<div class="warnbox"><i class="ti ti-info-circle"></i>Book flights 6+ weeks ahead for best prices.</div>' +
-    '<button class="aibtn" onclick="window.location.href=\'itinerary.html?dest=\' + encodeURIComponent(DEST)">' +
-      '<i class="ti ti-sparkles"></i> Generate AI Itinerary' +
+    '<button class="aibtn" onclick="window.location.href=\'compare.html?dests=\' + encodeURIComponent(DEST.toLowerCase())">' +
+      '<i class="ti ti-arrows-diff"></i> Compare with another city' +
     '</button>' +
     '<button class="sbtn" onclick="window.location.href=\'categories.html\'">Browse all destinations</button>' +
     '<button class="sbtn" onclick="window.location.href=\'index.html\'">← Back to search</button>' +

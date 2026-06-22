@@ -159,12 +159,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
-    <a href="itinerary.html">Itinerary</a>
-    <a href="about.html" class="active">About</a>
+    <a href="about.html">About</a>
   </div>
-  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
+  <a href="categories.html" class="nav-cta">Explore destinations →</a>
 </nav>
 
 <!-- HERO -->
@@ -235,12 +233,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <span class="step-tag"><i class="ti ti-arrows-diff"></i> Compare up to 3 destinations</span>
       </div>
     </div>
-    <div class="step">
+    <div class="step" style="opacity:.6">
       <div class="step-num s4">4</div>
       <div class="step-content">
-        <div class="step-title">Generate your AI itinerary</div>
-        <div class="step-desc">Tell us your destination, how many days, your travel style and budget — and our AI builds a complete day-by-day plan for you. Morning, afternoon, and evening activities, restaurant recommendations, estimated daily spend, and insider tips.</div>
-        <span class="step-tag"><i class="ti ti-route"></i> Printable & shareable</span>
+        <div class="step-title">Generate your AI itinerary <span style="font-size:11px;background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.25);border-radius:100px;padding:2px 10px;margin-left:8px;font-family:DM Sans,sans-serif;font-weight:400">Coming soon</span></div>
+        <div class="step-desc">Soon you'll be able to get a complete day-by-day plan for any destination — morning, afternoon, and evening activities, restaurant recommendations, and estimated daily costs, all personalized to your style and budget.</div>
+        <span class="step-tag"><i class="ti ti-clock"></i> In development</span>
       </div>
     </div>
   </div>
@@ -305,7 +303,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div class="faq-list">
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">Is TripOne free to use? <i class="ti ti-chevron-down"></i></div>
-      <div class="faq-a">Yes, TripOne is completely free. Destination guides, weather, comparisons and browsing are all free. The AI Finder and Itinerary Generator use AI credits but are accessible to all users.</div>
+      <div class="faq-a">Yes, TripOne is completely free. Destination guides, live weather, comparisons and browsing are all free to use, no account needed.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">How many destinations are covered? <i class="ti ti-chevron-down"></i></div>
@@ -320,16 +318,62 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
       <div class="faq-a">TripOne shows you the best options and prices, then links you directly to the booking platform (Skyscanner, Booking.com etc.) where you complete the reservation. We don't handle payments directly.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">How does the AI Itinerary work? <i class="ti ti-chevron-down"></i></div>
-      <div class="faq-a">You tell us your destination, how many days, your travel style and daily budget. Our AI (powered by Claude) generates a complete day-by-day plan with morning, afternoon and evening activities, restaurant recommendations, estimated costs and insider tips — all personalized to your preferences.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">What is the AI Destination Finder? <i class="ti ti-chevron-down"></i></div>
-      <div class="faq-a">The Finder helps you choose where to go when you're not sure. You enter your budget, when you're traveling, who you're going with, what vibe you want, and what you want to avoid — and our AI recommends the top 3 destinations that match, with a personalized explanation for each.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Is there an AI itinerary planner? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Not yet — it's in active development. Soon you'll be able to enter your destination, trip length and travel style and get a complete day-by-day plan generated for you. Want early access? Reach out — link in the founder section below.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">Who is TripOne for? <i class="ti ti-chevron-down"></i></div>
       <div class="faq-a">TripOne is for anyone who wants to plan a trip without the hassle. Whether you're a solo traveler, a couple, a group of friends or a family — if you've ever had 10 tabs open trying to plan a vacation, TripOne is for you.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div style="position:relative;z-index:1;padding:0 28px 64px;max-width:700px;margin:0 auto">
+  <div class="sec-hd" style="margin-bottom:24px">
+    <h2>What's coming next</h2>
+    <p>TripOne is early — here's where we're going</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+      <span style="font-size:20px">🌍</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--ink)">50+ destinations</div>
+        <div style="font-size:12px;color:var(--ink3)">Expanding beyond the current 20 to cover all major travel hotspots</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;background:rgba(0,229,255,.08);color:var(--cyan);border:1px solid rgba(0,229,255,.2);border-radius:100px;padding:2px 10px;white-space:nowrap">Next</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+      <span style="font-size:20px">✨</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--ink)">AI Itinerary Generator</div>
+        <div style="font-size:12px;color:var(--ink3)">Day-by-day trip plans built by AI, personalized to your style and budget</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;background:rgba(124,58,237,.08);color:var(--violet2);border:1px solid rgba(124,58,237,.2);border-radius:100px;padding:2px 10px;white-space:nowrap">In dev</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+      <span style="font-size:20px">🔍</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--ink)">AI Destination Finder</div>
+        <div style="font-size:12px;color:var(--ink3)">Tell us your preferences, get matched with the perfect destination</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;background:rgba(124,58,237,.08);color:var(--violet2);border:1px solid rgba(124,58,237,.2);border-radius:100px;padding:2px 10px;white-space:nowrap">In dev</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+      <span style="font-size:20px">📱</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--ink)">Mobile app</div>
+        <div style="font-size:12px;color:var(--ink3)">Native iOS and Android experience for planning on the go</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;background:var(--bg3);color:var(--ink3);border:1px solid var(--border);border-radius:100px;padding:2px 10px;white-space:nowrap">Planned</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+      <span style="font-size:20px">🏷️</span>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--ink)">Flight & hotel deals</div>
+        <div style="font-size:12px;color:var(--ink3)">Real-time pricing and booking links via affiliate partnerships</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;background:var(--bg3);color:var(--ink3);border:1px solid var(--border);border-radius:100px;padding:2px 10px;white-space:nowrap">Planned</span>
     </div>
   </div>
 </div>
@@ -373,7 +417,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="cta">
   <div class="cta-card">
     <h2>Ready to plan your trip?</h2>
-    <p>Join thousands of travelers who plan smarter with TripOne. Search any destination and get everything you need in seconds.</p>
+    <p>Plan smarter, not longer who plan smarter with TripOne. Search any destination and get everything you need in seconds.</p>
     <div class="cta-btns">
       <a href="index.html" class="cta-btn primary">Start planning →</a>
       <a href="finder.html" class="cta-btn secondary">✨ Find my destination</a>
