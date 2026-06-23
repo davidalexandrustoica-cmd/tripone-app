@@ -306,6 +306,23 @@ const DESTINATIONS = {
   }
 };
 
+DESTINATIONS["maldives"] = {
+    name:"Maldives",country:"Maldives",emoji:"🇲🇻",
+    tags:["Best: Nov–Apr","Flight ~12h","Ultimate luxury beach","Overwater bungalows"],
+    description:"The Maldives is the world's ultimate beach escape — a nation of 1,200 coral islands scattered across the Indian Ocean, famous for overwater bungalows, crystal-clear lagoons, and some of the world's best snorkeling and diving. A once-in-a-lifetime destination for those seeking pure luxury and total isolation.",
+    weather_city:"Male",
+    best_months:"November – April",peak:"December – February",language:"Dhivehi / English",currency:"Maldivian Rufiyaa (MVR)",timezone:"GMT+5",flight_time:"~12h with stop",
+    flights:[{airline:"Qatar Airways",route:"OTP → DOH → MLE",detail:"1 stop · 11h 30min",price:"€620",best:true},{airline:"Emirates",route:"OTP → DXB → MLE",detail:"1 stop · 12h",price:"€680"},{airline:"Turkish Airlines",route:"OTP → IST → MLE",detail:"1 stop · 13h",price:"€590"}],
+    hotels:[{name:"Soneva Jani",type:"Overwater villa · ultimate luxury",stars:5,price:"€2,000/night"},{name:"Cinnamon Hakuraa Huraa",type:"Mid-range resort · overwater bungalows",stars:4,price:"€350/night"},{name:"Adaaran Select Hudhuranfushi",type:"Beach villas · value resort",stars:4,price:"€220/night"},{name:"Malahini Kuda Bandos",type:"Budget resort · closest to Malé",stars:3,price:"€120/night"}],
+    budget:{min:"€1,500",ideal:"€3,500+",min_desc:"Budget resort, half board, snorkeling included.",ideal_desc:"Overwater villa, full board, water sports, spa.",breakdown:[["Flights","€590–€680"],["Accommodation 7n","€840–€14,000"],["Food","€100–€400"],["Activities","€80–€250"],["Transport","€100–€200"]]},
+    activities:[{icon:"🤿",name:"Snorkeling & Diving",detail:"World-class reef · sea turtles, manta rays, whale sharks",price:"€40–80/dive",free:false},{icon:"🌅",name:"Sunset dolphin cruise",detail:"Daily at most resorts · unforgettable",price:"€30–50/person",free:false},{icon:"🏝️",name:"Uninhabited island picnic",detail:"Private sandbank excursion",price:"€60/person",free:false},{icon:"🦈",name:"Whale shark tour",detail:"South Ari Atoll · seasonal · best Nov–May",price:"€80/person",free:false},{icon:"🏄",name:"Water sports",detail:"Kayaking, paddleboarding, windsurfing — included at most resorts",price:"Free (at resort)",free:true}],
+    food:[{name:"Resort all-inclusive",detail:"Most resorts offer half or full board",price:"€80–150/person/day"},{name:"Local cafés in Malé",detail:"Hedhikaa (snacks) + short eats · authentic",price:"€3–8/person"},{name:"Fish market Malé",detail:"Fresh tuna · local experience",price:"€2–5/person"},{name:"Overwater restaurant (resort)",detail:"Fine dining above the lagoon",price:"€80–150/person"}],
+    nightlife:[{name:"Resort beach bars",detail:"Sunset cocktails on the sand — most resorts have one"},{name:"Malé city bars",detail:"Very limited — Maldives is Muslim country, alcohol only in resorts"},{name:"Stargazing on the sandbank",detail:"Zero light pollution · incredible night skies"}],
+    warnings:[{title:"Alcohol rules",detail:""},{title:"Muslim country",text:"Alcohol only permitted in resort islands — not in inhabited islands or Malé. Dress modestly when visiting local islands."},{title:"Transfer costs",text:"Seaplane transfers to remote atolls can cost €300–600 return. Factor into your budget."},{title:"All-inclusive dependency",text:"Food outside resort is expensive — plan for full board."},{title:"Booking far ahead",text:"Top resorts sell out 6–12 months in advance for peak season (Dec–Feb)."}],
+    discounts:[{title:"Book in shoulder season",text:"May and October offer 30–40% lower prices with still-good weather."},{title:"Package deals",text:"Flight + resort packages from EU operators often beat booking separately."},{title:"Local guesthouse islands",text:"Maafushi and Guraidhoo offer budget stays from €50/night with beach access."}],
+    transport:[{icon:"🛥️",name:"Speedboat transfer",detail:"Most common · 30min–2h depending on atoll.",price:"€50–150/return"},{icon:"✈️",name:"Seaplane (DHC-6)",detail:"Spectacular views · reaches remote atolls.",price:"€300–600/return"},{icon:"⛵",name:"Local ferry",detail:"Between inhabited islands · very cheap but slow.",price:"€1–5/trip"},{icon:"🚤",name:"Resort boat",detail:"Free shuttle between resort and airport/Malé.",price:"Free (resort arranged)"}]
+};
+
 console.log("TripOne data.js loaded - " + Object.keys(DESTINATIONS).length + " destinations");
 function getDestination(query) {
   const key = query.toLowerCase().trim();
