@@ -160,6 +160,18 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   nav{padding:12px 16px}
   .nav-links{display:none}
 }
+
+.airport-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.airport-label{font-size:13px;color:var(--ink2);white-space:nowrap}
+.airport-sel{background:var(--card);border:1px solid var(--border2);color:var(--ink);border-radius:8px;padding:7px 12px;font-size:13px;font-family:"DM Sans",sans-serif;cursor:pointer;outline:none}
+.airport-sel:focus{border-color:var(--cyan2)}
+.flights-note{font-size:12px;color:var(--ink3);margin-top:10px;font-style:italic}
+.days-row{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.days-label{font-size:13px;color:var(--ink2)}
+.days-label strong{color:var(--amber);font-size:15px}
+.days-slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border2);outline:none;cursor:pointer}
+.days-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--amber);cursor:pointer;border:2px solid var(--bg)}
+.days-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--amber);cursor:pointer;border:2px solid var(--bg)}
 </style>
 </head>
 <body>
@@ -272,10 +284,10 @@ function renderPage() {
     document.getElementById("main-col").innerHTML =
       '<div class="not-found">' +
         '<h2>"' + DEST + '" is not in our database yet</h2>' +
-        '<p>We currently cover 20 top destinations. Search for one of those or browse all destinations.</p>' +
+        '<p>We currently cover 20 top destinations. Try one of those or use the AI Finder.</p>' +
         '<div class="nf-btns">' +
           '<a href="index.html" class="nf-btn primary">← Back to search</a>' +
-          '<a href="categories.html" class="nf-btn secondary">Browse destinations →</a>' +
+          '<a href="finder.html" class="nf-btn secondary">✨ AI Finder</a>' +
         '</div>' +
       '</div>';
     document.getElementById("side-col").innerHTML = "";
@@ -298,10 +310,10 @@ function renderPage() {
     bdRows += '<div class="sb-row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
   }
   document.getElementById("side-col").innerHTML =
-    '<div class="scard">' +
-      '<div class="stitle"><i class="ti ti-calculator"></i> Budget (7 nights)</div>' +
-      bdRows +
-      '<span class="btotal">' + data.budget.min + ' – ' + data.budget.ideal + '</span>' +
+    '<div class="scard" id="sidebar-budget">' +
+      '<div class="stitle"><i class="ti ti-calculator"></i> Budget (<span id="sb-days">7</span> nights)</div>' +
+      '<div id="sb-rows"></div>' +
+      '<span class="btotal" id="sb-total"></span>' +
     '</div>' +
     '<div class="warnbox"><i class="ti ti-info-circle"></i>Book flights 6+ weeks ahead for best prices.</div>' +
     '<button class="aibtn" onclick="window.location.href=\'compare.html?dests=\' + encodeURIComponent(DEST.toLowerCase())">' +
@@ -453,9 +465,44 @@ function renderPage() {
       '<div id="weather-box"><div class="wloading"><i class="ti ti-loader ti-spin"></i> Loading weather...</div></div>' +
     '</div>' +
 
-    '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2)"></i><h2>Flights from Bucharest (OTP)</h2></div>' +
-      '<div class="flist">' + flightsHTML + '</div>' +
+    '<div class="sec" id="flights-sec">' +
+      '<div class="sechd"><i class="ti ti-plane" style="color:var(--cyan2)"></i><h2>Flights</h2></div>' +
+      '<div class="airport-row">' +
+        '<label class="airport-label">Flying from:</label>' +
+        '<select id="airport-select" onchange="updateFlights()" class="airport-sel">' +
+          '<optgroup label="Romania">' +
+            '<option value="OTP">Bucharest (OTP)</option>' +
+            '<option value="CLJ">Cluj-Napoca (CLJ)</option>' +
+            '<option value="TSR">Timișoara (TSR)</option>' +
+            '<option value="IAS">Iași (IAS)</option>' +
+            '<option value="SBZ">Sibiu (SBZ)</option>' +
+            '<option value="CND">Constanța (CND)</option>' +
+          '</optgroup>' +
+          '<optgroup label="Central & Eastern Europe">' +
+            '<option value="BUD">Budapest (BUD)</option>' +
+            '<option value="SOF">Sofia (SOF)</option>' +
+            '<option value="VIE">Vienna (VIE)</option>' +
+            '<option value="WAW">Warsaw (WAW)</option>' +
+            '<option value="PRG">Prague (PRG)</option>' +
+          '</optgroup>' +
+          '<optgroup label="Western Europe">' +
+            '<option value="LHR">London (LHR)</option>' +
+            '<option value="CDG">Paris (CDG)</option>' +
+            '<option value="FRA">Frankfurt (FRA)</option>' +
+            '<option value="AMS">Amsterdam (AMS)</option>' +
+            '<option value="MAD">Madrid (MAD)</option>' +
+            '<option value="FCO">Rome (FCO)</option>' +
+            '<option value="BCN">Barcelona (BCN)</option>' +
+            '<option value="MXP">Milan (MXP)</option>' +
+          '</optgroup>' +
+          '<optgroup label="Other hubs">' +
+            '<option value="IST">Istanbul (IST)</option>' +
+            '<option value="DXB">Dubai (DXB)</option>' +
+          '</optgroup>' +
+        '</select>' +
+      '</div>' +
+      '<div id="flist-dynamic" class="flist"></div>' +
+      '<div id="flights-note" class="flights-note"></div>' +
     '</div>' +
 
     '<div class="sec">' +
@@ -463,21 +510,14 @@ function renderPage() {
       '<div class="hgrid">' + hotelsHTML + '</div>' +
     '</div>' +
 
-    '<div class="sec">' +
+    '<div class="sec" id="budget-sec">' +
       '<div class="sechd"><i class="ti ti-coin" style="color:var(--amber)"></i><h2>Budget Breakdown</h2></div>' +
-      '<div class="budget-split">' +
-        '<div class="bcard">' +
-          '<div class="bcard-label">Minimum budget</div>' +
-          '<div class="bcard-amount">' + data.budget.min + '</div>' +
-          '<div class="bcard-desc">' + data.budget.min_desc + '</div>' +
-        '</div>' +
-        '<div class="bcard ideal">' +
-          '<div class="bcard-label">Ideal budget</div>' +
-          '<div class="bcard-amount">' + data.budget.ideal + '</div>' +
-          '<div class="bcard-desc">' + data.budget.ideal_desc + '</div>' +
-        '</div>' +
+      '<div class="days-row">' +
+        '<label class="days-label">Trip duration: <strong id="days-val">7</strong> nights</label>' +
+        '<input type="range" id="days-slider" min="1" max="30" value="7" class="days-slider" oninput="updateBudget()">' +
       '</div>' +
-      '<div class="bdown">' + bdBreak + '</div>' +
+      '<div id="budget-cards" class="budget-split"></div>' +
+      '<div id="budget-breakdown" class="bdown"></div>' +
     '</div>' +
 
     '<div class="sec">' +
@@ -510,6 +550,13 @@ function renderPage() {
       '<div class="tlist">' + transHTML + '</div>' +
     '</div>';
 
+  // Store data globally for dynamic updates
+  window._currentData = data;
+
+  // Initialize dynamic components
+  updateFlights();
+  updateBudget();
+
   // Load weather async after main content
   loadWeather(data.weather_city).then(function(html) {
     var wb = document.getElementById("weather-box");
@@ -530,6 +577,189 @@ window.addEventListener("load", function() {
       '</div>';
   }
 });
+
+// ── AIRPORT / FLIGHTS LOGIC ──────────────────────────────────────────────────
+
+// Offset multipliers per airport vs OTP baseline
+var AIRPORT_OFFSETS = {
+  OTP:1.00, CLJ:1.05, TSR:1.08, IAS:1.10, SBZ:1.12, CND:1.15,
+  BUD:0.95, SOF:1.02, VIE:0.90, WAW:1.05, PRG:0.92,
+  LHR:0.85, CDG:0.88, FRA:0.82, AMS:0.87, MAD:0.90, FCO:0.93, BCN:0.91, MXP:0.92,
+  IST:0.78, DXB:0.80
+};
+
+// City names for display
+var AIRPORT_CITIES = {
+  OTP:"Bucharest",CLJ:"Cluj-Napoca",TSR:"Timișoara",IAS:"Iași",SBZ:"Sibiu",CND:"Constanța",
+  BUD:"Budapest",SOF:"Sofia",VIE:"Vienna",WAW:"Warsaw",PRG:"Prague",
+  LHR:"London",CDG:"Paris",FRA:"Frankfurt",AMS:"Amsterdam",MAD:"Madrid",FCO:"Rome",BCN:"Barcelona",MXP:"Milan",
+  IST:"Istanbul",DXB:"Dubai"
+};
+
+function parsePrice(str) {
+  // extracts first number from "€89" or "€89–€145" or "€620"
+  var m = str.match(/\d+/);
+  return m ? parseInt(m[0]) : 0;
+}
+
+function adjustPrice(originalStr, multiplier) {
+  // handles "€89–€145" range or "€620" single
+  var parts = originalStr.split("–");
+  var result = parts.map(function(p) {
+    var num = parsePrice(p.trim());
+    var adjusted = Math.round(num * multiplier / 5) * 5; // round to nearest 5
+    return "€" + adjusted;
+  });
+  return result.join("–");
+}
+
+function updateFlights() {
+  var sel = document.getElementById("airport-select");
+  if (!sel) return;
+  var code = sel.value;
+  var city = AIRPORT_CITIES[code] || code;
+  var mult = AIRPORT_OFFSETS[code] || 1.0;
+  var data = window._currentData;
+  if (!data || !data.flights) return;
+
+  var flightsHTML = "";
+  for (var i = 0; i < data.flights.length; i++) {
+    var f = data.flights[i];
+    // Rebuild route: replace origin code
+    var routeParts = f.route.split("→");
+    var newRoute = code + " → " + routeParts.slice(1).join("→");
+    var newPrice = adjustPrice(f.price, mult);
+    var badge = f.best ? '<div class="flbadge">Cheapest</div>' : "";
+    var cls = f.best ? "fl best" : "fl";
+    flightsHTML +=
+      '<div class="' + cls + '">' +
+        '<div style="display:flex;align-items:center;gap:10px">' +
+          '<div><div class="flair">' + f.airline + '</div>' + badge + '</div>' +
+          '<div><div class="flrt">' + newRoute + '</div><div class="fldt">' + f.detail + '</div></div>' +
+        '</div>' +
+        '<div class="flp">' +
+          '<strong>' + newPrice + '</strong>' +
+          '<span>round trip</span>' +
+          '<button class="flbtn">Book →</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  var flist = document.getElementById("flist-dynamic");
+  if (flist) flist.innerHTML = flightsHTML;
+
+  var note = document.getElementById("flights-note");
+  if (note) {
+    if (code !== "OTP") {
+      note.textContent = "Prices estimated from " + city + " — verify on Skyscanner for exact fares.";
+    } else {
+      note.textContent = "";
+    }
+  }
+}
+
+// ── BUDGET / DAYS LOGIC ──────────────────────────────────────────────────────
+
+function parseBudgetNum(str) {
+  // "€550" → 550, "€3,500+" → 3500
+  var clean = str.replace(/[€,+]/g, "").trim();
+  return parseInt(clean) || 0;
+}
+
+function formatBudget(num) {
+  if (num >= 1000) return "€" + num.toLocaleString("en");
+  return "€" + num;
+}
+
+function updateBudget() {
+  var slider = document.getElementById("days-slider");
+  if (!slider) return;
+  var days = parseInt(slider.value);
+  var BASE_NIGHTS = 7;
+
+  // Update display labels
+  var dv = document.getElementById("days-val");
+  if (dv) dv.textContent = days;
+  var sbDays = document.getElementById("sb-days");
+  if (sbDays) sbDays.textContent = days;
+
+  var data = window._currentData;
+  if (!data || !data.budget) return;
+
+  // Scale min/ideal totals
+  var minBase = parseBudgetNum(data.budget.min);
+  var idealBase = parseBudgetNum(data.budget.ideal);
+  var minScaled = Math.round(minBase * days / BASE_NIGHTS);
+  var idealScaled = Math.round(idealBase * days / BASE_NIGHTS);
+
+  // Budget cards
+  var cards = document.getElementById("budget-cards");
+  if (cards) {
+    cards.innerHTML =
+      '<div class="bcard">' +
+        '<div class="bcard-label">Minimum budget</div>' +
+        '<div class="bcard-amount">' + formatBudget(minScaled) + '</div>' +
+        '<div class="bcard-desc">' + data.budget.min_desc + '</div>' +
+      '</div>' +
+      '<div class="bcard ideal">' +
+        '<div class="bcard-label">Ideal budget</div>' +
+        '<div class="bcard-amount">' + formatBudget(idealScaled) + '</div>' +
+        '<div class="bcard-desc">' + data.budget.ideal_desc + '</div>' +
+      '</div>';
+  }
+
+  // Breakdown rows — scale accommodation, food, activities, transport; keep flights fixed
+  var breakdown = document.getElementById("budget-breakdown");
+  if (breakdown && data.budget.breakdown) {
+    var rows = "";
+    for (var i = 0; i < data.budget.breakdown.length; i++) {
+      var r = data.budget.breakdown[i];
+      var label = r[0];
+      var val = r[1];
+      // Scale per-night items, keep flights fixed
+      var isFlights = label.toLowerCase().indexOf("flight") !== -1;
+      if (!isFlights) {
+        // parse range like "€196–€595"
+        var parts = val.split("–");
+        var scaled = parts.map(function(p) {
+          var num = parsePrice(p.trim());
+          if (!num) return p;
+          return "€" + Math.round(num * days / BASE_NIGHTS);
+        });
+        val = scaled.join("–");
+      }
+      rows += '<div class="brow"><span>' + label + (isFlights ? "" : "") + '</span><span>' + val + '</span></div>';
+    }
+    breakdown.innerHTML = rows;
+  }
+
+  // Sidebar total
+  var sbTotal = document.getElementById("sb-total");
+  if (sbTotal) sbTotal.textContent = formatBudget(minScaled) + " – " + formatBudget(idealScaled);
+
+  // Sidebar rows
+  var sbRows = document.getElementById("sb-rows");
+  if (sbRows && data.budget.breakdown) {
+    var srows = "";
+    for (var i = 0; i < data.budget.breakdown.length; i++) {
+      var r = data.budget.breakdown[i];
+      var label = r[0];
+      var val = r[1];
+      var isFlights = label.toLowerCase().indexOf("flight") !== -1;
+      if (!isFlights) {
+        var parts = val.split("–");
+        var scaled = parts.map(function(p) {
+          var num = parsePrice(p.trim());
+          if (!num) return p;
+          return "€" + Math.round(num * days / BASE_NIGHTS);
+        });
+        val = scaled.join("–");
+      }
+      srows += '<div class="sb-row"><span>' + label + '</span><span>' + val + '</span></div>';
+    }
+    sbRows.innerHTML = srows;
+  }
+}
 </script>
 </body>
 </html>
