@@ -115,44 +115,24 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 @media(max-width:768px){
   .feat-grid,.cat-grid{grid-template-columns:repeat(2,1fr)}
   .dest-grid{grid-template-columns:repeat(2,1fr)}
-  .nav-links{display:none}.hamburger{display:flex}
+  .nav-links{display:none}
   nav{padding:14px 16px}
   .hero{padding:56px 16px 40px}
   .features,.categories,.top-dests{padding-left:16px;padding-right:16px}
 }
-
-.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;margin-left:auto}
-.hamburger span{display:block;height:2px;width:24px;background:var(--ink);border-radius:2px;transition:all .25s}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;z-index:99;background:rgba(9,9,11,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px}
-.mobile-menu a{font-size:15px;color:var(--ink2);text-decoration:none;padding:10px 0;border-bottom:1px solid var(--border);display:block;transition:color .2s}
-.mobile-menu a:last-child{border-bottom:none}
-.mobile-menu a:hover{color:var(--ink)}
-.mobile-menu.open{display:flex}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">Trip<em>One</em></a>
-    <div class="nav-links">
+  <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
   </div>
   <a href="categories.html" class="nav-cta">Explore destinations →</a>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="categories.html">Destinations</a>
-    <a href="compare.html">Compare</a>
-    <a href="about.html">About</a>
-  </div>
 </nav>
 
 <div class="hero">
@@ -253,16 +233,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <p>Most searched this month</p>
   </div>
   <div class="dest-grid">
-    <a href="results.html?dest=Santorini" class="dest-card"><span class="dest-flag">🇬🇷</span><div class="dest-name">Santorini</div><div class="dest-country">Greece</div><div class="dest-price">cazare de la €28/n</div></a>
-    <a href="results.html?dest=Bali" class="dest-card"><span class="dest-flag">🇮🇩</span><div class="dest-name">Bali</div><div class="dest-country">Indonesia</div><div class="dest-price">cazare de la €12/n</div></a>
-    <a href="results.html?dest=Barcelona" class="dest-card"><span class="dest-flag">🇪🇸</span><div class="dest-name">Barcelona</div><div class="dest-country">Spain</div><div class="dest-price">cazare de la €18/n</div></a>
-    <a href="results.html?dest=Lisbon" class="dest-card"><span class="dest-flag">🇵🇹</span><div class="dest-name">Lisbon</div><div class="dest-country">Portugal</div><div class="dest-price">cazare de la €20/n</div></a>
-    <a href="results.html?dest=Dubai" class="dest-card"><span class="dest-flag">🇦🇪</span><div class="dest-name">Dubai</div><div class="dest-country">UAE</div><div class="dest-price">cazare de la €45/n</div></a>
-    <a href="results.html?dest=Tokyo" class="dest-card"><span class="dest-flag">🇯🇵</span><div class="dest-name">Tokyo</div><div class="dest-country">Japan</div><div class="dest-price">cazare de la €30/n</div></a>
-    <a href="results.html?dest=Rome" class="dest-card"><span class="dest-flag">🇮🇹</span><div class="dest-name">Rome</div><div class="dest-country">Italy</div><div class="dest-price">cazare de la €22/n</div></a>
-    <a href="results.html?dest=Prague" class="dest-card"><span class="dest-flag">🇨🇿</span><div class="dest-name">Prague</div><div class="dest-country">Czech Republic</div><div class="dest-price">cazare de la €15/n</div></a>
-    <a href="results.html?dest=Amsterdam" class="dest-card"><span class="dest-flag">🇳🇱</span><div class="dest-name">Amsterdam</div><div class="dest-country">Netherlands</div><div class="dest-price">cazare de la €28/n</div></a>
-    <a href="results.html?dest=Budapest" class="dest-card"><span class="dest-flag">🇭🇺</span><div class="dest-name">Budapest</div><div class="dest-country">Hungary</div><div class="dest-price">cazare de la €18/n</div></a>
+    <a href="results.html?dest=Santorini" class="dest-card"><span class="dest-flag">🇬🇷</span><div class="dest-name">Santorini</div><div class="dest-country">Greece</div><div class="dest-price">from €28/night</div></a>
+    <a href="results.html?dest=Bali" class="dest-card"><span class="dest-flag">🇮🇩</span><div class="dest-name">Bali</div><div class="dest-country">Indonesia</div><div class="dest-price">from €12/night</div></a>
+    <a href="results.html?dest=Barcelona" class="dest-card"><span class="dest-flag">🇪🇸</span><div class="dest-name">Barcelona</div><div class="dest-country">Spain</div><div class="dest-price">from €18/night</div></a>
+    <a href="results.html?dest=Lisbon" class="dest-card"><span class="dest-flag">🇵🇹</span><div class="dest-name">Lisbon</div><div class="dest-country">Portugal</div><div class="dest-price">from €20/night</div></a>
+    <a href="results.html?dest=Dubai" class="dest-card"><span class="dest-flag">🇦🇪</span><div class="dest-name">Dubai</div><div class="dest-country">UAE</div><div class="dest-price">from €45/night</div></a>
+    <a href="results.html?dest=Tokyo" class="dest-card"><span class="dest-flag">🇯🇵</span><div class="dest-name">Tokyo</div><div class="dest-country">Japan</div><div class="dest-price">from €30/night</div></a>
+    <a href="results.html?dest=Rome" class="dest-card"><span class="dest-flag">🇮🇹</span><div class="dest-name">Rome</div><div class="dest-country">Italy</div><div class="dest-price">from €22/night</div></a>
+    <a href="results.html?dest=Prague" class="dest-card"><span class="dest-flag">🇨🇿</span><div class="dest-name">Prague</div><div class="dest-country">Czech Republic</div><div class="dest-price">from €15/night</div></a>
+    <a href="results.html?dest=Amsterdam" class="dest-card"><span class="dest-flag">🇳🇱</span><div class="dest-name">Amsterdam</div><div class="dest-country">Netherlands</div><div class="dest-price">from €28/night</div></a>
+    <a href="results.html?dest=Budapest" class="dest-card"><span class="dest-flag">🇭🇺</span><div class="dest-name">Budapest</div><div class="dest-country">Hungary</div><div class="dest-price">from €18/night</div></a>
   </div>
 </div>
 
@@ -282,24 +262,6 @@ function goSearch() {
 document.getElementById('main-search').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') goSearch();
 });
-</script>
-<script>
-// Mobile nav
-(function(){
-  var btn = document.getElementById('hamburger');
-  var menu = document.getElementById('mobile-menu');
-  if(!btn||!menu) return;
-  btn.addEventListener('click', function(){
-    btn.classList.toggle('open');
-    menu.classList.toggle('open');
-  });
-  document.addEventListener('click', function(e){
-    if(!btn.contains(e.target)&&!menu.contains(e.target)){
-      btn.classList.remove('open');
-      menu.classList.remove('open');
-    }
-  });
-})();
 </script>
 </body>
 </html>
