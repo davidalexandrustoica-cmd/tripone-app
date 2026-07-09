@@ -412,8 +412,14 @@ Only recommend destinations from the list. Order by best match first. Be specifi
     document.getElementById("submit-btn").disabled = false;
     const errBox = document.getElementById("error-box");
     errBox.classList.add("visible");
-    errBox.innerHTML = `<i class="ti ti-alert-circle"></i> Something went wrong: ${err.message}. Please try again.`;
+    errBox.innerHTML = `<i class="ti ti-alert-circle"></i> Something went wrong: ${escapeHTML(err.message)}. Please try again.`;
   }
+}
+
+function escapeHTML(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+  });
 }
 
 function renderResults(data, vibes, budget, when, group){
@@ -430,31 +436,37 @@ function renderResults(data, vibes, budget, when, group){
   const list = document.getElementById("results-list");
   list.innerHTML = recs.map((rec, i) => {
     const isTop = i === 0;
-    const destData = DESTINATIONS[rec.key] || null;
-    const highlightsHTML = (rec.highlights || []).map(h => `<div class="rec-tag"><i class="ti ti-check"></i>${h}</div>`).join("");
+    const recKey = String(rec.key || "").toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    const destData = DESTINATIONS[recKey] || null;
+    const name = destData ? destData.name : escapeHTML(rec.name);
+    const country = destData ? destData.country : escapeHTML(rec.country);
+    const emoji = destData ? destData.emoji : escapeHTML(rec.emoji || "🌍");
+    const score = Math.max(0, Math.min(100, parseInt(rec.match_score, 10) || 0));
+    const label = escapeHTML(rec.match_label || "Good match");
+    const highlightsHTML = (rec.highlights || []).map(h => `<div class="rec-tag"><i class="ti ti-check"></i>${escapeHTML(h)}</div>`).join("");
 
     return `
       <div class="rec-card ${isTop ? "top-pick" : ""}">
         ${isTop ? '<div class="top-pick-badge"><i class="ti ti-crown"></i> Top recommendation</div>' : ""}
         <div class="rec-header">
-          <div class="rec-flag">${rec.emoji}</div>
+          <div class="rec-flag">${emoji}</div>
           <div class="rec-title-wrap">
-            <div class="rec-name">${rec.name}</div>
-            <div class="rec-country">${rec.country}</div>
-            <div class="rec-match"><i class="ti ti-target"></i> ${rec.match_score}% match — ${rec.match_label}</div>
+            <div class="rec-name">${name}</div>
+            <div class="rec-country">${country}</div>
+            <div class="rec-match"><i class="ti ti-target"></i> ${score}% match — ${label}</div>
           </div>
           <div class="rec-actions">
-            <button class="rec-btn-primary" onclick="window.location.href='results.html?dest=${encodeURIComponent(rec.name)}'">Explore →</button>
-            <button class="rec-btn-secondary" onclick="window.location.href='compare.html?dests=${encodeURIComponent(rec.key)}'">+ Compare</button>
+            <button class="rec-btn-primary" onclick="window.location.href='results.html?dest=${encodeURIComponent(destData ? destData.name : rec.name || "")}'">Explore →</button>
+            <button class="rec-btn-secondary" onclick="window.location.href='compare.html?dests=${encodeURIComponent(recKey)}'">+ Compare</button>
           </div>
         </div>
-        <div class="rec-why">${rec.why}</div>
+        <div class="rec-why">${escapeHTML(rec.why)}</div>
         <div class="rec-tags">${highlightsHTML}</div>
         <div class="rec-highlights">
-          <div class="rec-hl"><div class="rec-hl-label">Best for</div><div class="rec-hl-val">${rec.best_for || "—"}</div></div>
-          <div class="rec-hl"><div class="rec-hl-label">Budget note</div><div class="rec-hl-val">${rec.budget_note || "—"}</div></div>
-          <div class="rec-hl"><div class="rec-hl-label">Weather in ${when.split(" ")[0]}</div><div class="rec-hl-val">${rec.weather_note || "—"}</div></div>
-          <div class="rec-hl"><div class="rec-hl-label">Insider tip</div><div class="rec-hl-val">${rec.top_tip || "—"}</div></div>
+          <div class="rec-hl"><div class="rec-hl-label">Best for</div><div class="rec-hl-val">${escapeHTML(rec.best_for || "—")}</div></div>
+          <div class="rec-hl"><div class="rec-hl-label">Budget note</div><div class="rec-hl-val">${escapeHTML(rec.budget_note || "—")}</div></div>
+          <div class="rec-hl"><div class="rec-hl-label">Weather in ${escapeHTML(when.split(" ")[0])}</div><div class="rec-hl-val">${escapeHTML(rec.weather_note || "—")}</div></div>
+          <div class="rec-hl"><div class="rec-hl-label">Insider tip</div><div class="rec-hl-val">${escapeHTML(rec.top_tip || "—")}</div></div>
         </div>
       </div>`;
   }).join("");

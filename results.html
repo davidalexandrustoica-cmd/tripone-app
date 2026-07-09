@@ -194,7 +194,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 
 <script src="data.js?v=3"></script>
 <script>
-var WEATHER_KEY = "ad16f6c9657d9eca6c06f3bf9cac3f4c";
 var params = new URLSearchParams(window.location.search);
 var DEST = params.get("dest") || "Santorini";
 document.title = "TripOne — " + DEST;
@@ -210,13 +209,19 @@ function wIcon(icon, size) {
   return '<i class="ti ti-cloud" style="font-size:' + s + 'px"></i>';
 }
 
+function escapeHTML(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+  });
+}
+
 async function loadWeather(city) {
   try {
-    var r1 = await fetch("https://api.openweathermap.org/data/2.5/weather?q=" + encodeURIComponent(city) + "&appid=" + WEATHER_KEY + "&units=metric&lang=en");
-    var r2 = await fetch("https://api.openweathermap.org/data/2.5/forecast?q=" + encodeURIComponent(city) + "&appid=" + WEATHER_KEY + "&units=metric&lang=en&cnt=40");
-    if (!r1.ok) throw new Error("Weather unavailable");
-    var cur = await r1.json();
-    var fore = await r2.json();
+    var r = await fetch("/api/weather?city=" + encodeURIComponent(city));
+    if (!r.ok) throw new Error("Weather unavailable");
+    var weather = await r.json();
+    var cur = weather.current;
+    var fore = weather.forecast;
     var days = {};
     var dn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     fore.list.forEach(function(item) {
@@ -273,9 +278,10 @@ function renderPage() {
   if (!data) {
     document.getElementById("dest-title").textContent = DEST;
     document.getElementById("dest-sub").textContent = "Destination not in our database yet";
+    var safeDest = escapeHTML(DEST);
     document.getElementById("main-col").innerHTML =
       '<div class="not-found">' +
-        '<h2>"' + DEST + '" is not in our database yet</h2>' +
+        '<h2>"' + safeDest + '" is not in our database yet</h2>' +
         '<p>We currently cover 20 top destinations. Try one of those or use the AI Finder.</p>' +
         '<div class="nf-btns">' +
           '<a href="index.html" class="nf-btn primary">← Back to search</a>' +

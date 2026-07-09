@@ -504,6 +504,12 @@ Make every day different and interesting. Be specific with names of places, rest
   }
 }
 
+function escapeHTML(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+  });
+}
+
 function renderItinerary(itin, dest, destData){
   const emoji = destData ? destData.emoji : "🌍";
   const country = destData ? destData.country : "";
@@ -511,12 +517,12 @@ function renderItinerary(itin, dest, destData){
 
   // Day tabs
   const tabsHTML = days.map((d, i) =>
-    `<button class="day-tab ${i===0?"active":""}" onclick="showDay(${i})" id="tab-${i}">Day ${d.day}</button>`
+    `<button class="day-tab ${i===0?"active":""}" onclick="showDay(${i})" id="tab-${i}">Day ${escapeHTML(d.day)}</button>`
   ).join("");
 
   // Day panels
   const timeDotClass = t => {
-    const tl = t.toLowerCase();
+    const tl = String(t || "").toLowerCase();
     if(tl.includes("morning")) return "morning";
     if(tl.includes("afternoon")) return "afternoon";
     if(tl.includes("evening")) return "evening";
@@ -532,34 +538,34 @@ function renderItinerary(itin, dest, destData){
           <div class="tl-dot ${timeDotClass(a.time)}"></div>
         </div>
         <div class="tl-content">
-          <div class="tl-time">${a.time}${a.cost ? " · " + a.cost : ""}</div>
-          <div class="tl-title">${a.title}</div>
-          <div class="tl-desc">${a.description}</div>
-          <div class="tl-tags">${(a.tags||[]).map(t => `<span class="tl-tag"><i class="ti ti-tag"></i>${t}</span>`).join("")}</div>
+          <div class="tl-time">${escapeHTML(a.time)}${a.cost ? " · " + escapeHTML(a.cost) : ""}</div>
+          <div class="tl-title">${escapeHTML(a.title)}</div>
+          <div class="tl-desc">${escapeHTML(a.description)}</div>
+          <div class="tl-tags">${(a.tags||[]).map(t => `<span class="tl-tag"><i class="ti ti-tag"></i>${escapeHTML(t)}</span>`).join("")}</div>
         </div>
       </div>`).join("");
 
     return `<div class="day-panel ${i===0?"active":""}" id="panel-${i}">
       <div class="day-header">
-        <span class="day-num">Day ${d.day}</span>
-        <span class="day-title">${d.title}</span>
-        <span class="day-theme">${d.theme || ""}</span>
+        <span class="day-num">Day ${escapeHTML(d.day)}</span>
+        <span class="day-title">${escapeHTML(d.title)}</span>
+        <span class="day-theme">${escapeHTML(d.theme || "")}</span>
       </div>
       <div class="timeline">${activitiesHTML}</div>
       ${d.day_budget ? `<div class="day-budget">
         <span class="day-budget-label">Estimated spend today</span>
         <div class="day-budget-items">
-          <span class="day-budget-item"><i class="ti ti-coin"></i>${d.day_budget}</span>
-          ${d.day_tip ? `<span class="day-budget-item"><i class="ti ti-bulb"></i>${d.day_tip}</span>` : ""}
+          <span class="day-budget-item"><i class="ti ti-coin"></i>${escapeHTML(d.day_budget)}</span>
+          ${d.day_tip ? `<span class="day-budget-item"><i class="ti ti-bulb"></i>${escapeHTML(d.day_tip)}</span>` : ""}
         </div>
-        <span class="day-budget-total">${d.day_budget}</span>
+        <span class="day-budget-total">${escapeHTML(d.day_budget)}</span>
       </div>` : ""}
     </div>`;
   }).join("");
 
   // Tips
   const tipsHTML = (itin.total_tips || []).map(t =>
-    `<div class="tip-item"><i class="ti ti-bulb"></i>${t}</div>`
+    `<div class="tip-item"><i class="ti ti-bulb"></i>${escapeHTML(t)}</div>`
   ).join("");
 
   document.getElementById("itin-content").innerHTML = `
@@ -568,11 +574,11 @@ function renderItinerary(itin, dest, destData){
         <div style="display:flex;align-items:flex-start;gap:16px;flex:1">
           <div class="itin-dest-flag">${emoji}</div>
           <div class="itin-dest-info">
-            <div class="itin-dest-name">${itin.destination}</div>
-            <div class="itin-dest-sub">${country} · ${itin.duration}-day itinerary</div>
+            <div class="itin-dest-name">${escapeHTML(itin.destination)}</div>
+            <div class="itin-dest-sub">${escapeHTML(country)} · ${escapeHTML(itin.duration)}-day itinerary</div>
             <div class="itin-meta">
-              <span class="itin-meta-chip"><i class="ti ti-calendar"></i>${itin.duration} days</span>
-              <span class="itin-meta-chip"><i class="ti ti-coin"></i>${itin.total_budget_estimate || "See daily estimates"}</span>
+              <span class="itin-meta-chip"><i class="ti ti-calendar"></i>${escapeHTML(itin.duration)} days</span>
+              <span class="itin-meta-chip"><i class="ti ti-coin"></i>${escapeHTML(itin.total_budget_estimate || "See daily estimates")}</span>
               <span class="itin-meta-chip"><i class="ti ti-sparkles"></i>AI generated</span>
             </div>
           </div>
@@ -582,7 +588,7 @@ function renderItinerary(itin, dest, destData){
           <button class="btn-new" onclick="resetItinerary()"><i class="ti ti-refresh"></i>New itinerary</button>
         </div>
       </div>
-      ${itin.intro ? `<div class="itin-intro">${itin.intro}</div>` : ""}
+      ${itin.intro ? `<div class="itin-intro">${escapeHTML(itin.intro)}</div>` : ""}
     </div>
 
     <div class="days-nav">${tabsHTML}</div>
@@ -593,11 +599,11 @@ function renderItinerary(itin, dest, destData){
       <div class="summary-grid">
         <div class="sum-card">
           <div class="sum-label">Total days</div>
-          <div class="sum-val cyan">${itin.duration}</div>
+          <div class="sum-val cyan">${escapeHTML(itin.duration)}</div>
         </div>
         <div class="sum-card">
           <div class="sum-label">Est. total budget</div>
-          <div class="sum-val amber">${itin.total_budget_estimate || "—"}</div>
+          <div class="sum-val amber">${escapeHTML(itin.total_budget_estimate || "—")}</div>
         </div>
         <div class="sum-card">
           <div class="sum-label">Activities planned</div>
