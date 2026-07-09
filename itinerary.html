@@ -306,7 +306,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 <div class="loading-wrap" id="loading-wrap">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Building your itinerary...</div>
-  <div class="loading-sub">AI is planning your perfect trip day by day</div>
+  <div class="loading-sub">TripOne is planning your perfect trip day by day</div>
   <div class="loading-days" id="loading-days"></div>
 </div>
 
@@ -497,11 +497,84 @@ Make every day different and interesting. Be specific with names of places, rest
 
   } catch(err) {
     clearInterval(dayInterval);
-    loadWrap.classList.remove("visible");
-    document.getElementById("form-wrap").style.display = "block";
-    document.getElementById("submit-btn").disabled = false;
-    alert("Something went wrong: " + err.message + ". Please try again.");
+    for(let i=1; i<=parseInt(days); i++){
+      document.getElementById(`ld-${i}`)?.classList.remove("active");
+      document.getElementById(`ld-${i}`)?.classList.add("done");
+    }
+    const fallback = buildLocalItinerary({dest, days, month, group, budget, styles, extra}, destData);
+    setTimeout(() => {
+      loadWrap.classList.remove("visible");
+      renderItinerary(fallback, dest, destData);
+    }, 400);
   }
+}
+
+function pickFrom(list, index) {
+  return list && list.length ? list[index % list.length] : null;
+}
+
+function buildLocalItinerary(prefs, destData) {
+  const totalDays = Math.max(1, Math.min(14, parseInt(prefs.days, 10) || 3));
+  const destination = destData ? destData.name : prefs.dest;
+  const restaurants = destData ? destData.food : [];
+  const activities = destData ? destData.activities : [];
+  const nightlife = destData ? destData.nightlife : [];
+  const transport = destData ? destData.transport : [];
+
+  const days = Array.from({length: totalDays}, (_, idx) => {
+    const day = idx + 1;
+    const morning = pickFrom(activities, idx) || {name:"Explore the center", detail:"Start with the most walkable central area and get a feel for the destination.", price:"Free"};
+    const afternoon = pickFrom(activities, idx + 2) || {name:"Local neighborhood walk", detail:"Spend the afternoon in a different neighborhood and save interesting places on your map.", price:"Free"};
+    const dinner = pickFrom(restaurants, idx) || {name:"Local dinner", detail:"Choose a well-reviewed local restaurant close to where you are staying.", price:"€15–30/person"};
+    const evening = pickFrom(nightlife, idx) || {name:"Evening stroll", detail:"Keep the evening flexible: sunset viewpoint, old town walk, or a relaxed drink.", price:"Free–€20"};
+
+    return {
+      day,
+      title: day === 1 ? "Arrival & First Impressions" : "Local Highlights Day " + day,
+      theme: day === 1 ? "Settle in and start easy" : "Mix sightseeing, food, and free time",
+      activities: [
+        {
+          time: "Morning",
+          title: morning.name,
+          description: morning.detail || "Start with a simple, low-stress activity and get oriented.",
+          tags: ["Easy start", day === 1 ? "Arrival" : "Sightseeing"],
+          cost: morning.price || "Free–€20/person"
+        },
+        {
+          time: "Afternoon",
+          title: afternoon.name,
+          description: afternoon.detail || "Use the afternoon for a stronger highlight while energy is still good.",
+          tags: ["Highlight", "Flexible"],
+          cost: afternoon.price || "€10–30/person"
+        },
+        {
+          time: "Evening",
+          title: dinner.name + " + " + evening.name,
+          description: (dinner.detail || "Try local food at dinner.") + " After dinner, " + (evening.detail || "keep the plan relaxed and close to your stay."),
+          tags: ["Food", "Evening"],
+          cost: dinner.price || evening.price || "€20–50/person"
+        }
+      ],
+      day_budget: prefs.budget || "Estimate depends on your style",
+      day_tip: destData && destData.warnings && destData.warnings[idx % destData.warnings.length]
+        ? destData.warnings[idx % destData.warnings.length].text
+        : "Keep one backup option in case weather or energy changes."
+    };
+  });
+
+  return {
+    destination,
+    duration: totalDays,
+    intro: "Free mode itinerary for " + destination + " in " + prefs.month + ". It uses TripOne's local destination database, so it works without paid AI credits.",
+    total_budget_estimate: destData ? destData.budget.min + " – " + destData.budget.ideal + " per person, excluding flights" : prefs.budget,
+    days,
+    total_tips: [
+      destData ? "Best travel window: " + destData.best_months + "." : "Check the best season before booking.",
+      transport && transport[0] ? "Transport tip: " + transport[0].name + " usually costs " + transport[0].price + "." : "Stay close to the area you plan to explore most.",
+      "Book flexible accommodation first, then compare flight prices.",
+      "Leave one open slot each day for weather, rest, or a spontaneous find."
+    ]
+  };
 }
 
 function escapeHTML(value) {

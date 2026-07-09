@@ -268,7 +268,20 @@ async function loadWeather(city) {
       '</div>' +
       '<div class="wrow">' + dayCards + '</div>';
   } catch(e) {
-    return '<div class="wloading" style="color:var(--coral)">Weather unavailable for this destination.</div>';
+    var data = window._currentData || {};
+    return '<div class="weather-now">' +
+      '<div class="wtemp"><i class="ti ti-calendar" style="font-size:42px"></i></div>' +
+      '<div class="winfo">' +
+        '<div class="wdesc">Typical travel season</div>' +
+        '<div class="wdetails">' +
+          '<span>Best months: ' + escapeHTML(data.best_months || "Check season before booking") + '</span>' +
+          '<span>Peak: ' + escapeHTML(data.peak || "Varies") + '</span>' +
+          '<span>No live API needed</span>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:46px;color:var(--cyan)"><i class="ti ti-sun"></i></div>' +
+      '</div>' +
+      '<div class="warnbox" style="margin-top:12px"><i class="ti ti-info-circle"></i>Free mode: showing seasonal guidance instead of live weather.</div>';
   }
 }
 
@@ -458,8 +471,8 @@ function renderPage() {
     '</div>' +
 
     '<div class="sec">' +
-      '<div class="sechd"><i class="ti ti-sun" style="color:var(--cyan)"></i><h2>Live Weather <span class="live-badge">LIVE</span></h2></div>' +
-      '<div id="weather-box"><div class="wloading"><i class="ti ti-loader ti-spin"></i> Loading weather...</div></div>' +
+      '<div class="sechd"><i class="ti ti-sun" style="color:var(--cyan)"></i><h2>Weather & Season</h2></div>' +
+      '<div id="weather-box"><div class="wloading"><i class="ti ti-loader ti-spin"></i> Checking weather...</div></div>' +
     '</div>' +
 
     '<div class="sec">' +

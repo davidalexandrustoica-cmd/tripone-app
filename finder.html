@@ -407,13 +407,89 @@ Only recommend destinations from the list. Order by best match first. Be specifi
     }, 600);
 
   } catch(err) {
-    document.getElementById("loading-wrap").classList.remove("visible");
-    document.querySelector(".form-wrap").style.display = "block";
-    document.getElementById("submit-btn").disabled = false;
-    const errBox = document.getElementById("error-box");
-    errBox.classList.add("visible");
-    errBox.innerHTML = `<i class="ti ti-alert-circle"></i> Something went wrong: ${escapeHTML(err.message)}. Please try again.`;
+    const fallback = buildLocalRecommendations({budget, duration, when, group, vibes, avoids, extra});
+    document.getElementById("step3").classList.add("done");
+    document.getElementById("step3").innerHTML = '<i class="ti ti-check"></i> Done!';
+    setTimeout(() => {
+      document.getElementById("loading-wrap").classList.remove("visible");
+      renderResults(fallback, vibes, budget, when, group);
+    }, 500);
   }
+}
+
+function budgetTarget(value) {
+  if (value.includes("300")) return 500;
+  if (value.includes("500")) return 800;
+  if (value.includes("1000")) return 1300;
+  if (value.includes("2000")) return 2200;
+  return 1000;
+}
+
+function parseEuro(value) {
+  return parseInt(String(value || "").replace(/[^\d]/g, ""), 10) || 0;
+}
+
+function localCategories(d) {
+  const text = (d.name + " " + d.tags.join(" ") + " " + d.description).toLowerCase();
+  const cats = [];
+  if (/beach|island|sea|coast|sand|surf|caldera|maldives|phuket|bali|tenerife|mykonos|ibiza/.test(text)) cats.push("beach");
+  if (/nightlife|club|party|bar|music|ibiza|bangkok|budapest/.test(text)) cats.push("party");
+  if (/museum|history|old town|medieval|temple|palace|rome|prague|vienna|marrakech/.test(text)) cats.push("history");
+  if (/food|restaurant|wine|street food|cuisine|tapas|seafood/.test(text)) cats.push("food");
+  if (/nature|mountain|hike|volcano|tropical|park/.test(text)) cats.push("nature");
+  if (/luxury|5-star|resort|boutique|dubai|maldives/.test(text)) cats.push("luxury");
+  if (/budget|affordable|value|cheap|hostel|prague|budapest|bangkok/.test(text)) cats.push("budget");
+  if (/city|capital|urban|museum|shopping|tokyo|paris|barcelona|lisbon|new york/.test(text)) cats.push("city");
+  return cats;
+}
+
+function buildLocalRecommendations(prefs) {
+  const target = budgetTarget(prefs.budget);
+  const month = String(prefs.when || "").split(" ")[0].toLowerCase();
+  const avoidText = (prefs.avoids || []).join(" ").toLowerCase();
+
+  const ranked = Object.entries(DESTINATIONS).map(([key, d]) => {
+    const cats = localCategories(d);
+    const ideal = parseEuro(d.budget && d.budget.ideal);
+    let score = 62;
+
+    if (ideal && ideal <= target) score += 18;
+    else if (ideal && ideal <= target * 1.25) score += 8;
+    else score -= 10;
+
+    (prefs.vibes || []).forEach(v => {
+      if (cats.includes(v)) score += 12;
+      if (d.tags.join(" ").toLowerCase().includes(v)) score += 6;
+    });
+
+    if (month && d.best_months.toLowerCase().includes(month.slice(0, 3))) score += 8;
+    if (avoidText.includes("crowd") && /peak|party|club|tourist/i.test(d.tags.join(" ") + d.description)) score -= 8;
+    if (avoidText.includes("expensive") && ideal > target) score -= 12;
+
+    return { key, data: d, cats, score: Math.max(55, Math.min(98, score)) };
+  }).sort((a, b) => b.score - a.score).slice(0, 3);
+
+  return {
+    summary: "Free mode matched these destinations using your budget, travel style, season, and TripOne's local destination database.",
+    recommendations: ranked.map((item, idx) => {
+      const d = item.data;
+      const topCats = item.cats.slice(0, 3);
+      return {
+        key: item.key,
+        name: d.name,
+        country: d.country,
+        emoji: d.emoji,
+        match_score: item.score,
+        match_label: idx === 0 ? "Best local match" : "Strong option",
+        why: d.name + " fits because it lines up with " + (topCats.length ? topCats.join(", ") : "your travel preferences") + " and sits around " + d.budget.min + " to " + d.budget.ideal + " for a 7-night trip excluding flights.",
+        best_for: topCats.length ? topCats.join(" + ") + " travelers" : "balanced travelers",
+        budget_note: "Estimated local trip budget: " + d.budget.min + " to " + d.budget.ideal + " per person, excluding flights.",
+        weather_note: "Best months: " + d.best_months + ". Peak season: " + d.peak + ".",
+        top_tip: d.warnings && d.warnings[0] ? d.warnings[0].text : "Book flexible options and compare prices before confirming.",
+        highlights: (d.activities || []).slice(0, 4).map(a => a.name)
+      };
+    })
+  };
 }
 
 function escapeHTML(value) {
