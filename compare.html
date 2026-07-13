@@ -45,6 +45,12 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 .picker-add{background:var(--bg3);border:2px dashed var(--border2);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:8px;min-width:180px;cursor:pointer;color:var(--ink3);font-size:13px;transition:all .2s;font-family:"DM Sans",sans-serif}
 .picker-add:hover{border-color:var(--cyan2);color:var(--cyan)}
 
+.trip-control{position:relative;z-index:1;max-width:1000px;margin:-12px auto 28px;padding:0 28px;display:flex;justify-content:center}
+.nights-box{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.nights-box label{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+.nights-box input{width:180px;accent-color:var(--cyan2)}
+.nights-value{font-size:14px;color:var(--ink);font-weight:500;min-width:72px}
+
 /* COMPARE AREA */
 .compare-area{position:relative;z-index:1;padding:0 20px 60px;max-width:1100px;margin:0 auto}
 
@@ -123,7 +129,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
   </div>
-  <a href="categories.html" class="nav-cta">Explore destinations →</a>
+  <a href="finder.html" class="nav-cta">Find my destination</a>
 </nav>
 
 <div class="hero">
@@ -136,6 +142,14 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 </div>
 
 <div class="picker-row" id="picker-row"></div>
+
+<div class="trip-control">
+  <div class="nights-box">
+    <label for="nights-slider">Trip length</label>
+    <input type="range" id="nights-slider" min="1" max="30" value="7" oninput="setCompareNights(this.value)">
+    <span class="nights-value"><span id="nights-value">7</span> nights</span>
+  </div>
+</div>
 
 <div class="compare-area">
   <div id="empty-state" class="empty-state">
@@ -178,6 +192,7 @@ if (destParam) {
   selected = ["barcelona", "prague", "budapest"];
 }
 var editingSlot = null;
+var compareNights = 7;
 
 var MALDIVES = {
   name:"Maldives", country:"Maldives", emoji:"🇲🇻",
@@ -236,6 +251,28 @@ function minOf(arr) {
   var m = arr[0];
   for (var i = 1; i < arr.length; i++) { if (arr[i] < m) m = arr[i]; }
   return m;
+}
+
+function parseBudgetValue(value) {
+  var match = String(value || "").replace(/,/g, "").match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+function formatEuro(value, plus) {
+  var rounded = Math.round(value / 10) * 10;
+  return "€" + rounded.toLocaleString("en") + (plus ? "+" : "");
+}
+
+function scaleBudgetValue(value, nights) {
+  var num = parseBudgetValue(value);
+  if (!num) return "—";
+  return formatEuro(num * (nights / 7), String(value || "").includes("+"));
+}
+
+function setCompareNights(value) {
+  compareNights = Math.max(1, Math.min(30, parseInt(value, 10) || 7));
+  document.getElementById("nights-value").textContent = compareNights;
+  renderCompare();
 }
 
 // ── RENDER PICKERS ─────────────────────────────────────────────
@@ -354,8 +391,9 @@ function renderCompare() {
       ["💱 Currency", function(d,m){ return d.currency; }]
     ],
     "Budget": [
-      ["💰 Min budget", function(d,m){ return d.budget ? d.budget.min : "—"; }],
-      ["✨ Ideal budget", function(d,m){ return d.budget ? d.budget.ideal : "—"; }],
+      ["💰 Min budget", function(d,m){ return d.budget ? scaleBudgetValue(d.budget.min, compareNights) : "—"; }],
+      ["✨ Ideal budget", function(d,m){ return d.budget ? scaleBudgetValue(d.budget.ideal, compareNights) : "—"; }],
+      ["🛏️ Trip length", function(){ return compareNights + (compareNights === 1 ? " night" : " nights"); }],
       ["📊 Value for money", function(d,m){ return m ? bar(m.value,5) : "—"; }, true]
     ],
     "Vibe": [
@@ -518,4 +556,5 @@ waitAndInit();
 </script>
 </body>
 </html>
+
 

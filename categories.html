@@ -161,7 +161,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
   </div>
-  <a href="categories.html" class="nav-cta">Explore destinations →</a>
+  <a href="finder.html" class="nav-cta">Find my destination</a>
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -329,7 +329,6 @@ function buildCards(){
     const compareClass = inCompare ? "add-compare added" : "add-compare";
     const compareIcon = inCompare ? "check" : "plus";
     const compareLabel = inCompare ? "Added" : "Compare";
-    const flightText = meta.flightH < 5 ? "~" + meta.flightH + "h direct" : "~" + meta.flightH + "h with stop";
     const destUrl = "results.html?dest=" + encodeURIComponent(data.name);
 
     card.innerHTML =
@@ -338,7 +337,6 @@ function buildCards(){
       '<div class="dc-country">' + data.country + '</div>' +
       '<div class="dc-desc">' + data.description.substring(0,120) + '...</div>' +
       '<div class="dc-meta">' +
-        '<div class="dc-meta-item"><i class="ti ti-plane"></i> ' + flightText + '</div>' +
         '<div class="dc-meta-item"><i class="ti ti-calendar"></i> ' + meta.season + '</div>' +
       '</div>' +
       '<div class="dc-footer"><div>' +
@@ -505,3 +503,4 @@ if(typeof DESTINATIONS !== "undefined"){
 </script>
 </body>
 </html>
+

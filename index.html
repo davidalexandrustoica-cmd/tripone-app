@@ -48,11 +48,11 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 .nav-cta{background:var(--ink);color:#08080a;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap}
 
 /* HERO */
-.hero{position:relative;z-index:1;padding:80px 28px 56px;text-align:center;max-width:800px;margin:0 auto}
+.hero{position:relative;z-index:1;padding:92px 28px 64px;text-align:center;max-width:800px;margin:0 auto}
 .hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--ink2);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:28px}
-h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(32px,6vw,60px);line-height:1.02;letter-spacing:-2px;margin-bottom:20px}
+h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(44px,8vw,82px);line-height:1;letter-spacing:0;margin-bottom:10px}
 h1 .grad{color:var(--cyan);background:none;-webkit-text-fill-color:currentColor}
-.hero-sub{font-size:17px;color:var(--ink2);line-height:1.7;max-width:540px;margin:0 auto 44px}
+.hero-sub{font-size:16px;color:var(--ink2);line-height:1.7;max-width:540px;margin:0 auto 34px}
 
 /* SEARCH */
 .search-box{background:var(--card);border:1.5px solid var(--border2);border-radius:16px;padding:7px 7px 7px 22px;display:flex;align-items:center;gap:10px;max-width:620px;margin:0 auto 18px;transition:border-color .3s}
@@ -64,7 +64,7 @@ h1 .grad{color:var(--cyan);background:none;-webkit-text-fill-color:currentColor}
 .search-go:hover{opacity:.88}
 
 /* QUICK CHIPS */
-.quick-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:56px}
+.quick-chips{display:none}
 .qchip{background:var(--card);border:1px solid var(--border);color:var(--ink2);padding:6px 16px;border-radius:100px;font-size:13px;cursor:pointer;transition:all .2s;font-family:"DM Sans",sans-serif;border:none;border:1px solid var(--border)}
 .qchip:hover{border-color:var(--cyan2);color:var(--cyan);background:rgba(0,229,255,.05)}
 
@@ -128,7 +128,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <a href="index.html" class="logo">Trip<em>One</em></a>
   <div class="nav-links">
     <a href="index.html">Home</a>
-    <a href="finder.html">Finder</a>
     <a href="categories.html">Destinations</a>
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
@@ -137,26 +136,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 </nav>
 
 <div class="hero">
-  <div class="hero-badge"><i class="ti ti-adjustments"></i> Free destination matcher</div>
-  <h1>Find where to go<br>without the <span class="grad">tab chaos</span></h1>
-  <p class="hero-sub">Tell TripOne your budget, month and travel style. Get ranked destination options from the built-in travel database, no paid API calls needed.</p>
+  <h1>TripOne</h1>
+  <p class="hero-sub">without the tab chaos</p>
 
   <div class="search-box">
     <i class="ti ti-map-pin"></i>
-    <input type="text" id="main-search" placeholder="Where do you want to go? (e.g. Santorini, Bali, Tokyo...)" autofocus>
+    <input type="text" id="main-search" placeholder="Where do you want to go?" autofocus>
     <button class="search-go" onclick="goSearch()">Open guide</button>
   </div>
 
-  <div class="quick-chips">
-    <button class="qchip" onclick="goTo('Santorini')">🇬🇷 Santorini</button>
-    <button class="qchip" onclick="goTo('Bali')">🇮🇩 Bali</button>
-    <button class="qchip" onclick="goTo('Barcelona')">🇪🇸 Barcelona</button>
-    <button class="qchip" onclick="goTo('Tokyo')">🇯🇵 Tokyo</button>
-    <button class="qchip" onclick="goTo('Dubai')">🇦🇪 Dubai</button>
-    <button class="qchip" onclick="goTo('Lisbon')">🇵🇹 Lisbon</button>
-    <button class="qchip" onclick="goTo('Prague')">🇨🇿 Prague</button>
-    <button class="qchip" onclick="goTo('Budapest')">🇭🇺 Budapest</button>
-  </div>
 </div>
 
 <!-- FEATURES -->
@@ -231,7 +219,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="top-dests">
   <div class="section-hd">
     <h2>Top destinations</h2>
-    <p>Most searched this month</p>
   </div>
   <div class="dest-grid">
     <a href="results.html?dest=Santorini" class="dest-card"><span class="dest-flag">🇬🇷</span><div class="dest-name">Santorini</div><div class="dest-country">Greece</div><div class="dest-price">from €28/night</div></a>
@@ -266,4 +253,5 @@ document.getElementById('main-search').addEventListener('keydown', function(e) {
 </script>
 </body>
 </html>
+
 

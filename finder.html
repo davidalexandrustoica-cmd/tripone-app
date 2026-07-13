@@ -162,11 +162,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="categories.html">Destinations</a>
-    <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
   </div>
-  <a href="finder.html" class="nav-cta">Find my trip ✨</a>
+  <a href="finder.html" class="nav-cta">Find my destination</a>
 </nav>
 
 <div class="hero">
@@ -252,11 +251,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
         </div>
       </div>
 
-      <div class="form-group full">
-        <label class="form-label"><i class="ti ti-message"></i> Anything else? (optional)</label>
-        <input type="text" class="form-input" id="f-extra" placeholder="e.g. I love street food, prefer less touristy places, traveling from Bucharest...">
-      </div>
-
     </div>
 
     <button class="submit-btn" id="submit-btn" onclick="findDestinations()">
@@ -313,9 +307,6 @@ async function findDestinations(){
   const group = document.getElementById("f-group").value;
   const vibes = getChipVals("vibe-chips");
   const avoids = getChipVals("avoid-chips");
-  const extra = document.getElementById("f-extra").value.trim();
-
-
   // Show loading
   document.getElementById("submit-btn").disabled = true;
   document.querySelector(".form-wrap").style.display = "none";
@@ -337,7 +328,7 @@ async function findDestinations(){
     document.getElementById("loading-text").textContent = "Generating personalized insights...";
   }, 1800);
 
-  const fallback = buildLocalRecommendations({budget, duration, when, group, vibes, avoids, extra});
+  const fallback = buildLocalRecommendations({budget, duration, when, group, vibes, avoids});
   document.getElementById("step3").classList.add("done");
   document.getElementById("step3").innerHTML = '<i class="ti ti-check"></i> Done!';
   setTimeout(() => {
@@ -347,11 +338,13 @@ async function findDestinations(){
 }
 
 function budgetTarget(value) {
-  if (value.includes("300")) return 500;
-  if (value.includes("500")) return 800;
-  if (value.includes("1000")) return 1300;
-  if (value.includes("2000")) return 2200;
-  return 1000;
+  value = String(value || "").toLowerCase();
+  if (value.includes("under")) return 500;
+  if (value.includes("500 to 1000")) return 1000;
+  if (value.includes("1000 to 2000")) return 2000;
+  if (value.includes("2000 to 5000")) return 5000;
+  if (value.includes("no budget")) return 9999;
+  return 1200;
 }
 
 function parseEuro(value) {
@@ -372,34 +365,105 @@ function localCategories(d) {
   return cats;
 }
 
+const FINDER_META = {
+  santorini:{flightH:3,safety:5,value:3,crowd:4,tempSummer:30,tempWinter:14},
+  bali:{flightH:14,safety:4,value:5,crowd:3,tempSummer:30,tempWinter:28},
+  barcelona:{flightH:3,safety:3,value:4,crowd:4,tempSummer:29,tempWinter:12},
+  dubai:{flightH:5,safety:5,value:2,crowd:3,tempSummer:42,tempWinter:22},
+  paris:{flightH:3,safety:3,value:3,crowd:5,tempSummer:25,tempWinter:7},
+  rome:{flightH:2,safety:3,value:4,crowd:4,tempSummer:32,tempWinter:12},
+  lisbon:{flightH:4,safety:4,value:5,crowd:3,tempSummer:28,tempWinter:15},
+  tokyo:{flightH:12,safety:5,value:3,crowd:4,tempSummer:31,tempWinter:10},
+  amsterdam:{flightH:3,safety:4,value:4,crowd:4,tempSummer:22,tempWinter:6},
+  prague:{flightH:2,safety:4,value:5,crowd:3,tempSummer:25,tempWinter:3},
+  mykonos:{flightH:3,safety:5,value:2,crowd:5,tempSummer:29,tempWinter:13},
+  ibiza:{flightH:4,safety:4,value:2,crowd:4,tempSummer:30,tempWinter:16},
+  "new york":{flightH:10,safety:3,value:2,crowd:5,tempSummer:29,tempWinter:4},
+  bangkok:{flightH:10,safety:3,value:5,crowd:4,tempSummer:35,tempWinter:31},
+  phuket:{flightH:11,safety:3,value:4,crowd:4,tempSummer:33,tempWinter:31},
+  vienna:{flightH:2,safety:5,value:4,crowd:3,tempSummer:26,tempWinter:4},
+  budapest:{flightH:2,safety:4,value:5,crowd:3,tempSummer:28,tempWinter:3},
+  tenerife:{flightH:5,safety:5,value:4,crowd:3,tempSummer:29,tempWinter:21},
+  marrakech:{flightH:4,safety:3,value:5,crowd:3,tempSummer:39,tempWinter:19},
+  maldives:{flightH:12,safety:5,value:1,crowd:2,tempSummer:31,tempWinter:30}
+};
+
+function vibeScore(vibes, cats, d) {
+  const text = (vibes || []).join(" ").toLowerCase();
+  let score = 0;
+  const rules = [
+    ["beach", /beach|sun/],
+    ["party", /party|nightlife/],
+    ["city", /city|culture|exploration/],
+    ["nature", /adventure|nature/],
+    ["food", /food|gastronomy/],
+    ["history", /history|architecture/],
+    ["luxury", /romance|luxury|wellness|relaxation/]
+  ];
+  rules.forEach(([cat, rx]) => { if (rx.test(text) && cats.includes(cat)) score += 14; });
+  if (!text && d.tags.length) score += 4;
+  return score;
+}
+
+function seasonScore(when, d) {
+  const text = String(when || "").toLowerCase();
+  if (text.includes("flexible")) return 8;
+  const season = d.best_months.toLowerCase();
+  const pairs = {
+    "january": ["jan","feb","nov","dec","year"],
+    "march": ["mar","apr","spring","year"],
+    "may": ["may","jun","apr","spring","summer","year"],
+    "july": ["jul","aug","summer","year"],
+    "september": ["sep","oct","autumn","fall","year"],
+    "november": ["nov","dec","jan","winter","year"]
+  };
+  for (const key in pairs) {
+    if (text.includes(key)) {
+      return pairs[key].some(m => season.includes(m)) ? 12 : -4;
+    }
+  }
+  return 0;
+}
+
+function durationScore(duration, meta) {
+  const text = String(duration || "").toLowerCase();
+  if (text.includes("weekend") && meta.flightH <= 4) return 10;
+  if (text.includes("weekend") && meta.flightH > 6) return -12;
+  if (text.includes("2 weeks") && meta.flightH >= 6) return 6;
+  if (text.includes("month") && meta.value >= 4) return 8;
+  return 0;
+}
+
 function buildLocalRecommendations(prefs) {
   const target = budgetTarget(prefs.budget);
-  const month = String(prefs.when || "").split(" ")[0].toLowerCase();
   const avoidText = (prefs.avoids || []).join(" ").toLowerCase();
 
   const ranked = Object.entries(DESTINATIONS).map(([key, d]) => {
     const cats = localCategories(d);
+    const meta = FINDER_META[key] || {flightH:6,safety:3,value:3,crowd:3,tempSummer:28,tempWinter:14};
     const ideal = parseEuro(d.budget && d.budget.ideal);
     let score = 62;
 
-    if (ideal && ideal <= target) score += 18;
+    if (ideal && ideal <= target) score += 20;
     else if (ideal && ideal <= target * 1.25) score += 8;
     else score -= 10;
 
-    (prefs.vibes || []).forEach(v => {
-      if (cats.includes(v)) score += 12;
-      if (d.tags.join(" ").toLowerCase().includes(v)) score += 6;
-    });
+    score += vibeScore(prefs.vibes, cats, d);
+    score += seasonScore(prefs.when, d);
+    score += durationScore(prefs.duration, meta);
 
-    if (month && d.best_months.toLowerCase().includes(month.slice(0, 3))) score += 8;
-    if (avoidText.includes("crowd") && /peak|party|club|tourist/i.test(d.tags.join(" ") + d.description)) score -= 8;
+    if (avoidText.includes("crowd") && meta.crowd >= 4) score -= 12;
     if (avoidText.includes("expensive") && ideal > target) score -= 12;
+    if (avoidText.includes("long flights") && meta.flightH > 6) score -= 18;
+    if (avoidText.includes("extreme heat") && meta.tempSummer >= 35 && /may|june|july|august|september/i.test(prefs.when)) score -= 14;
+    if (avoidText.includes("unsafe") && meta.safety <= 3) score -= 10;
+    if (avoidText.includes("language") && !/English|USD|Euro|GMT\+1|GMT\+2|GMT\+3/i.test(d.language + d.currency + d.timezone)) score -= 4;
 
-    return { key, data: d, cats, score: Math.max(55, Math.min(98, score)) };
+    return { key, data: d, cats, meta, score: Math.max(45, Math.min(98, score)) };
   }).sort((a, b) => b.score - a.score).slice(0, 3);
 
   return {
-    summary: "Free mode matched these destinations using your budget, travel style, season, and TripOne's local destination database.",
+    summary: "TripOne matched these destinations using your budget, trip length, season, travel style and avoid preferences.",
     recommendations: ranked.map((item, idx) => {
       const d = item.data;
       const topCats = item.cats.slice(0, 3);
@@ -410,7 +474,7 @@ function buildLocalRecommendations(prefs) {
         emoji: d.emoji,
         match_score: item.score,
         match_label: idx === 0 ? "Best local match" : "Strong option",
-        why: d.name + " fits because it lines up with " + (topCats.length ? topCats.join(", ") : "your travel preferences") + " and sits around " + d.budget.min + " to " + d.budget.ideal + " for a 7-night trip excluding flights.",
+        why: d.name + " fits because it lines up with " + (topCats.length ? topCats.join(", ") : "your travel preferences") + ", works for " + prefs.duration + ", and sits around " + d.budget.min + " to " + d.budget.ideal + " for a 7-night trip excluding flights.",
         best_for: topCats.length ? topCats.join(" + ") + " travelers" : "balanced travelers",
         budget_note: "Estimated local trip budget: " + d.budget.min + " to " + d.budget.ideal + " per person, excluding flights.",
         weather_note: "Best months: " + d.best_months + ". Peak season: " + d.peak + ".",
@@ -478,12 +542,8 @@ function renderResults(data, vibes, budget, when, group){
 
   // Follow-up chips
   const followupChips = [
-    "Show me budget options only",
-    "I prefer less touristy destinations",
-    "What about Southeast Asia?",
-    "Show me beach destinations only",
-    "Which is best for a long weekend?",
     "Compare these 3 destinations",
+    "Search again"
   ];
   document.getElementById("followup-chips").innerHTML = followupChips.map(c =>
     `<button class="fchip" onclick="handleFollowup('${c}')">${c}</button>`
@@ -505,11 +565,7 @@ function handleFollowup(text){
     if(keys.length >= 2) window.location.href = "compare.html?dests=" + keys.map(k => encodeURIComponent(k)).join(",");
     return;
   }
-  document.getElementById("f-extra").value = text;
   resetFinder();
-  setTimeout(() => {
-    document.getElementById("f-extra").scrollIntoView({behavior:"smooth"});
-  }, 300);
 }
 
 function resetFinder(){
@@ -530,4 +586,5 @@ function resetFinder(){
 </script>
 </body>
 </html>
+
 
