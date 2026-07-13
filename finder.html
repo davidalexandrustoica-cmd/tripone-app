@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Destination Finder — TripOne</title>
-<meta name="description" content="Not sure where to go? Tell us your budget, travel style and preferences — our AI finds the perfect destination for you.">
+<title>Trip Finder — TripOne</title>
+<meta name="description" content="Not sure where to go? Tell us your budget, travel style and preferences — TripOne ranks the best destinations from its travel database.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="TripOne">
 <meta name="theme-color" content="#09090b">
@@ -12,16 +12,16 @@
 <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tripone-app.vercel.app/finder.html">
-<meta property="og:title" content="AI Destination Finder — TripOne">
-<meta property="og:description" content="Not sure where to go? Tell us your budget, travel style and preferences — our AI finds the perfect destination for you.">
+<meta property="og:title" content="Trip Finder — TripOne">
+<meta property="og:description" content="Not sure where to go? Tell us your budget, travel style and preferences — TripOne ranks the best destinations from its travel database.">
 <meta property="og:image" content="https://tripone-app.vercel.app/og-image.png">
 <meta property="og:site_name" content="TripOne">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Destination Finder — TripOne">
-<meta name="twitter:description" content="Not sure where to go? Tell us your budget, travel style and preferences — our AI finds the perfect destination for you.">
+<meta name="twitter:title" content="Trip Finder — TripOne">
+<meta name="twitter:description" content="Not sure where to go? Tell us your budget, travel style and preferences — TripOne ranks the best destinations from its travel database.">
 <meta name="twitter:image" content="https://tripone-app.vercel.app/og-image.png">
 
 <!-- Canonical -->
@@ -31,9 +31,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--card:#1c1c21;--card2:#222228;
-  --border:#2a2a32;--border2:#333340;--ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
-  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
+  --bg:#0d0d0f;--bg2:#121216;--bg3:#18181c;--card:#19191e;--card2:#202027;
+  --border:#292932;--border2:#383842;--ink:#f5f3ee;--ink2:#aaa8b5;--ink3:#6f6d7a;
+  --cyan:#53d5e8;--cyan2:#37b7c9;--violet:#8b5cf6;--violet2:#b4a0ff;
   --amber:#f59e0b;--coral:#ff6b6b;--green:#10b981;--r:12px;
 }
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
@@ -41,22 +41,22 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .logo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
-.logo em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo em{font-style:normal;color:var(--cyan)}
 .nav-links{display:flex;gap:24px;margin-left:auto}
 .nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;transition:color .2s}
 .nav-links a:hover,.nav-links a.active{color:var(--ink)}
 
 /* HERO */
 .hero{position:relative;z-index:1;padding:56px 28px 40px;text-align:center;max-width:720px;margin:0 auto}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--violet2);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:24px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--ink2);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:24px}
 .hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,48px);letter-spacing:-1.5px;line-height:1.05;margin-bottom:16px}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 em{font-style:normal;color:var(--cyan)}
 .hero p{font-size:15px;color:var(--ink2);line-height:1.7;max-width:520px;margin:0 auto}
 
 /* FORM */
 .form-wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 28px 60px}
-.form-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px;position:relative;overflow:hidden}
-.form-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,.04),rgba(0,229,255,.02));pointer-events:none}
+.form-card{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:32px;position:relative;overflow:hidden}
+.form-card::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.015);pointer-events:none}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
 .form-group{display:flex;flex-direction:column;gap:7px}
 .form-group.full{grid-column:1/-1}
@@ -74,7 +74,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 .chip-opt.sel-cyan{background:rgba(0,229,255,.08);border-color:var(--cyan2);color:var(--cyan)}
 
 /* SUBMIT */
-.submit-btn{width:100%;background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;border-radius:12px;padding:15px;font-family:"DM Sans",sans-serif;font-size:16px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:4px;transition:opacity .2s;position:relative;z-index:1}
+.submit-btn{width:100%;background:var(--cyan2);color:#061113;border:none;border-radius:10px;padding:15px;font-family:"DM Sans",sans-serif;font-size:16px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:4px;transition:opacity .2s;position:relative;z-index:1}
 .submit-btn:hover{opacity:.9}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed}
 .submit-btn i{font-size:18px}
@@ -100,10 +100,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 .retry-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .2s}
 .retry-btn:hover{border-color:var(--border2);color:var(--ink)}
 
-.rec-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:14px;transition:border-color .2s;position:relative;overflow:hidden}
+.rec-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:14px;transition:border-color .2s;position:relative;overflow:hidden}
 .rec-card:hover{border-color:var(--border2)}
 .rec-card.top-pick{border-color:var(--cyan2)}
-.rec-card.top-pick::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet2))}
+.rec-card.top-pick::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan2)}
 .top-pick-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);color:var(--cyan);font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;margin-bottom:12px}
 .rec-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
 .rec-flag{font-size:36px;line-height:1;flex-shrink:0}
@@ -150,7 +150,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 }
 
 /* NAV CTA */
-.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.nav-cta{background:var(--ink);color:#08080a;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity .2s}
 .nav-cta:hover{opacity:.88}
 @media(max-width:768px){.nav-links{display:none}}
 </style>
@@ -164,16 +164,15 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="categories.html">Destinations</a>
     <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
-    <a href="itinerary.html">Itinerary</a>
     <a href="about.html">About</a>
   </div>
   <a href="finder.html" class="nav-cta">Find my trip ✨</a>
 </nav>
 
 <div class="hero">
-  <div class="hero-badge"><i class="ti ti-sparkles"></i> Powered by AI</div>
+  <div class="hero-badge"><i class="ti ti-adjustments"></i> Free database matcher</div>
   <h1>Find your <em>perfect</em> destination</h1>
-  <p>Tell us what you want from a trip and our AI will match you with the best destinations — personalized just for you.</p>
+  <p>Tell us your budget, month and travel style. TripOne ranks the strongest destinations from its own database, with no paid AI calls.</p>
 </div>
 
 <div class="form-wrap">
@@ -271,7 +270,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 <div class="loading-wrap" id="loading-wrap">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Analyzing your preferences...</div>
-  <div class="loading-sub">Our AI is searching through hundreds of destinations</div>
+  <div class="loading-sub">TripOne is scoring destinations from the local database</div>
   <div class="loading-steps">
     <div class="loading-step" id="step1"><i class="ti ti-loader ti-spin"></i> Reading preferences</div>
     <div class="loading-step" id="step2"><i class="ti ti-circle"></i> Matching destinations</div>
@@ -316,48 +315,6 @@ async function findDestinations(){
   const avoids = getChipVals("avoid-chips");
   const extra = document.getElementById("f-extra").value.trim();
 
-  // Build the list of all destinations for context
-  const destList = Object.entries(DESTINATIONS).map(([key, d]) => {
-    return `${d.name} (${d.country}) — Budget: ${d.budget.min}–${d.budget.ideal}, Best season: ${d.best_months}, Tags: ${d.tags.join(", ")}`;
-  }).join("\n");
-
-  const prompt = `You are TripOne, an expert travel advisor. A user wants help finding their perfect travel destination.
-
-USER PREFERENCES:
-- Budget per person (7 nights total including flights): ${budget}
-- Trip duration: ${duration}
-- Travel period: ${when}
-- Traveling: ${group}
-- Looking for: ${vibes.length ? vibes.join(", ") : "general travel experience"}
-- Wants to avoid: ${avoids.length ? avoids.join(", ") : "nothing specific"}
-- Additional notes: ${extra || "none"}
-
-AVAILABLE DESTINATIONS IN OUR DATABASE:
-${destList}
-
-Based on these preferences, recommend exactly 3 destinations from the list above. For each destination respond in this EXACT JSON format with no other text:
-
-{
-  "recommendations": [
-    {
-      "key": "santorini",
-      "name": "Santorini",
-      "country": "Greece",
-      "emoji": "🇬🇷",
-      "match_score": 95,
-      "match_label": "Perfect match",
-      "why": "2-3 sentence explanation of exactly why this destination matches their specific preferences. Be specific and personal — mention their budget, travel style, the season.",
-      "best_for": "One short phrase like: couples seeking romance and stunning views",
-      "budget_note": "e.g. Fits your €500-1000 budget if you book flights early and choose mid-range accommodation",
-      "weather_note": "e.g. July in Santorini: 28-30°C, sunny every day — perfect beach weather",
-      "top_tip": "One specific insider tip for this traveler",
-      "highlights": ["Beach & caldera views", "Excellent food scene", "Romantic sunsets", "Local wine tasting"]
-    }
-  ],
-  "summary": "One sentence summarizing why these 3 destinations were chosen for this specific traveler"
-}
-
-Only recommend destinations from the list. Order by best match first. Be specific, warm, and genuinely helpful.`;
 
   // Show loading
   document.getElementById("submit-btn").disabled = true;
@@ -380,41 +337,13 @@ Only recommend destinations from the list. Order by best match first. Be specifi
     document.getElementById("loading-text").textContent = "Generating personalized insights...";
   }, 1800);
 
-  try {
-    const response = await fetch("/api/claude", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: prompt, max_tokens: 1000 })
-    });
-
-    const data = await response.json();
-    if (data.error) throw new Error("API error: " + (data.error.message || data.error));
-    if (!data.content || !data.content[0]) throw new Error("No response from API. Check your Anthropic credits at console.anthropic.com");
-    const text = data.content[0].text;
-
-    // Parse JSON
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error("Could not parse AI response");
-    const parsed = JSON.parse(jsonMatch[0]);
-
-    // Mark step 3 done
-    document.getElementById("step3").classList.add("done");
-    document.getElementById("step3").innerHTML = '<i class="ti ti-check"></i> Done!';
-
-    setTimeout(() => {
-      document.getElementById("loading-wrap").classList.remove("visible");
-      renderResults(parsed, vibes, budget, when, group);
-    }, 600);
-
-  } catch(err) {
-    const fallback = buildLocalRecommendations({budget, duration, when, group, vibes, avoids, extra});
-    document.getElementById("step3").classList.add("done");
-    document.getElementById("step3").innerHTML = '<i class="ti ti-check"></i> Done!';
-    setTimeout(() => {
-      document.getElementById("loading-wrap").classList.remove("visible");
-      renderResults(fallback, vibes, budget, when, group);
-    }, 500);
-  }
+  const fallback = buildLocalRecommendations({budget, duration, when, group, vibes, avoids, extra});
+  document.getElementById("step3").classList.add("done");
+  document.getElementById("step3").innerHTML = '<i class="ti ti-check"></i> Done!';
+  setTimeout(() => {
+    document.getElementById("loading-wrap").classList.remove("visible");
+    renderResults(fallback, vibes, budget, when, group);
+  }, 500);
 }
 
 function budgetTarget(value) {
@@ -601,3 +530,4 @@ function resetFinder(){
 </script>
 </body>
 </html>
+

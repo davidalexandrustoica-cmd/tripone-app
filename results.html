@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Destination Guide — TripOne</title>
-<meta name="description" content="Complete travel guide: live weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
+<meta name="description" content="Complete travel guide: Seasonal Weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="TripOne">
 <meta name="theme-color" content="#09090b">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tripone-app.vercel.app/results.html">
 <meta property="og:title" content="Destination Guide — TripOne">
-<meta property="og:description" content="Complete travel guide: live weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
+<meta property="og:description" content="Complete travel guide: Seasonal Weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
 <meta property="og:image" content="https://tripone-app.vercel.app/og-image.png">
 <meta property="og:site_name" content="TripOne">
 <meta property="og:locale" content="en_US">
@@ -21,7 +21,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Destination Guide — TripOne">
-<meta name="twitter:description" content="Complete travel guide: live weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
+<meta name="twitter:description" content="Complete travel guide: Seasonal Weather, flights, hotels, activities, food, nightlife, safety tips and budget breakdown. Everything in one page.">
 <meta name="twitter:image" content="https://tripone-app.vercel.app/og-image.png">
 
 <!-- Canonical -->
@@ -173,7 +173,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
     <a href="categories.html">Destinations</a>
     <a href="finder.html">Finder</a>
     <a href="compare.html">Compare</a>
-    <a href="itinerary.html">Itinerary</a>
     <a href="about.html">About</a>
   </div>
   <a href="categories.html" class="nav-cta">Explore destinations →</a>
@@ -197,6 +196,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 var params = new URLSearchParams(window.location.search);
 var DEST = params.get("dest") || "Santorini";
 document.title = "TripOne — " + DEST;
+var TRIPONE_LIVE_WEATHER = false;
 
 function wIcon(icon, size) {
   var s = size || 18;
@@ -215,74 +215,54 @@ function escapeHTML(value) {
   });
 }
 
-async function loadWeather(city) {
-  try {
-    var r = await fetch("/api/weather?city=" + encodeURIComponent(city));
-    if (!r.ok) throw new Error("Weather unavailable");
-    var weather = await r.json();
-    var cur = weather.current;
-    var fore = weather.forecast;
-    var days = {};
-    var dn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    fore.list.forEach(function(item) {
-      var d = item.dt_txt.split(" ")[0];
-      if (!days[d]) days[d] = {temps:[], icons:[]};
-      days[d].temps.push(item.main.temp);
-      days[d].icons.push(item.weather[0].icon);
-    });
-    var proc = Object.entries(days).slice(0,7).map(function(entry, i) {
-      var d = new Date(entry[0]);
-      var v = entry[1];
-      return {
-        name: i === 0 ? "Today" : dn[d.getDay()],
-        max: Math.round(Math.max.apply(null, v.temps)),
-        min: Math.round(Math.min.apply(null, v.temps)),
-        icon: v.icons[Math.floor(v.icons.length / 2)]
-      };
-    });
-    var t = Math.round(cur.main.temp);
-    var fl = Math.round(cur.main.feels_like);
-    var hum = cur.main.humidity;
-    var wind = Math.round(cur.wind.speed * 3.6);
-    var desc = cur.weather[0].description;
-    var icon = cur.weather[0].icon;
-    var dayCards = proc.map(function(d, i) {
-      return '<div class="wd ' + (i === 0 ? "today" : "") + '">' +
-        '<div class="wdn">' + d.name + '</div>' +
-        '<div class="wdi">' + wIcon(d.icon, 18) + '</div>' +
-        '<div class="wdt">' + d.max + '°</div>' +
-        '<div class="wdl">' + d.min + '°</div>' +
-        '</div>';
-    }).join("");
-    return '<div class="weather-now">' +
-      '<div class="wtemp">' + t + '°</div>' +
-      '<div class="winfo">' +
-        '<div class="wdesc">' + desc + '</div>' +
-        '<div class="wdetails">' +
-          '<span>Feels like ' + fl + '°C</span>' +
-          '<span>Humidity ' + hum + '%</span>' +
-          '<span>Wind ' + wind + ' km/h</span>' +
-        '</div>' +
+var STATIC_WEATHER = {
+  santorini:{high:[14,15,17,20,24,28,30,30,27,23,19,15],low:[10,10,12,15,19,23,25,25,22,18,15,11],note:"Dry, sunny Mediterranean island climate."},
+  bali:{high:[30,30,31,31,30,29,28,28,29,30,31,30],low:[24,24,24,24,24,23,23,23,23,24,24,24],note:"Tropical and humid; showers are common outside dry season."},
+  barcelona:{high:[15,16,18,20,23,27,29,29,26,22,18,15],low:[8,9,11,13,16,20,23,23,20,16,12,9],note:"Warm Mediterranean city climate with hot summers."},
+  dubai:{high:[24,25,29,34,39,41,42,42,40,36,31,26],low:[15,16,19,23,27,30,32,32,29,25,21,17],note:"Very hot desert climate; winter is the comfortable season."},
+  paris:{high:[7,9,13,16,20,23,25,25,21,16,11,8],low:[3,3,5,7,11,14,16,16,13,10,6,4],note:"Mild but changeable; pack layers outside summer."},
+  rome:{high:[12,14,17,20,24,29,32,32,27,22,17,13],low:[4,5,7,10,14,18,21,21,17,13,9,5],note:"Hot dry summers, mild winters and great shoulder seasons."},
+  lisbon:{high:[15,16,18,20,23,26,28,28,27,23,18,15],low:[8,9,10,12,14,17,18,19,18,15,11,9],note:"Sunny Atlantic climate; breezy evenings are common."},
+  tokyo:{high:[10,11,15,20,24,26,30,31,27,22,17,12],low:[2,3,6,11,16,19,23,24,20,14,8,4],note:"Humid summers, crisp winters and excellent spring/autumn."},
+  amsterdam:{high:[6,7,10,14,18,20,22,22,19,15,10,7],low:[1,1,3,5,9,12,14,14,11,8,4,2],note:"Mild, often windy and rainy; layers help year-round."},
+  prague:{high:[3,5,10,15,20,23,25,25,20,14,8,4],low:[-2,-1,2,5,10,13,15,14,10,6,2,-1],note:"Continental climate with warm summers and cold winters."},
+  mykonos:{high:[13,14,16,19,23,27,29,29,26,22,18,15],low:[9,9,11,14,18,22,24,24,21,17,14,11],note:"Sunny and windy Cyclades island climate."},
+  ibiza:{high:[16,16,18,20,23,27,30,30,28,24,20,17],low:[8,8,10,12,15,19,22,22,20,16,12,9],note:"Hot, dry summers and mild shoulder seasons."},
+  "new york":{high:[4,6,11,17,22,27,29,28,25,18,12,6],low:[-3,-2,2,7,12,18,21,20,16,10,5,0],note:"Four-season city climate with hot summers and cold winters."},
+  bangkok:{high:[32,33,34,35,34,33,33,33,32,32,31,31],low:[22,24,26,27,26,26,26,26,25,25,24,22],note:"Hot year-round; rainy season peaks around late summer/autumn."},
+  phuket:{high:[32,33,33,33,32,31,31,31,31,31,31,31],low:[24,24,25,25,25,25,25,25,24,24,24,24],note:"Tropical beach climate; dry season is best for sunshine."},
+  vienna:{high:[4,6,11,16,21,24,26,26,21,15,9,4],low:[-1,0,4,8,12,16,18,18,14,9,4,0],note:"Warm summers, cold winters and elegant shoulder seasons."},
+  budapest:{high:[3,6,11,17,22,25,28,28,23,16,9,4],low:[-2,0,3,8,12,15,17,17,13,8,3,-1],note:"Continental climate; summer is warm, winter is cold."},
+  tenerife:{high:[21,21,22,22,24,26,29,29,28,26,24,22],low:[15,15,16,16,18,20,22,22,21,20,18,16],note:"Mild island climate with sunshine most of the year."},
+  marrakech:{high:[19,21,25,27,31,36,39,38,33,28,23,19],low:[6,8,11,13,16,20,23,23,20,16,11,7],note:"Hot dry summers; spring and autumn are most comfortable."},
+  maldives:{high:[30,31,31,31,31,30,30,30,30,30,30,30],low:[25,26,26,26,26,26,25,25,25,25,25,25],note:"Warm tropical weather year-round; rain varies by monsoon."}
+};
+
+function staticWeatherFor(data) {
+  var key = (data.name || "").toLowerCase();
+  var climate = STATIC_WEATHER[key] || null;
+  var month = new Date().getMonth();
+  var monthName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][month];
+  if (!climate) return {month:monthName, high:"--", low:"--", note:"Use best months and peak season as guidance."};
+  return {month:monthName, high:climate.high[month], low:climate.low[month], note:climate.note};
+}
+
+function loadWeather(city) {
+  var data = window._currentData || {};
+  var sw = staticWeatherFor(data);
+  return Promise.resolve('<div class="weather-now">' +
+    '<div class="wtemp">' + escapeHTML(sw.high) + '&deg;</div>' +
+    '<div class="winfo">' +
+      '<div class="wdesc">Typical ' + escapeHTML(sw.month) + ' average</div>' +
+      '<div class="wdetails">' +
+        '<span>Low around ' + escapeHTML(sw.low) + '&deg;C</span>' +
+        '<span>Best months: ' + escapeHTML(data.best_months || "Check season before booking") + '</span>' +
+        '<span>' + escapeHTML(sw.note) + '</span>' +
       '</div>' +
-      '<div style="font-size:46px;color:var(--cyan)">' + wIcon(icon, 46) + '</div>' +
-      '</div>' +
-      '<div class="wrow">' + dayCards + '</div>';
-  } catch(e) {
-    var data = window._currentData || {};
-    return '<div class="weather-now">' +
-      '<div class="wtemp"><i class="ti ti-calendar" style="font-size:42px"></i></div>' +
-      '<div class="winfo">' +
-        '<div class="wdesc">Typical travel season</div>' +
-        '<div class="wdetails">' +
-          '<span>Best months: ' + escapeHTML(data.best_months || "Check season before booking") + '</span>' +
-          '<span>Peak: ' + escapeHTML(data.peak || "Varies") + '</span>' +
-          '<span>No live API needed</span>' +
-        '</div>' +
-      '</div>' +
-      '<div style="font-size:46px;color:var(--cyan)"><i class="ti ti-sun"></i></div>' +
-      '</div>' +
-      '<div class="warnbox" style="margin-top:12px"><i class="ti ti-info-circle"></i>Free mode: showing seasonal guidance instead of live weather.</div>';
-  }
+    '</div>' +
+    '<div style="font-size:46px;color:var(--cyan)"><i class="ti ti-sun"></i></div>' +
+    '</div>' +
+    '<div class="warnbox" style="margin-top:12px"><i class="ti ti-info-circle"></i>Launch mode: static climate averages, not live forecast data.</div>');
 }
 
 function renderPage() {
@@ -295,10 +275,10 @@ function renderPage() {
     document.getElementById("main-col").innerHTML =
       '<div class="not-found">' +
         '<h2>"' + safeDest + '" is not in our database yet</h2>' +
-        '<p>We currently cover 20 top destinations. Try one of those or use the AI Finder.</p>' +
+        '<p>We currently cover 20 top destinations. Try one of those or use the Trip Finder.</p>' +
         '<div class="nf-btns">' +
           '<a href="index.html" class="nf-btn primary">← Back to search</a>' +
-          '<a href="finder.html" class="nf-btn secondary">✨ AI Finder</a>' +
+          '<a href="finder.html" class="nf-btn secondary">✨ Trip Finder</a>' +
         '</div>' +
       '</div>';
     document.getElementById("side-col").innerHTML = "";
@@ -307,7 +287,7 @@ function renderPage() {
 
   // Hero
   document.getElementById("dest-title").textContent = data.name + ", " + data.country + " " + data.emoji;
-  document.getElementById("dest-sub").textContent = "Everything you need for the perfect trip — updated today";
+  document.getElementById("dest-sub").textContent = "Budget, season, stays, activities and local tips in one place";
   var tagsHTML = "";
   for (var i = 0; i < data.tags.length; i++) {
     tagsHTML += '<div class="tag ' + (i === 0 ? "good" : "") + '">' + data.tags[i] + '</div>';
@@ -657,3 +637,4 @@ function updateBudget() {
 </script>
 </body>
 </html>
+

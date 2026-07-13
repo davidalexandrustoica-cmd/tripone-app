@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -31,9 +31,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#09090b;--card:#1c1c21;--border:#2a2a32;--border2:#333340;
-  --ink:#f4f3f0;--ink2:#9998a8;--ink3:#5a5a6e;
-  --cyan:#00e5ff;--cyan2:#00b8d4;--violet:#7c3aed;--violet2:#a78bfa;
+  --bg:#0d0d0f;--card:#18181c;--border:#28282f;--border2:#373741;
+  --ink:#f5f3ee;--ink2:#aaa8b5;--ink3:#6f6d7a;
+  --cyan:#53d5e8;--cyan2:#37b7c9;--violet:#8b5cf6;--violet2:#b4a0ff;
   --amber:#f59e0b;--coral:#ff6b6b;--green:#10b981;
 }
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
@@ -45,13 +45,13 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;p
 .nav-links{display:flex;gap:24px;margin-left:auto}
 .nav-links a{font-size:14px;color:var(--ink2);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--ink)}
-.nav-cta{background:linear-gradient(135deg,var(--violet),var(--cyan2));color:#fff;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap}
+.nav-cta{background:var(--ink);color:#08080a;border:none;padding:8px 18px;border-radius:100px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap}
 
 /* HERO */
 .hero{position:relative;z-index:1;padding:80px 28px 56px;text-align:center;max-width:800px;margin:0 auto}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--cyan);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:28px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--ink2);font-size:12px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:28px}
 h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(32px,6vw,60px);line-height:1.02;letter-spacing:-2px;margin-bottom:20px}
-h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h1 .grad{color:var(--cyan);background:none;-webkit-text-fill-color:currentColor}
 .hero-sub{font-size:17px;color:var(--ink2);line-height:1.7;max-width:540px;margin:0 auto 44px}
 
 /* SEARCH */
@@ -60,7 +60,7 @@ h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--
 .search-box i{color:var(--ink3);font-size:20px}
 .search-box input{flex:1;background:transparent;border:none;font-family:"DM Sans",sans-serif;font-size:16px;color:var(--ink);outline:none;padding:9px 0}
 .search-box input::placeholder{color:var(--ink3)}
-.search-go{background:linear-gradient(135deg,var(--cyan2),var(--violet));color:#fff;border:none;padding:12px 22px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.search-go{background:var(--cyan2);color:#061113;border:none;padding:12px 22px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .2s}
 .search-go:hover{opacity:.88}
 
 /* QUICK CHIPS */
@@ -74,7 +74,7 @@ h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--
 .section-hd h2{font-family:"Syne",sans-serif;font-weight:700;font-size:20px;color:var(--ink);margin-bottom:6px}
 .section-hd p{font-size:13px;color:var(--ink3)}
 .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.feat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:border-color .2s}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;transition:border-color .2s}
 .feat:hover{border-color:var(--border2)}
 .feat-icon{font-size:24px;margin-bottom:12px}
 .feat-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px}
@@ -83,7 +83,7 @@ h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--
 /* CATEGORIES */
 .categories{position:relative;z-index:1;padding:0 28px 64px;max-width:1000px;margin:0 auto}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 16px;text-align:center;cursor:pointer;text-decoration:none;display:block;transition:all .25s}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px 16px;text-align:center;cursor:pointer;text-decoration:none;display:block;transition:all .25s}
 .cat-card:hover{border-color:var(--border2);transform:translateY(-3px)}
 .cat-card.beach:hover{border-color:var(--cyan2)}
 .cat-card.party:hover{border-color:var(--violet2)}
@@ -100,7 +100,7 @@ h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--violet2) 50%,var(--
 /* TOP DESTINATIONS */
 .top-dests{position:relative;z-index:1;padding:0 28px 80px;max-width:1000px;margin:0 auto}
 .dest-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.dest-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;cursor:pointer;text-align:center;transition:all .2s;text-decoration:none;display:block}
+.dest-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 12px;cursor:pointer;text-align:center;transition:all .2s;text-decoration:none;display:block}
 .dest-card:hover{border-color:var(--border2);transform:translateY(-2px)}
 .dest-flag{font-size:28px;margin-bottom:8px;display:block}
 .dest-name{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:2px}
@@ -128,22 +128,23 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <a href="index.html" class="logo">Trip<em>One</em></a>
   <div class="nav-links">
     <a href="index.html">Home</a>
+    <a href="finder.html">Finder</a>
     <a href="categories.html">Destinations</a>
     <a href="compare.html">Compare</a>
     <a href="about.html">About</a>
   </div>
-  <a href="categories.html" class="nav-cta">Explore destinations →</a>
+  <a href="finder.html" class="nav-cta">Find my destination</a>
 </nav>
 
 <div class="hero">
-  <div class="hero-badge"><i class="ti ti-sparkles"></i> Everything you need. One search.</div>
-  <h1>Plan your trip without<br>the <span class="grad">tab chaos</span></h1>
-  <p class="hero-sub">Weather, flights, hotels, activities, nightlife, food and budget — all in one place. Stop switching between 10 tabs.</p>
+  <div class="hero-badge"><i class="ti ti-adjustments"></i> Free destination matcher</div>
+  <h1>Find where to go<br>without the <span class="grad">tab chaos</span></h1>
+  <p class="hero-sub">Tell TripOne your budget, month and travel style. Get ranked destination options from the built-in travel database, no paid API calls needed.</p>
 
   <div class="search-box">
     <i class="ti ti-map-pin"></i>
     <input type="text" id="main-search" placeholder="Where do you want to go? (e.g. Santorini, Bali, Tokyo...)" autofocus>
-    <button class="search-go" onclick="goSearch()">Search →</button>
+    <button class="search-go" onclick="goSearch()">Open guide</button>
   </div>
 
   <div class="quick-chips">
@@ -161,12 +162,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <!-- FEATURES -->
 <div class="features">
   <div class="section-hd">
-    <h2>Everything in one search</h2>
-    <p>No more switching between tabs</p>
+    <h2>Built for choosing faster</h2>
+    <p>Useful travel signals without the noise</p>
   </div>
   <div class="feat-grid">
-    <div class="feat"><div class="feat-icon">🌤️</div><div class="feat-title">Live Weather</div><div class="feat-desc">Real-time forecast + best season to visit</div></div>
-    <div class="feat"><div class="feat-icon">✈️</div><div class="feat-title">Flights</div><div class="feat-desc">Cheapest flights from Bucharest</div></div>
+    <div class="feat"><div class="feat-icon">🎛️</div><div class="feat-title">Trip Finder</div><div class="feat-desc">Ranks destinations by budget, month and vibe</div></div>
+    <div class="feat"><div class="feat-icon">🌤️</div><div class="feat-title">Seasonal Weather</div><div class="feat-desc">Best months, peak season and timing notes</div></div>
     <div class="feat"><div class="feat-icon">🏨</div><div class="feat-title">Hotels & Stays</div><div class="feat-desc">Hotels, villas, Airbnb by budget</div></div>
     <div class="feat"><div class="feat-icon">💰</div><div class="feat-title">Budget Breakdown</div><div class="feat-desc">Minimum & ideal budget per person</div></div>
     <div class="feat"><div class="feat-icon">🎯</div><div class="feat-title">Top Activities</div><div class="feat-desc">Must-do experiences with prices</div></div>
@@ -265,3 +266,4 @@ document.getElementById('main-search').addEventListener('keydown', function(e) {
 </script>
 </body>
 </html>
+
